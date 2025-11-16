@@ -7,7 +7,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
 body {
-  background: #0b1d3f; /* dark blue */
+  background: linear-gradient(to bottom, #0b1d3f, #0f3057, #193d6f);
   color: #fff;
   font-family: 'Segoe UI', sans-serif;
   padding: 20px;
@@ -15,23 +15,43 @@ body {
 h2, h3 { color: gold; text-align: center; margin-bottom: 20px; }
 .btn-player {
   background: gold;
-  color: #fff; /* player name in white */
+  color: #000;
   font-weight: bold;
   border-radius: 20px;
   margin-top: 10px;
   width: 100%;
 }
-.btn-player:hover { background: #ffd700; color: #fff; }
+.btn-player:hover { background: #ffd700; }
 .card { background-color: rgba(255,255,255,0.05); border-radius: 15px; margin-bottom: 20px; }
-.card-title { color: #fff; } /* player name white */
-.table th { background: gold; color: #000; } /* header */
-.table td, .table th { color: #fff; } /* text inside table white */
+.table th { background: gold; color: #000; }
+.table td { background: rgba(255,255,255,0.05); color: #fff; }
 .pointer { cursor: pointer; }
 @media(max-width:768px){
   .table-responsive { font-size: 0.9rem; }
   .btn-player { font-size: 14px; }
 }
 .player-img { width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; }
+
+/* Player Page Table Background Dark Blue */
+#playerPage {
+  background-color: #0b1d3f; 
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+#playerPage table td, 
+#playerPage table th {
+  color: #fff;
+  background-color: rgba(255,255,255,0.05);
+}
+#playerPage h3 { color: gold; text-align: center; margin-bottom: 20px; }
+
+/* Blendor Points Table */
+#blendorTable th, #blendorTable td {
+  color: #fff;
+  background-color: #0b1d3f;
+  text-align: center;
+}
 </style>
 </head>
 <body>
@@ -84,7 +104,29 @@ h2, h3 { color: gold; text-align: center; margin-bottom: 20px; }
   <table class="table table-bordered table-hover text-white">
     <thead>
       <tr>
-        <th class="pointer">Player</th>
+        <th class="pointer" onclick="sortBy('number')">#</th>
+        <th class="pointer" onclick="sortBy('name')">Name</th>
+        <th class="pointer" onclick="sortBy('matches')">Matches</th>
+        <th class="pointer" onclick="sortBy('goals')">Goals</th>
+        <th class="pointer" onclick="sortBy('assists')">Assists</th>
+        <th class="pointer" onclick="sortBy('passRate')">Pass %</th>
+        <th class="pointer" onclick="sortBy('shotRate')">Shot %</th>
+        <th class="pointer" onclick="sortBy('motm')">MOTM</th>
+        <th class="pointer" onclick="sortBy('red')">Red Cards</th>
+        <th class="pointer" onclick="sortBy('winRate')">Win %</th>
+        <th class="pointer" onclick="sortBy('rating')">Rating</th>
+      </tr>
+    </thead>
+    <tbody id="statsBody"></tbody>
+  </table>
+</div>
+
+<h3 class="mt-4">Blendor Points</h3>
+<div class="table-responsive">
+  <table id="blendorTable" class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Player</th>
         <th>Oct 2025</th>
         <th>Nov 2025</th>
         <th>Dec 2025</th>
@@ -96,46 +138,40 @@ h2, h3 { color: gold; text-align: center; margin-bottom: 20px; }
         <th>Jun 2026</th>
         <th>Jul 2026</th>
         <th>Aug 2026</th>
-        <th>Ballondor Points</th>
+        <th>Total Points</th>
       </tr>
     </thead>
-    <tbody id="statsBody"></tbody>
+    <tbody id="blendorBody"></tbody>
   </table>
 </div>
 
 <script>
+// Players data
 const players = [
   {number:78,name:"Almousa3m",img:"https://drive.google.com/uc?export=view&id=1Ms51uVWqoV0BBT749S8M4uJOWupv6gDJ",
-    stats: {"2025-10":{matches:58,goals:65,assists:61,passRate:78,shotRate:33,motm:18,red:1,winRate:60,rating:8.7}}
-  },
+    stats: {"2025-10":{matches:58,goals:65,assists:61,passRate:78,shotRate:33,motm:18,red:1,winRate:60,rating:8.7}} },
   {number:25,name:"Yo0ousef25",img:"https://drive.google.com/uc?export=view&id=1lMxLGuypymJ0T8duu0ZkX3YNop5-Kq5E",
-    stats: {"2025-10":{matches:28,goals:23,assists:5,passRate:78,shotRate:46,motm:0,red:0,winRate:67,rating:8.3}}
-  },
+    stats: {"2025-10":{matches:28,goals:23,assists:5,passRate:78,shotRate:46,motm:0,red:0,winRate:67,rating:8.3}} },
   {number:28,name:"H2ssain_28",img:"https://drive.google.com/uc?export=view&id=104nrIHng2Xf5v2e5nG2bQLdvbgRejOJe",
-    stats: {"2025-10":{matches:44,goals:36,assists:15,passRate:76,shotRate:23,motm:1,red:0,winRate:56,rating:8.2}}
-  },
+    stats: {"2025-10":{matches:44,goals:36,assists:15,passRate:76,shotRate:23,motm:1,red:0,winRate:56,rating:8.2}} },
   {number:7,name:"H7modi_77",img:"https://drive.google.com/uc?export=view&id=1iZFg0I6QiBC2-3a8zO8-UjFKfmnOrV9",
-    stats: {"2025-10":{matches:45,goals:14,assists:36,passRate:79,shotRate:33,motm:2,red:5,winRate:62,rating:8.5}}
-  },
+    stats: {"2025-10":{matches:45,goals:14,assists:36,passRate:79,shotRate:33,motm:2,red:5,winRate:62,rating:8.5}} },
   {number:2,name:"Basabeso2",img:"https://drive.google.com/uc?export=view&id=1mTPDEeTAtcA1kA5Z_zYKN5Z93SzKFipi",
-    stats: {"2025-10":{matches:48,goals:36,assists:17,passRate:84,shotRate:40,motm:7,red:1,winRate:62,rating:8.6}}
-  },
-  {number:11,name:"M-_-_-_-11_11",img:"https://drive.google.com/uc?export=view&id=1DROKFwFKISl9-y2YGU6MpzujWQlLFIW8",
-    stats: {"2025-10":{matches:68,goals:38,assists:43,passRate:81,shotRate:27,motm:9,red:1,winRate:57,rating:8.8}}
-  }
+    stats: {"2025-10":{matches:48,goals:36,assists:17,passRate:84,shotRate:40,motm:7,red:1,winRate:62,rating:8.6}} },
+  {number:11,name:"M-*-*-_-11_11",img:"https://drive.google.com/uc?export=view&id=1DROKFwFKISl9-y2YGU6MpzujWQlLFIW8",
+    stats: {"2025-10":{matches:68,goals:38,assists:43,passRate:81,shotRate:27,motm:9,red:1,winRate:57,rating:8.8}} }
 ];
 
-function showHome(){ document.getElementById('homePage').classList.remove('d-none'); document.getElementById('playerPage').classList.add('d-none'); renderPlayers(); renderStats(); }
-
+// Functions
+function showHome(){ document.getElementById('homePage').classList.remove('d-none'); document.getElementById('playerPage').classList.add('d-none'); renderPlayers(); renderStats(); renderBlendor(); }
 function renderPlayers(){
-  const grid = document.getElementById('playersGrid');
-  grid.innerHTML='';
+  const grid = document.getElementById('playersGrid'); grid.innerHTML='';
   players.forEach(p=>{
     const card = `<div class="col-12 col-md-6">
       <div class="card d-flex flex-row align-items-center p-2">
         <img src="${p.img}" class="player-img" alt="${p.name}">
         <div class="card-body">
-          <h5 class="card-title">${p.name}</h5>
+          <h5 class="card-title" style="color:white">${p.name}</h5>
           <button class="btn btn-player" onclick="showPlayer(${p.number})">View Stats</button>
         </div>
       </div>
@@ -143,7 +179,6 @@ function renderPlayers(){
     grid.innerHTML += card;
   });
 }
-
 function showPlayer(number){
   const p = players.find(pl=>pl.number==number);
   document.getElementById('homePage').classList.add('d-none');
@@ -178,27 +213,59 @@ function aggregateStats(statsObj){
     };
   }, zeroStats());
 }
-
 function zeroStats(){ return {matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0}; }
 
-function renderStats(){
+let currentSort={col:'number',asc:true};
+function renderStats(month='all'){
   const tbody = document.getElementById('statsBody');
   tbody.innerHTML='';
-  players.forEach(p=>{
-    const months = ['2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07','2026-08'];
-    let ballondorSum = 0;
-    let row = `<tr><td>${p.name}</td>`;
-    months.forEach(m=>{
-      let rating = (p.stats[m]||{rating:0}).rating;
-      ballondorSum += rating;
-      row += `<td>${rating}</td>`;
-    });
-    row += `<td>${ballondorSum}</td></tr>`;
-    tbody.innerHTML += row;
+  const sorted = [...players].sort((a,b)=>{
+    let aVal = (month==='all'? aggregateStats(a.stats) : (a.stats[month] || zeroStats()))[currentSort.col] || a[currentSort.col];
+    let bVal = (month==='all'? aggregateStats(b.stats) : (b.stats[month] || zeroStats()))[currentSort.col] || b[currentSort.col];
+    if(aVal<bVal) return currentSort.asc?-1:1;
+    if(aVal>bVal) return currentSort.asc?1:-1;
+    return 0;
+  });
+
+  sorted.forEach(p=>{
+    let s = month==='all' ? aggregateStats(p.stats) : (p.stats[month] || zeroStats());
+    tbody.innerHTML+=`<tr>
+      <td>${p.number}</td>
+      <td>${p.name}</td>
+      <td>${s.matches}</td>
+      <td>${s.goals}</td>
+      <td>${s.assists}</td>
+      <td>${s.passRate}</td>
+      <td>${s.shotRate}</td>
+      <td>${s.motm}</td>
+      <td>${s.red}</td>
+      <td>${s.winRate}</td>
+      <td>${s.rating}</td>
+    </tr>`;
   });
 }
 
-updateStats = renderStats;
+function renderBlendor(){
+  const tbody = document.getElementById('blendorBody');
+  tbody.innerHTML='';
+  players.forEach(p=>{
+    let total=0;
+    let row = `<tr><td>${p.name}</td>`;
+    const months = ["2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08"];
+    months.forEach(m=>{
+      const val = p.stats[m] ? p.stats[m].rating : 0;
+      total+=val;
+      row+=`<td>${val}</td>`;
+    });
+    row+=`<td>${total}</td></tr>`;
+    tbody.innerHTML+=row;
+  });
+}
+
+function updateStats(){ renderStats(document.getElementById('monthSelect').value); renderBlendor(); }
+function sortBy(col){ currentSort.col===col ? currentSort.asc=!currentSort.asc : (currentSort={col,asc:true}); renderStats(document.getElementById('monthSelect').value); renderBlendor(); }
+
+// Initial load
 showHome();
 </script>
 </body>
