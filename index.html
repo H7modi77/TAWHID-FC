@@ -7,30 +7,21 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
 body {
-  background: #0b0b0b; /* خلفية داكنة */
-  color: #fff;
+  background: #111111;
+  color: #FFD700;
   font-family: 'Segoe UI', sans-serif;
   padding: 20px;
 }
-h2, h3 { color: gold; text-align: center; margin-bottom: 20px; }
-.btn-player {
-  background: gold;
-  color: #000;
-  font-weight: bold;
-  border-radius: 20px;
-  margin-top: 10px;
-  width: 100%;
-}
-.btn-player:hover { background: #ffd700; }
-.card { background-color: rgba(255,255,255,0.05); border-radius: 15px; margin-bottom: 20px; }
-.table th { background: gold; color: #000; }
-.table td { background: rgba(255,255,255,0.1); color: #fff; }
+h2,h3 { color: #FFD700; text-align: center; margin-bottom: 20px; }
+.card { background-color: rgba(255,255,255,0.05); border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; padding: 10px; }
+.player-img { width:50px; height:50px; border-radius:50%; margin-right:10px; }
+.btn-player { background: #FFD700; color: #111; font-weight:bold; border-radius:20px; width:100%; margin-top:5px; }
+.btn-player:hover { background: #e6c200; color:#111; }
+.btn-secondary { background:#333; color:#FFD700; border:none; }
+.table th { background:#FFD700; color:#111; }
+.table td { background: rgba(255,255,255,0.05); color: #FFD700; }
 .pointer { cursor: pointer; }
-@media(max-width:768px){
-  .table-responsive { font-size: 0.9rem; }
-  .btn-player { font-size: 14px; }
-}
-.player-img { width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; }
+@media(max-width:768px){ .table-responsive { font-size:0.85rem; } }
 </style>
 </head>
 <body>
@@ -101,148 +92,69 @@ h2, h3 { color: gold; text-align: center; margin-bottom: 20px; }
 </div>
 
 <script>
-// Players data with images from your links
 const players = [
   {number:78,name:"Almousa3m",img:"https://drive.google.com/uc?export=view&id=1Ms51uVWqoV0BBT749S8M4uJOWupv6gDJ",
-    stats: {"2025-10":{matches:58,goals:65,assists:61,passRate:78,shotRate:33,motm:18,red:1,winRate:60,rating:8.7}}
-  },
+    stats: {"2025-10":{matches:58,goals:65,assists:61,passRate:78,shotRate:33,motm:18,red:1,winRate:60,rating:8.7}} },
   {number:25,name:"Yo0ousef25",img:"https://drive.google.com/uc?export=view&id=1lMxLGuypymJ0T8duu0ZkX3YNop5-Kq5E",
-    stats: {"2025-10":{matches:28,goals:23,assists:5,passRate:78,shotRate:46,motm:0,red:0,winRate:67,rating:8.3}}
-  },
+    stats: {"2025-10":{matches:28,goals:23,assists:5,passRate:78,shotRate:46,motm:0,red:0,winRate:67,rating:8.3}} },
   {number:28,name:"H2ssain_28",img:"https://drive.google.com/uc?export=view&id=104nrIHng2Xf5v2e5nG2bQLdvbgRejOJe",
-    stats: {"2025-10":{matches:44,goals:36,assists:15,passRate:76,shotRate:23,motm:1,red:0,winRate:56,rating:8.2}}
-  },
+    stats: {"2025-10":{matches:44,goals:36,assists:15,passRate:76,shotRate:23,motm:1,red:0,winRate:56,rating:8.2}} },
   {number:7,name:"H7modi_77",img:"https://drive.google.com/uc?export=view&id=1iZFg0I6QiBC2-3a8zO8-UjFKfmnOrV9",
-    stats: {"2025-10":{matches:45,goals:14,assists:36,passRate:79,shotRate:33,motm:2,red:5,winRate:62,rating:8.5}}
-  },
+    stats: {"2025-10":{matches:45,goals:14,assists:36,passRate:79,shotRate:33,motm:2,red:5,winRate:62,rating:8.5}} },
   {number:2,name:"Basabeso2",img:"https://drive.google.com/uc?export=view&id=1mTPDEeTAtcA1kA5Z_zYKN5Z93SzKFipi",
-    stats: {"2025-10":{matches:48,goals:36,assists:17,passRate:84,shotRate:40,motm:7,red:1,winRate:62,rating:8.6}}
-  },
-  {number:11,name:"M-*-*-_-11_11",img:"https://drive.google.com/uc?export=view&id=1DROKFwFKISl9-y2YGU6MpzujWQlLFIW8",
-    stats: {"2025-10":{matches:68,goals:38,assists:43,passRate:81,shotRate:27,motm:9,red:1,winRate:57,rating:8.8}}
-  }
+    stats: {"2025-10":{matches:48,goals:36,assists:17,passRate:84,shotRate:40,motm:7,red:1,winRate:62,rating:8.6}} },
+  {number:11,name:"M-_-_-_-11_11 [C]",img:"https://drive.google.com/uc?export=view&id=1DROKFwFKISl9-y2YGU6MpzujWQlLFIW8",
+    stats: {"2025-10":{matches:68,goals:38,assists:43,passRate:81,shotRate:27,motm:9,red:1,winRate:57,rating:8.8}} }
 ];
 
-// Functions
-function showHome(){
-  document.getElementById('homePage').classList.remove('d-none');
-  document.getElementById('playerPage').classList.add('d-none');
-  renderPlayers();
-  renderStats();
-}
+function showHome(){ document.getElementById('homePage').classList.remove('d-none'); document.getElementById('playerPage').classList.add('d-none'); renderPlayers(); renderStats(); }
 
 function renderPlayers(){
-  const grid = document.getElementById('playersGrid');
-  grid.innerHTML='';
-  // Add "All Players" option
-  const allCard = `<div class="col-12 col-md-6">
-      <div class="card d-flex flex-row align-items-center p-2">
-        <div class="card-body">
-          <h5 class="card-title">All Players</h5>
-          <button class="btn btn-player" onclick="showPlayer('all')">View Stats</button>
-        </div>
-      </div>
-    </div>`;
-  grid.innerHTML += allCard;
-
+  const grid=document.getElementById('playersGrid'); grid.innerHTML='';
   players.forEach(p=>{
-    const card = `<div class="col-12 col-md-6">
-      <div class="card d-flex flex-row align-items-center p-2">
-        <img src="${p.img}" class="player-img" alt="${p.name}">
-        <div class="card-body">
-          <h5 class="card-title">${p.name}</h5>
-          <button class="btn btn-player" onclick="showPlayer(${p.number})">View Stats</button>
-        </div>
-      </div>
-    </div>`;
-    grid.innerHTML += card;
+    grid.innerHTML+=`<div class="col-12 col-md-6"><div class="card">
+      <img src="${p.img}" class="player-img" alt="${p.name}">
+      <div class="card-body">
+      <h5>${p.name}</h5>
+      <button class="btn btn-player" onclick="showPlayer(${p.number})">View Stats</button>
+      </div></div></div>`;
   });
 }
 
 function showPlayer(number){
+  const p=players.find(pl=>pl.number==number);
   document.getElementById('homePage').classList.add('d-none');
   document.getElementById('playerPage').classList.remove('d-none');
-  let title = "All Players";
-  let statsObj = {};
-  if(number === 'all'){
-    title = "All Players";
-    players.forEach(p=>{
-      statsObj[p.name] = p.stats;
-    });
-    const month = document.getElementById('monthSelect').value;
-    let s = aggregateAllPlayers(month);
-    fillPlayerTable(title,s);
-  } else {
-    const p = players.find(pl=>pl.number==number);
-    title = p.name;
-    const month = document.getElementById('monthSelect').value;
-    let s = month==='all' ? aggregateStats(p.stats) : (p.stats[month] || zeroStats());
-    fillPlayerTable(title,s);
-  }
+  document.getElementById('playerName').innerText=p.name;
+  const month=document.getElementById('monthSelect').value;
+  let s=month==='all'?aggregateStats(p.stats):(p.stats[month]||zeroStats());
+  document.getElementById('playerMatches').innerText=s.matches;
+  document.getElementById('playerGoals').innerText=s.goals;
+  document.getElementById('playerAssists').innerText=s.assists;
+  document.getElementById('playerPassRate').innerText=s.passRate;
+  document.getElementById('playerShotRate').innerText=s.shotRate;
+  document.getElementById('playerMOTM').innerText=s.motm;
+  document.getElementById('playerRed').innerText=s.red;
+  document.getElementById('playerWinRate').innerText=s.winRate;
+  document.getElementById('playerRating').innerText=s.rating;
 }
 
-function fillPlayerTable(name, stats){
-  document.getElementById('playerName').innerText = name;
-  document.getElementById('playerMatches').innerText = stats.matches;
-  document.getElementById('playerGoals').innerText = stats.goals;
-  document.getElementById('playerAssists').innerText = stats.assists;
-  document.getElementById('playerPassRate').innerText = stats.passRate;
-  document.getElementById('playerShotRate').innerText = stats.shotRate;
-  document.getElementById('playerMOTM').innerText = stats.motm;
-  document.getElementById('playerRed').innerText = stats.red;
-  document.getElementById('playerWinRate').innerText = stats.winRate;
-  document.getElementById('playerRating').innerText = stats.rating;
-}
-
-function aggregateStats(statsObj){
-  return Object.values(statsObj).reduce((acc, cur)=>{
-    return {
-      matches: acc.matches+cur.matches,
-      goals: acc.goals+cur.goals,
-      assists: acc.assists+cur.assists,
-      passRate: Math.round((acc.passRate+cur.passRate)/2),
-      shotRate: Math.round((acc.shotRate+cur.shotRate)/2),
-      motm: acc.motm+cur.motm,
-      red: acc.red+cur.red,
-      winRate: Math.round((acc.winRate+cur.winRate)/2),
-      rating: Math.round((acc.rating+cur.rating)*10/2)/10
-    };
-  }, zeroStats());
-}
-
-function aggregateAllPlayers(month='all'){
-  const all = players.reduce((acc,p)=>{
-    let s = month==='all'? aggregateStats(p.stats) : (p.stats[month] || zeroStats());
-    acc.matches += s.matches;
-    acc.goals += s.goals;
-    acc.assists += s.assists;
-    acc.passRate = Math.round((acc.passRate + s.passRate)/2);
-    acc.shotRate = Math.round((acc.shotRate + s.shotRate)/2);
-    acc.motm += s.motm;
-    acc.red += s.red;
-    acc.winRate = Math.round((acc.winRate + s.winRate)/2);
-    acc.rating = Math.round((acc.rating + s.rating)*10/2)/10;
-    return acc;
-  }, zeroStats());
-  return all;
-}
+function aggregateStats(statsObj){ return Object.values(statsObj).reduce((acc,cur)=>({ matches:acc.matches+cur.matches, goals:acc.goals+cur.goals, assists:acc.assists+cur.assists, passRate:Math.round((acc.passRate+cur.passRate)/2), shotRate:Math.round((acc.shotRate+cur.shotRate)/2), motm:acc.motm+cur.motm, red:acc.red+cur.red, winRate:Math.round((acc.winRate+cur.winRate)/2), rating:Math.round((acc.rating+cur.rating)*10/2)/10 }), zeroStats()); }
 
 function zeroStats(){ return {matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0}; }
 
 let currentSort={col:'number',asc:true};
 function renderStats(month='all'){
-  const tbody = document.getElementById('statsBody');
-  tbody.innerHTML='';
-  const sorted = [...players].sort((a,b)=>{
-    let aVal = (month==='all'? aggregateStats(a.stats) : (a.stats[month] || zeroStats()))[currentSort.col] || a[currentSort.col];
-    let bVal = (month==='all'? aggregateStats(b.stats) : (b.stats[month] || zeroStats()))[currentSort.col] || b[currentSort.col];
+  const tbody=document.getElementById('statsBody'); tbody.innerHTML='';
+  const sorted=[...players].sort((a,b)=>{
+    let aVal=(month==='all'?aggregateStats(a.stats):(a.stats[month]||zeroStats()))[currentSort.col]||a[currentSort.col];
+    let bVal=(month==='all'?aggregateStats(b.stats):(b.stats[month]||zeroStats()))[currentSort.col]||b[currentSort.col];
     if(aVal<bVal) return currentSort.asc?-1:1;
     if(aVal>bVal) return currentSort.asc?1:-1;
     return 0;
   });
-
   sorted.forEach(p=>{
-    let s = month==='all' ? aggregateStats(p.stats) : (p.stats[month] || zeroStats());
+    let s=month==='all'?aggregateStats(p.stats):(p.stats[month]||zeroStats());
     tbody.innerHTML+=`<tr>
       <td>${p.number}</td>
       <td>${p.name}</td>
@@ -259,27 +171,10 @@ function renderStats(month='all'){
   });
 }
 
-function updateStats(){ 
-  const month = document.getElementById('monthSelect').value;
-  renderStats(month);
-  const playerPageVisible = !document.getElementById('playerPage').classList.contains('d-none');
-  if(playerPageVisible){
-    const playerName = document.getElementById('playerName').innerText;
-    if(playerName === "All Players") fillPlayerTable("All Players", aggregateAllPlayers(month));
-    else {
-      const p = players.find(pl=>pl.name===playerName);
-      let s = month==='all'? aggregateStats(p.stats) : (p.stats[month] || zeroStats());
-      fillPlayerTable(playerName,s);
-    }
-  }
-}
+function updateStats(){ renderStats(document.getElementById('monthSelect').value); }
+function sortBy(col){ currentSort.col===col?currentSort.asc=!currentSort.asc:(currentSort={col,asc:true}); renderStats(document.getElementById('monthSelect').value); }
 
-function sortBy(col){ 
-  currentSort.col===col ? currentSort.asc=!currentSort.asc : (currentSort={col,asc:true}); 
-  renderStats(document.getElementById('monthSelect').value); 
-}
-
-// Initial load
+// load
 showHome();
 </script>
 </body>
