@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAWHID FC Stats</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+body {
+  background: linear-gradient(to bottom, #0b1d3f, #0f3057, #193d6f);
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 20px;
+}
+h2, h3 { color: gold; text-align: center; margin-bottom: 20px; }
+.btn-player {
+  background: gold;
+  color: #000;
+  font-weight: bold;
+  border-radius: 20px;
+  margin-top: 10px;
+  width: 100%;
+}
+.btn-player:hover { background: #ffd700; }
+.card { background-color: rgba(255,255,255,0.05); border-radius: 15px; margin-bottom: 20px; }
+.table th { background: gold; color: #000; }
+.table td { background: rgba(255,255,255,0.1); }
+.pointer { cursor: pointer; }
+@media(max-width:768px){
+  .table-responsive { font-size: 0.9rem; }
+  .btn-player { font-size: 14px; }
+}
+.player-img { width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; }
+</style>
+</head>
+<body>
+
+<div id="homePage">
+  <h2>Select Player</h2>
+  <div id="playersGrid" class="row"></div>
+
+  <div class="mt-3 text-center">
+    <label>Select Month:</label>
+    <select id="monthSelect" class="form-select w-50 mx-auto" onchange="updateStats()">
+      <option value="all">All Months</option>
+      <option value="2025-10">Oct 2025</option>
+      <option value="2025-11">Nov 2025</option>
+      <option value="2025-12">Dec 2025</option>
+      <option value="2026-01">Jan 2026</option>
+      <option value="2026-02">Feb 2026</option>
+      <option value="2026-03">Mar 2026</option>
+      <option value="2026-04">Apr 2026</option>
+      <option value="2026-05">May 2026</option>
+      <option value="2026-06">Jun 2026</option>
+      <option value="2026-07">Jul 2026</option>
+      <option value="2026-08">Aug 2026</option>
+    </select>
+  </div>
+</div>
+
+<div id="playerPage" class="d-none">
+  <button class="btn btn-secondary mb-3" onclick="showHome()">Back</button>
+  <h3 id="playerName"></h3>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover text-white">
+      <tbody>
+        <tr><th>Matches</th><td id="playerMatches"></td></tr>
+        <tr><th>Goals</th><td id="playerGoals"></td></tr>
+        <tr><th>Assists</th><td id="playerAssists"></td></tr>
+        <tr><th>Pass Rate %</th><td id="playerPassRate"></td></tr>
+        <tr><th>Shot Rate %</th><td id="playerShotRate"></td></tr>
+        <tr><th>Man of the Match</th><td id="playerMOTM"></td></tr>
+        <tr><th>Red Cards</th><td id="playerRed"></td></tr>
+        <tr><th>Win Rate %</th><td id="playerWinRate"></td></tr>
+        <tr><th>Rating</th><td id="playerRating"></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<h3 class="mt-4">Team Stats</h3>
+<div class="table-responsive">
+  <table class="table table-bordered table-hover text-white">
+    <thead>
+      <tr>
+        <th class="pointer" onclick="sortBy('number')">#</th>
+        <th class="pointer" onclick="sortBy('name')">Name</th>
+        <th class="pointer" onclick="sortBy('matches')">Matches</th>
+        <th class="pointer" onclick="sortBy('goals')">Goals</th>
+        <th class="pointer" onclick="sortBy('assists')">Assists</th>
+        <th class="pointer" onclick="sortBy('passRate')">Pass %</th>
+        <th class="pointer" onclick="sortBy('shotRate')">Shot %</th>
+        <th class="pointer" onclick="sortBy('motm')">MOTM</th>
+        <th class="pointer" onclick="sortBy('red')">Red Cards</th>
+        <th class="pointer" onclick="sortBy('winRate')">Win %</th>
+        <th class="pointer" onclick="sortBy('rating')">Rating</th>
+      </tr>
+    </thead>
+    <tbody id="statsBody"></tbody>
+  </table>
+</div>
+
+<script>
+// Players data with images
+const players = [
+  {number:78,name:"Almousa3m",img:"images/almousa3m.png",
+    stats: {"2025-10":{matches:58,goals:65,assists:61,passRate:78,shotRate:33,motm:18,red:1,winRate:60,rating:8.7}}
+  },
+  {number:25,name:"Yo0ousef25",img:"images/yo0ousef25.png",
+    stats: {"2025-10":{matches:28,goals:23,assists:5,passRate:78,shotRate:46,motm:0,red:0,winRate:67,rating:8.3}}
+  },
+  {number:28,name:"H2ssain_28",img:"images/h2ssain28.png",
+    stats: {"2025-10":{matches:44,goals:36,assists:15,passRate:76,shotRate:23,motm:1,red:0,winRate:56,rating:8.2}}
+  },
+  {number:7,name:"H7modi_77",img:"images/h7modi77.png",
+    stats: {"2025-10":{matches:45,goals:14,assists:36,passRate:79,shotRate:33,motm:2,red:5,winRate:62,rating:8.5}}
+  },
+  {number:2,name:"Basabeso2",img:"images/basabeso2.png",
+    stats: {"2025-10":{matches:48,goals:36,assists:17,passRate:84,shotRate:40,motm:7,red:1,winRate:62,rating:8.6}}
+  },
+  {number:11,name:"M-_-_-_-11_11",img:"images/m11.png",
+    stats: {"2025-10":{matches:68,goals:38,assists:43,passRate:81,shotRate:27,motm:9,red:1,winRate:57,rating:8.8}}
+  }
+];
+
+// Functions
+function showHome(){
+  document.getElementById('homePage').classList.remove('d-none');
+  document.getElementById('playerPage').classList.add('d-none');
+  renderPlayers();
+  renderStats();
+}
+
+function renderPlayers(){
+  const grid = document.getElementById('playersGrid');
+  grid.innerHTML='';
+  players.forEach(p=>{
+    const card = `<div class="col-12 col-md-6">
+      <div class="card d-flex flex-row align-items-center p-2">
+        <img src="${p.img}" class="player-img" alt="${p.name}">
+        <div class="card-body">
+          <h5 class="card-title">${p.name}</h5>
+          <button class="btn btn-player" onclick="showPlayer(${p.number})">View Stats</button>
+        </div>
+      </div>
+    </div>`;
+    grid.innerHTML += card;
+  });
+}
+
+function showPlayer(number){
+  const p = players.find(pl=>pl.number==number);
+  document.getElementById('homePage').classList.add('d-none');
+  document.getElementById('playerPage').classList.remove('d-none');
+  document.getElementById('playerName').innerText = p.name;
+
+  const month = document.getElementById('monthSelect').value;
+  let s = month==='all' ? aggregateStats(p.stats) : (p.stats[month] || zeroStats());
+  document.getElementById('playerMatches').innerText = s.matches;
+  document.getElementById('playerGoals').innerText = s.goals;
+  document.getElementById('playerAssists').innerText = s.assists;
+  document.getElementById('playerPassRate').innerText = s.passRate;
+  document.getElementById('playerShotRate').innerText = s.shotRate;
+  document.getElementById('playerMOTM').innerText = s.motm;
+  document.getElementById('playerRed').innerText = s.red;
+  document.getElementById('playerWinRate').innerText = s.winRate;
+  document.getElementById('playerRating').innerText = s.rating;
+}
+
+function aggregateStats(statsObj){
+  return Object.values(statsObj).reduce((acc, cur)=>{
+    return {
+      matches: acc.matches+cur.matches,
+      goals: acc.goals+cur.goals,
+      assists: acc.assists+cur.assists,
+      passRate: Math.round((acc.passRate+cur.passRate)/2),
+      shotRate: Math.round((acc.shotRate+cur.shotRate)/2),
+      motm: acc.motm+cur.motm,
+      red: acc.red+cur.red,
+      winRate: Math.round((acc.winRate+cur.winRate)/2),
+      rating: Math.round((acc.rating+cur.rating)*10/2)/10
+    };
+  }, zeroStats());
+}
+
+function zeroStats(){ return {matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0}; }
+
+let currentSort={col:'number',asc:true};
+function renderStats(month='all'){
+  const tbody = document.getElementById('statsBody');
+  tbody.innerHTML='';
+  const sorted = [...players].sort((a,b)=>{
+    let aVal = (month==='all'? aggregateStats(a.stats) : (a.stats[month] || zeroStats()))[currentSort.col] || a[currentSort.col];
+    let bVal = (month==='all'? aggregateStats(b.stats) : (b.stats[month] || zeroStats()))[currentSort.col] || b[currentSort.col];
+    if(aVal<bVal) return currentSort.asc?-1:1;
+    if(aVal>bVal) return currentSort.asc?1:-1;
+    return 0;
+  });
+
+  sorted.forEach(p=>{
+    let s = month==='all' ? aggregateStats(p.stats) : (p.stats[month] || zeroStats());
+    tbody.innerHTML+=`<tr>
+      <td>${p.number}</td>
+      <td>${p.name}</td>
+      <td>${s.matches}</td>
+      <td>${s.goals}</td>
+      <td>${s.assists}</td>
+      <td>${s.passRate}</td>
+      <td>${s.shotRate}</td>
+      <td>${s.motm}</td>
+      <td>${s.red}</td>
+      <td>${s.winRate}</td>
+      <td>${s.rating}</td>
+    </tr>`;
+  });
+}
+
+function updateStats(){ renderStats(document.getElementById('monthSelect').value); }
+function sortBy(col){ currentSort.col===col ? currentSort.asc=!currentSort.asc : (currentSort={col,asc:true}); renderStats(document.getElementById('monthSelect').value); }
+
+// Initial load
+showHome();
+</script>
+</body>
+</html>
