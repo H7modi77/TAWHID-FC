@@ -7,45 +7,41 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
 body {
-  background: #0b0c1c; /* داكن جداً */
-  color: #fff;
+  background: #0b1d3f; /* أزرق غامق */
+  color: #fff; /* نص أبيض */
   font-family: 'Segoe UI', sans-serif;
   padding: 20px;
 }
-h1 { color: gold; text-align: center; margin-bottom: 30px; }
-h2 { color: gold; margin-top: 20px; }
+h2, h3 { color: gold; text-align: center; margin-bottom: 20px; }
 .btn-player {
   background: gold;
   color: #000;
   font-weight: bold;
   border-radius: 20px;
-  margin: 5px;
+  margin-top: 10px;
+  width: 100%;
 }
 .btn-player:hover { background: #ffd700; }
-.card { background-color: rgba(255,255,255,0.05); border-radius: 15px; margin-bottom: 15px; }
+.card { background-color: rgba(255,255,255,0.05); border-radius: 15px; margin-bottom: 20px; }
 .table th { background: gold; color: #000; }
 .table td { background: rgba(255,255,255,0.1); }
 .pointer { cursor: pointer; }
+@media(max-width:768px){
+  .table-responsive { font-size: 0.9rem; }
+  .btn-player { font-size: 14px; }
+}
 .player-img { width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; }
 </style>
 </head>
 <body>
 
-<h1>TAWHID FC</h1>
-
 <div id="homePage">
-  <div id="playersGrid" class="d-flex flex-wrap justify-content-center"></div>
-  <div class="mt-4 text-center">
-    <button class="btn btn-player" onclick="showBallonPoints()">Ballon d'Or Points</button>
-  </div>
-</div>
+  <h2>TAWHID FC</h2>
+  <div id="playersGrid" class="row"></div>
 
-<div id="playerPage" class="d-none">
-  <button class="btn btn-secondary mb-3" onclick="showHome()">Back</button>
-  <h2 id="playerName"></h2>
-  <div class="text-center mb-3">
+  <div class="mt-3 text-center">
     <label>Select Month:</label>
-    <select id="monthSelect" class="form-select w-50 mx-auto" onchange="updatePlayerStats()">
+    <select id="monthSelect" class="form-select w-50 mx-auto" onchange="updateStats()">
       <option value="all">All Months</option>
       <option value="2025-10">Oct 2025</option>
       <option value="2025-11">Nov 2025</option>
@@ -60,93 +56,120 @@ h2 { color: gold; margin-top: 20px; }
       <option value="2026-08">Aug 2026</option>
     </select>
   </div>
+</div>
+
+<div id="playerPage" class="d-none">
+  <button class="btn btn-secondary mb-3" onclick="showHome()">Back</button>
+  <h3 id="playerName"></h3>
   <div class="table-responsive">
     <table class="table table-bordered table-hover text-white">
-      <thead>
-        <tr>
-          <th>Matches</th>
-          <th>Goals</th>
-          <th>Assists</th>
-          <th>Pass %</th>
-          <th>Shot %</th>
-          <th>MOTM</th>
-          <th>Red</th>
-          <th>Win %</th>
-          <th>Rating</th>
-        </tr>
-      </thead>
-      <tbody id="playerStatsBody"></tbody>
+      <tbody>
+        <tr><th>Matches</th><td id="playerMatches"></td></tr>
+        <tr><th>Goals</th><td id="playerGoals"></td></tr>
+        <tr><th>Assists</th><td id="playerAssists"></td></tr>
+        <tr><th>Pass Rate %</th><td id="playerPassRate"></td></tr>
+        <tr><th>Shot Rate %</th><td id="playerShotRate"></td></tr>
+        <tr><th>Man of the Match</th><td id="playerMOTM"></td></tr>
+        <tr><th>Red Cards</th><td id="playerRed"></td></tr>
+        <tr><th>Win Rate %</th><td id="playerWinRate"></td></tr>
+        <tr><th>Rating</th><td id="playerRating"></td></tr>
+      </tbody>
     </table>
   </div>
 </div>
 
-<div id="ballonPage" class="d-none">
-  <button class="btn btn-secondary mb-3" onclick="showHome()">Back</button>
-  <h2>Ballon d'Or Points</h2>
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover text-white">
-      <thead>
-        <tr>
-          <th>Player</th>
-          <th>Oct 2025</th>
-          <th>Nov 2025</th>
-          <th>Dec 2025</th>
-          <th>Jan 2026</th>
-          <th>Feb 2026</th>
-          <th>Mar 2026</th>
-          <th>Apr 2026</th>
-          <th>May 2026</th>
-          <th>Jun 2026</th>
-          <th>Jul 2026</th>
-          <th>Aug 2026</th>
-          <th>Total Points</th>
-        </tr>
-      </thead>
-      <tbody id="ballonTableBody"></tbody>
-    </table>
-  </div>
+<h3 class="mt-4">Team Stats</h3>
+<div class="table-responsive">
+  <table class="table table-bordered table-hover text-white">
+    <thead>
+      <tr>
+        <th class="pointer" onclick="sortBy('number')">#</th>
+        <th class="pointer" onclick="sortBy('name')">Name</th>
+        <th class="pointer" onclick="sortBy('matches')">Matches</th>
+        <th class="pointer" onclick="sortBy('goals')">Goals</th>
+        <th class="pointer" onclick="sortBy('assists')">Assists</th>
+        <th class="pointer" onclick="sortBy('passRate')">Pass %</th>
+        <th class="pointer" onclick="sortBy('shotRate')">Shot %</th>
+        <th class="pointer" onclick="sortBy('motm')">Ballon d'Or</th>
+        <th class="pointer" onclick="sortBy('red')">Red Cards</th>
+        <th class="pointer" onclick="sortBy('winRate')">Win %</th>
+        <th class="pointer" onclick="sortBy('rating')">Rating</th>
+      </tr>
+    </thead>
+    <tbody id="statsBody"></tbody>
+  </table>
+</div>
+
+<h3 class="mt-4">Ballon d'Or Points per Month</h3>
+<div class="table-responsive">
+  <table class="table table-bordered table-hover text-white">
+    <thead>
+      <tr>
+        <th>Player</th>
+        <th>Oct 2025</th>
+        <th>Nov 2025</th>
+        <th>Dec 2025</th>
+        <th>Jan 2026</th>
+        <th>Feb 2026</th>
+        <th>Mar 2026</th>
+        <th>Apr 2026</th>
+        <th>May 2026</th>
+        <th>Jun 2026</th>
+        <th>Jul 2026</th>
+        <th>Aug 2026</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody id="ballonTable"></tbody>
+  </table>
 </div>
 
 <script>
+// Players data with images
 const players = [
   {number:78,name:"Almousa3m",img:"https://drive.google.com/uc?export=view&id=1Ms51uVWqoV0BBT749S8M4uJOWupv6gDJ",
-    stats: {"2025-10":{matches:58,goals:65,assists:61,passRate:78,shotRate:33,motm:18,red:1,winRate:60,rating:8.7},"2025-11":{matches:12,goals:15,assists:14,passRate:79,shotRate:35,motm:5,red:0,winRate:65,rating:8.8}}
+    stats: {"2025-10":{matches:58,goals:65,assists:61,passRate:78,shotRate:33,motm:18,rating:8.7}}
   },
   {number:25,name:"Yo0ousef25",img:"https://drive.google.com/uc?export=view&id=1lMxLGuypymJ0T8duu0ZkX3YNop5-Kq5E",
-    stats: {"2025-10":{matches:28,goals:23,assists:5,passRate:78,shotRate:46,motm:0,red:0,winRate:67,rating:8.3}}
+    stats: {"2025-10":{matches:28,goals:23,assists:5,passRate:78,shotRate:46,motm:0,rating:8.3}}
   },
   {number:28,name:"H2ssain_28",img:"https://drive.google.com/uc?export=view&id=104nrIHng2Xf5v2e5nG2bQLdvbgRejOJe",
-    stats: {"2025-10":{matches:44,goals:36,assists:15,passRate:76,shotRate:23,motm:1,red:0,winRate:56,rating:8.2}}
+    stats: {"2025-10":{matches:44,goals:36,assists:15,passRate:76,shotRate:23,motm:1,rating:8.2}}
   },
   {number:7,name:"H7modi_77",img:"https://drive.google.com/uc?export=view&id=1iZFg0I6QiBC2-3a8zO8-UjFKfmnOrV9",
-    stats: {"2025-10":{matches:45,goals:14,assists:36,passRate:79,shotRate:33,motm:2,red:5,winRate:62,rating:8.5}}
+    stats: {"2025-10":{matches:45,goals:14,assists:36,passRate:79,shotRate:33,motm:2,rating:8.5}}
   },
   {number:2,name:"Basabeso2",img:"https://drive.google.com/uc?export=view&id=1mTPDEeTAtcA1kA5Z_zYKN5Z93SzKFipi",
-    stats: {"2025-10":{matches:48,goals:36,assists:17,passRate:84,shotRate:40,motm:7,red:1,winRate:62,rating:8.6}}
+    stats: {"2025-10":{matches:48,goals:36,assists:17,passRate:84,shotRate:40,motm:7,rating:8.6}}
   },
-  {number:11,name:"M-_-_-_-11_11 [C]",img:"https://drive.google.com/uc?export=view&id=1DROKFwFKISl9-y2YGU6MpzujWQlLFIW8",
-    stats: {"2025-10":{matches:68,goals:38,assists:43,passRate:81,shotRate:27,motm:9,red:1,winRate:57,rating:8.8}}
+  {number:11,name:"M-_-_-_-11_11",img:"https://drive.google.com/uc?export=view&id=1DROKFwFKISl9-y2YGU6MpzujWQlLFIW8",
+    stats: {"2025-10":{matches:68,goals:38,assists:43,passRate:81,shotRate:27,motm:9,rating:8.8}}
   }
 ];
 
+// Functions
 function showHome(){
   document.getElementById('homePage').classList.remove('d-none');
   document.getElementById('playerPage').classList.add('d-none');
-  document.getElementById('ballonPage').classList.add('d-none');
   renderPlayers();
+  renderStats();
+  renderBallon();
 }
 
 function renderPlayers(){
   const grid = document.getElementById('playersGrid');
   grid.innerHTML='';
   players.forEach(p=>{
-    grid.innerHTML += `<div class="card d-flex flex-row align-items-center p-2 m-2" style="width: 250px;">
-      <img src="${p.img}" class="player-img" alt="${p.name}">
-      <div class="card-body">
-        <h5>${p.name}</h5>
-        <button class="btn btn-player" onclick="showPlayer(${p.number})">View Stats</button>
+    const card = `<div class="col-12 col-md-6">
+      <div class="card d-flex flex-row align-items-center p-2">
+        <img src="${p.img}" class="player-img" alt="${p.name}">
+        <div class="card-body">
+          <h5 class="card-title">${p.name}</h5>
+          <button class="btn btn-player" onclick="showPlayer(${p.number})">View Stats</button>
+        </div>
       </div>
     </div>`;
+    grid.innerHTML += card;
   });
 }
 
@@ -155,64 +178,87 @@ function showPlayer(number){
   document.getElementById('homePage').classList.add('d-none');
   document.getElementById('playerPage').classList.remove('d-none');
   document.getElementById('playerName').innerText = p.name;
-  updatePlayerStats();
-}
 
-function updatePlayerStats(){
   const month = document.getElementById('monthSelect').value;
-  const number = document.getElementById('playerName').innerText;
-  const p = players.find(pl=>pl.name==number);
-  let stats = month==='all'? aggregateStats(p.stats) : (p.stats[month] || zeroStats());
-  const tbody = document.getElementById('playerStatsBody');
-  tbody.innerHTML = `<tr>
-    <td>${stats.matches}</td>
-    <td>${stats.goals}</td>
-    <td>${stats.assists}</td>
-    <td>${stats.passRate}</td>
-    <td>${stats.shotRate}</td>
-    <td>${stats.motm}</td>
-    <td>${stats.red}</td>
-    <td>${stats.winRate}</td>
-    <td>${stats.rating}</td>
-  </tr>`;
+  let s = month==='all' ? aggregateStats(p.stats) : (p.stats[month] || zeroStats());
+  document.getElementById('playerMatches').innerText = s.matches;
+  document.getElementById('playerGoals').innerText = s.goals;
+  document.getElementById('playerAssists').innerText = s.assists;
+  document.getElementById('playerPassRate').innerText = s.passRate;
+  document.getElementById('playerShotRate').innerText = s.shotRate;
+  document.getElementById('playerMOTM').innerText = s.rating; // rating = Ballon d'Or
+  document.getElementById('playerRed').innerText = s.red;
+  document.getElementById('playerWinRate').innerText = s.winRate;
+  document.getElementById('playerRating').innerText = s.rating;
 }
-
-function zeroStats(){ return {matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0}; }
 
 function aggregateStats(statsObj){
-  return Object.values(statsObj).reduce((acc,cur)=>{
+  return Object.values(statsObj).reduce((acc, cur)=>{
     return {
       matches: acc.matches+cur.matches,
       goals: acc.goals+cur.goals,
       assists: acc.assists+cur.assists,
       passRate: Math.round((acc.passRate+cur.passRate)/2),
       shotRate: Math.round((acc.shotRate+cur.shotRate)/2),
-      motm: acc.motm+cur.motm,
+      motm: Math.round((acc.motm+cur.motm)/2),
       red: acc.red+cur.red,
       winRate: Math.round((acc.winRate+cur.winRate)/2),
       rating: Math.round((acc.rating+cur.rating)*10/2)/10
-    }
+    };
   }, zeroStats());
 }
 
-function showBallonPoints(){
-  document.getElementById('homePage').classList.add('d-none');
-  document.getElementById('ballonPage').classList.remove('d-none');
-  const tbody = document.getElementById('ballonTableBody');
-  tbody.innerHTML = '';
-  const months = ["2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08"];
-  players.forEach(p=>{
-    let total=0;
-    const row = months.map(m=>{
-      const pts = p.stats[m]?.motm || 0;
-      total += pts;
-      return `<td>${pts}</td>`;
-    }).join('');
-    tbody.innerHTML += `<tr>
-      <td>${p.name}</td>${row}<td>${total}</td>
+function zeroStats(){ return {matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0}; }
+
+let currentSort={col:'number',asc:true};
+function renderStats(month='all'){
+  const tbody = document.getElementById('statsBody');
+  tbody.innerHTML='';
+  const sorted = [...players].sort((a,b)=>{
+    let aVal = (month==='all'? aggregateStats(a.stats) : (a.stats[month] || zeroStats()))[currentSort.col] || a[currentSort.col];
+    let bVal = (month==='all'? aggregateStats(b.stats) : (b.stats[month] || zeroStats()))[currentSort.col] || b[currentSort.col];
+    if(aVal<bVal) return currentSort.asc?-1:1;
+    if(aVal>bVal) return currentSort.asc?1:-1;
+    return 0;
+  });
+
+  sorted.forEach(p=>{
+    let s = month==='all' ? aggregateStats(p.stats) : (p.stats[month] || zeroStats());
+    tbody.innerHTML+=`<tr>
+      <td>${p.number}</td>
+      <td>${p.name}</td>
+      <td>${s.matches}</td>
+      <td>${s.goals}</td>
+      <td>${s.assists}</td>
+      <td>${s.passRate}</td>
+      <td>${s.shotRate}</td>
+      <td>${s.rating}</td> <!-- Ballon d'Or -->
+      <td>${s.red}</td>
+      <td>${s.winRate}</td>
+      <td>${s.rating}</td>
     </tr>`;
   });
 }
+
+function renderBallon(){
+  const tbody = document.getElementById('ballonTable');
+  tbody.innerHTML='';
+  players.forEach(p=>{
+    const months = ["2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08"];
+    let total = 0;
+    let row = `<tr><td>${p.name}</td>`;
+    months.forEach(m=>{
+      let val = p.stats[m]?.rating || 0;
+      total += val;
+      row += `<td>${val}</td>`;
+    });
+    row += `<td>${total}</td></tr>`;
+    tbody.innerHTML += row;
+  });
+}
+
+function updateStats(){ renderStats(document.getElementById('monthSelect').value); }
+function sortBy(col){ currentSort.col===col ? currentSort.asc=!currentSort.asc : (currentSort={col,asc:true}); renderStats(document.getElementById('monthSelect').value); }
 
 // Initial load
 showHome();
