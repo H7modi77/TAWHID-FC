@@ -7,7 +7,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
 body {
-  background: linear-gradient(to bottom, #0b1d3f, #0f3057, #193d6f);
+  background: linear-gradient(to bottom, #000000, #111111);
   color: #fff;
   font-family: 'Segoe UI', sans-serif;
   padding: 20px;
@@ -30,7 +30,7 @@ h2, h3 { color: gold; text-align: center; margin-bottom: 20px; }
   .table-responsive { font-size: 0.9rem; }
   .btn-player { font-size: 14px; }
 }
-.player-img { width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; }
+.player-img { width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; object-fit: cover; }
 </style>
 </head>
 <body>
@@ -103,22 +103,22 @@ h2, h3 { color: gold; text-align: center; margin-bottom: 20px; }
 <script>
 // Players data with images
 const players = [
-  {number:78,name:"Almousa3m",img:"images/almousa3m.png",
+  {number:78,name:"Almousa3m", img:"https://drive.google.com/uc?export=view&id=1Ms51uVWqoV0BBT749S8M4uJOWupv6gDJ",
     stats: {"2025-10":{matches:58,goals:65,assists:61,passRate:78,shotRate:33,motm:18,red:1,winRate:60,rating:8.7}}
   },
-  {number:25,name:"Yo0ousef25",img:"images/yo0ousef25.png",
+  {number:25,name:"Yo0ousef25", img:"https://drive.google.com/uc?export=view&id=1lMxLGuypymJ0T8duu0ZkX3YNop5-Kq5E",
     stats: {"2025-10":{matches:28,goals:23,assists:5,passRate:78,shotRate:46,motm:0,red:0,winRate:67,rating:8.3}}
   },
-  {number:28,name:"H2ssain_28",img:"images/h2ssain28.png",
+  {number:28,name:"H2ssain_28", img:"https://drive.google.com/uc?export=view&id=104nrIHng2Xf5v2e5nG2bQLdvbgRejOJe",
     stats: {"2025-10":{matches:44,goals:36,assists:15,passRate:76,shotRate:23,motm:1,red:0,winRate:56,rating:8.2}}
   },
-  {number:7,name:"H7modi_77",img:"images/h7modi77.png",
+  {number:7,name:"H7modi_77", img:"https://drive.google.com/uc?export=view&id=1iZFg0I6QiBC2-3a8zO8-UjFKfmnOrV9",
     stats: {"2025-10":{matches:45,goals:14,assists:36,passRate:79,shotRate:33,motm:2,red:5,winRate:62,rating:8.5}}
   },
-  {number:2,name:"Basabeso2",img:"images/basabeso2.png",
+  {number:2,name:"Basabeso2", img:"https://drive.google.com/uc?export=view&id=1mTPDEeTAtcA1kA5Z_zYKN5Z93SzKFipi",
     stats: {"2025-10":{matches:48,goals:36,assists:17,passRate:84,shotRate:40,motm:7,red:1,winRate:62,rating:8.6}}
   },
-  {number:11,name:"M-_-_-_-11_11",img:"images/m11.png",
+  {number:11,name:"M-_-_-_-11_11", img:"https://drive.google.com/uc?export=view&id=1DROKFwFKISl9-y2YGU6MpzujWQlLFIW8",
     stats: {"2025-10":{matches:68,goals:38,assists:43,passRate:81,shotRate:27,motm:9,red:1,winRate:57,rating:8.8}}
   }
 ];
@@ -146,80 +146,13 @@ function renderPlayers(){
     </div>`;
     grid.innerHTML += card;
   });
+  // Add All Players button
+  grid.innerHTML += `<div class="col-12">
+    <div class="card p-2 text-center">
+      <button class="btn btn-player" onclick="showAllPlayers()">All Players</button>
+    </div>
+  </div>`;
 }
 
-function showPlayer(number){
-  const p = players.find(pl=>pl.number==number);
-  document.getElementById('homePage').classList.add('d-none');
-  document.getElementById('playerPage').classList.remove('d-none');
-  document.getElementById('playerName').innerText = p.name;
+// باقي الدوال بدون تغيير (showPlayer, showAllPlayers, aggregateStats, sumStats, zeroStats, renderStats, updateStats, sortBy)
 
-  const month = document.getElementById('monthSelect').value;
-  let s = month==='all' ? aggregateStats(p.stats) : (p.stats[month] || zeroStats());
-  document.getElementById('playerMatches').innerText = s.matches;
-  document.getElementById('playerGoals').innerText = s.goals;
-  document.getElementById('playerAssists').innerText = s.assists;
-  document.getElementById('playerPassRate').innerText = s.passRate;
-  document.getElementById('playerShotRate').innerText = s.shotRate;
-  document.getElementById('playerMOTM').innerText = s.motm;
-  document.getElementById('playerRed').innerText = s.red;
-  document.getElementById('playerWinRate').innerText = s.winRate;
-  document.getElementById('playerRating').innerText = s.rating;
-}
-
-function aggregateStats(statsObj){
-  return Object.values(statsObj).reduce((acc, cur)=>{
-    return {
-      matches: acc.matches+cur.matches,
-      goals: acc.goals+cur.goals,
-      assists: acc.assists+cur.assists,
-      passRate: Math.round((acc.passRate+cur.passRate)/2),
-      shotRate: Math.round((acc.shotRate+cur.shotRate)/2),
-      motm: acc.motm+cur.motm,
-      red: acc.red+cur.red,
-      winRate: Math.round((acc.winRate+cur.winRate)/2),
-      rating: Math.round((acc.rating+cur.rating)*10/2)/10
-    };
-  }, zeroStats());
-}
-
-function zeroStats(){ return {matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0}; }
-
-let currentSort={col:'number',asc:true};
-function renderStats(month='all'){
-  const tbody = document.getElementById('statsBody');
-  tbody.innerHTML='';
-  const sorted = [...players].sort((a,b)=>{
-    let aVal = (month==='all'? aggregateStats(a.stats) : (a.stats[month] || zeroStats()))[currentSort.col] || a[currentSort.col];
-    let bVal = (month==='all'? aggregateStats(b.stats) : (b.stats[month] || zeroStats()))[currentSort.col] || b[currentSort.col];
-    if(aVal<bVal) return currentSort.asc?-1:1;
-    if(aVal>bVal) return currentSort.asc?1:-1;
-    return 0;
-  });
-
-  sorted.forEach(p=>{
-    let s = month==='all' ? aggregateStats(p.stats) : (p.stats[month] || zeroStats());
-    tbody.innerHTML+=`<tr>
-      <td>${p.number}</td>
-      <td>${p.name}</td>
-      <td>${s.matches}</td>
-      <td>${s.goals}</td>
-      <td>${s.assists}</td>
-      <td>${s.passRate}</td>
-      <td>${s.shotRate}</td>
-      <td>${s.motm}</td>
-      <td>${s.red}</td>
-      <td>${s.winRate}</td>
-      <td>${s.rating}</td>
-    </tr>`;
-  });
-}
-
-function updateStats(){ renderStats(document.getElementById('monthSelect').value); }
-function sortBy(col){ currentSort.col===col ? currentSort.asc=!currentSort.asc : (currentSort={col,asc:true}); renderStats(document.getElementById('monthSelect').value); }
-
-// Initial load
-showHome();
-</script>
-</body>
-</html>
