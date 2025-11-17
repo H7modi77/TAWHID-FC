@@ -5,237 +5,270 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TAWHID FC Stats</title>
 <style>
-body { background:#001f3f; color:white; font-family:Arial, sans-serif; padding:10px; }
-h2, h3 { color: gold; text-align:center; margin:10px 0; }
-button { background: gold; color:black; border:none; border-radius:8px; padding:10px; margin:5px; cursor:pointer; }
-button:hover { background:#ffd700; }
-#playerButtons button { display:inline-block; width:calc(16% - 10px); margin:2px; } /* 6 players per row */
-#monthButtons button { display:inline-block; width:calc(8% - 10px); margin:2px; } /* 11 months per row */
-table { width:100%; border-collapse:collapse; margin-top:10px; }
-table, th, td { border:1px solid white; }
-th, td { padding:5px; text-align:center; }
-.line { width:100%; height:2px; background:white; margin:10px 0; }
+body { background:#001f3f; color:white; font-family:Arial; padding:20px; }
+h2,h3{ color:gold; text-align:center; }
+.section{ margin-bottom:30px; }
+.line{ width:100%; height:2px; background:white; margin:20px 0; }
+.button { background:gold; color:black; border:none; padding:10px 15px; margin:5px; border-radius:8px; cursor:pointer; }
+.button:hover { background:#ffd700; }
+#playerPage, #blendorPage, #awardPage{ display:none; }
+.table{ width:100%; border-collapse:collapse; margin-top:10px; }
+.table th, .table td{ border:1px solid white; padding:8px; text-align:center; }
+.table th{ background:gold; color:black; }
+.flex-wrap{ display:flex; flex-wrap:wrap; justify-content:center; }
+.flex-wrap .button{ margin:5px; min-width:100px; }
 </style>
 </head>
 <body>
 
-<h2>TAWHID FC Dashboard</h2>
+<h2>TAWHID FC</h2>
 
 <div id="homePage">
-  <div id="playerButtons"></div>
-  <div class="line"></div>
-  <div id="awardButtons">
-    <button onclick="showAward('Goal of the Month')">Goal of the Month</button>
-    <button onclick="showAward('Player of the Month')">Player of the Month</button>
-    <button onclick="showAward('Assist of the Month')">Assist of the Month</button>
+  <div class="section">
+    <h3>Players</h3>
+    <div class="flex-wrap" id="playersButtons"></div>
   </div>
+
   <div class="line"></div>
-  <div id="blendorPointsTable"></div>
+
+  <div class="section">
+    <h3>Ballon d'Or</h3>
+    <button class="button" onclick="showBlendor()">Ballon d'Or Points</button>
+  </div>
+
+  <div class="line"></div>
+
+  <div class="section">
+    <h3>Monthly Awards</h3>
+    <button class="button" onclick="showAward('Goal of the Month')">Goal of the Month</button>
+    <button class="button" onclick="showAward('Player of the Month')">Player of the Month</button>
+    <button class="button" onclick="showAward('Assist of the Month')">Assist of the Month</button>
+  </div>
 </div>
 
-<div id="playerPage" style="display:none;">
-  <button onclick="showHome()">Back</button>
+<!-- Player Page -->
+<div id="playerPage">
+  <button class="button" onclick="showHome()">Back</button>
   <h3 id="playerName"></h3>
-  <div id="monthButtons"></div>
-  <div id="statsTable"></div>
+  <div id="monthButtons" class="flex-wrap"></div>
+  <div id="playerStats"></div>
+</div>
+
+<!-- Blendor Page -->
+<div id="blendorPage">
+  <button class="button" onclick="showHome()">Back</button>
+  <h3>Ballon d'Or Points</h3>
+  <div id="blendorTable"></div>
+</div>
+
+<!-- Award Page -->
+<div id="awardPage">
+  <button class="button" onclick="showHome()">Back</button>
+  <h3 id="awardTitle"></h3>
+  <p id="awardWinner" style="font-size:20px; text-align:center;"></p>
 </div>
 
 <script>
-// الأشهر
-const months=["2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08"];
-
-// البيانات الكاملة لكل اللاعبين الستة
-const players=[
-  {number:78,name:"Almousa3m",stats:{
-    "2025-10":{matches:58,goals:65,assists:61,passRate:78,shotRate:33,motm:18,red:1,winRate:60,rating:8.7},
-    "2025-11":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2025-12":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-1":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-2":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-3":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-4":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-5":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-6":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-7":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-8":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-  },blendorPoints:{"2025-10":17.03,"2025-11":0,"2025-12":0,"2026-01":0,"2026-02":0,"2026-03":0,"2026-04":0,"2026-05":0,"2026-06":0,"2026-07":0,"2026-08":0}},
-  
-  {number:25,name:"Yo0ousef25",stats:{
-    "2025-10":{matches:28,goals:23,assists:5,passRate:78,shotRate:46,motm:0,red:0,winRate:67,rating:8.3},
-    "2025-11":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2025-12":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-1":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-2":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-3":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-4":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-5":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-6":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-7":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-8":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-  },blendorPoints:{"2025-10":16.24,"2025-11":0,"2025-12":0,"2026-01":0,"2026-02":0,"2026-03":0,"2026-04":0,"2026-05":0,"2026-06":0,"2026-07":0,"2026-08":0}},
-  
-  {number:28,name:"H2ssain_28",stats:{
-    "2025-10":{matches:44,goals:36,assists:15,passRate:76,shotRate:23,motm:1,red:0,winRate:56,rating:8.2},
-     "2025-11":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2025-12":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-1":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-2":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-3":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-4":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-5":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-6":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-7":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-8":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-  },blendorPoints:{"2025-10":16.05,"2025-11":0,"2025-12":0,"2026-01":0,"2026-02":0,"2026-03":0,"2026-04":0,"2026-05":0,"2026-06":0,"2026-07":0,"2026-08":0}},
-  
-  {number:7,name:"H7modi_77",stats:{
-    "2025-10":{matches:45,goals:14,assists:36,passRate:79,shotRate:33,motm:2,red:5,winRate:62,rating:8.5},
+// Players data
+const players = [
+  {number:78,name:"Almousa3m", stats:{
+      "2025-10":{matches:58,goals:65,assists:61,passRate:78,shotRate:33,motm:18,red:1,winRate:60,rating:8.7},
       "2025-11":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2025-12":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-1":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-2":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-3":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-4":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-5":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-6":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-7":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-8":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-  },blendorPoints:{"2025-10":16.63,"2025-11":0,"2025-12":0,"2026-01":0,"2026-02":0,"2026-03":0,"2026-04":0,"2026-05":0,"2026-06":0,"2026-07":0,"2026-08":0}},
-  
-  {number:2,name:"Basabeso2",stats:{
-    "2025-10":{matches:48,goals:36,assists:17,passRate:84,shotRate:40,motm:7,red:1,winRate:62,rating:8.6},
+      "2025-12":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-01":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-02":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-03":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-04":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-05":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-06":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-07":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-08":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0}
+    }, blendorPoints:{
+      "2025-10":2,"2025-11":0,"2025-12":0,"2026-01":0,"2026-02":0,"2026-03":0,"2026-04":0,"2026-05":0,"2026-06":0,"2026-07":0,"2026-08":0
+    }
+  },
+  {number:25,name:"Yo0ousef25", stats:{
+      "2025-10":{matches:28,goals:23,assists:5,passRate:78,shotRate:46,motm:0,red:0,winRate:67,rating:8.3},
       "2025-11":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2025-12":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-1":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-2":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-3":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-4":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-5":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-6":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-7":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-8":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-  },blendorPoints:{"2025-10":16.83,"2025-11":0,"2025-12":0,"2026-01":0,"2026-02":0,"2026-03":0,"2026-04":0,"2026-05":0,"2026-06":0,"2026-07":0,"2026-08":0}},
-  
-  {number:11,name:"M-_-_-_-11_11",stats:{
-    "2025-10":{matches:68,goals:38,assists:43,passRate:81,shotRate:27,motm:9,red:1,winRate:57,rating:8.8},
-     "2025-11":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2025-12":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-1":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-2":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-3":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-4":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-5":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-6":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-7":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-    "2026-8":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
-  },blendorPoints:{"2025-10":17.22,"2025-11":0,"2025-12":0,"2026-01":0,"2026-02":0,"2026-03":0,"2026-04":0,"2026-05":0,"2026-06":0,"2026-07":0,"2026-08":0}},
+      "2025-12":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-01":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-02":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-03":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-04":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-05":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-06":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-07":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-08":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0}
+    }, blendorPoints:{
+      "2025-10":2,"2025-11":0,"2025-12":0,"2026-01":0,"2026-02":0,"2026-03":0,"2026-04":0,"2026-05":0,"2026-06":0,"2026-07":0,"2026-08":0
+    }
+  },
+  {number:28,name:"H2ssain_28", stats:{
+      "2025-10":{matches:44,goals:36,assists:15,passRate:76,shotRate:23,motm:1,red:0,winRate:56,rating:8.2},
+      "2025-11":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2025-12":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-01":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-02":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-03":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-04":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-05":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-06":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-07":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-08":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0}
+    }, blendorPoints:{
+      "2025-10":2,"2025-11":0,"2025-12":0,"2026-01":0,"2026-02":0,"2026-03":0,"2026-04":0,"2026-05":0,"2026-06":0,"2026-07":0,"2026-08":0
+    }
+  },
+  {number:7,name:"H7modi_77", stats:{
+      "2025-10":{matches:45,goals:14,assists:36,passRate:79,shotRate:33,motm:2,red:5,winRate:62,rating:8.5},
+      "2025-11":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2025-12":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-01":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-02":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-03":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-04":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-05":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-06":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-07":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-08":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0}
+    }, blendorPoints:{
+      "2025-10":2,"2025-11":0,"2025-12":0,"2026-01":0,"2026-02":0,"2026-03":0,"2026-04":0,"2026-05":0,"2026-06":0,"2026-07":0,"2026-08":0
+    }
+  },
+  {number:2,name:"Basabeso2", stats:{
+      "2025-10":{matches:48,goals:36,assists:17,passRate:84,shotRate:40,motm:7,red:1,winRate:62,rating:8.6},
+      "2025-11":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2025-12":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-01":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-02":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-03":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-04":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-05":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-06":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-07":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0},
+      "2026-08":{matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0}
+    }, blendorPoints:{
+      "2025-10":2,"2025-11":0,"2025-12":0,"2026-01":0,"2026-02":0,"2026-03":0,"2026-04":0,"2026-05":0,"2026-06":0,"2026-07":0,"2026-08":0
+    }
+  }
 ];
 
-// --- الدوال ---
-function renderPlayerButtons(){
-  const container=document.getElementById('playerButtons');
-  container.innerHTML='';
-  players.forEach(p=>{
-    const btn=document.createElement('button');
-    btn.innerText=p.name;
-    btn.onclick=()=>showPlayer(p.number);
-    container.appendChild(btn);
-  });
-}
+// Initialize players buttons
+const playersDiv = document.getElementById('playersButtons');
+players.forEach((p,i)=>{
+  const btn = document.createElement('button');
+  btn.className='button';
+  btn.textContent=p.name;
+  btn.onclick=()=>showPlayer(i);
+  playersDiv.appendChild(btn);
+});
 
-function showPlayer(number){
-  const player=players.find(p=>p.number===number);
+// Show player page
+function showPlayer(index){
   document.getElementById('homePage').style.display='none';
   document.getElementById('playerPage').style.display='block';
-  document.getElementById('playerName').innerText=player.name;
-
-  const monthContainer=document.getElementById('monthButtons');
-  monthContainer.innerHTML='';
+  document.getElementById('playerName').textContent = players[index].name;
+  
+  const monthsDiv = document.getElementById('monthButtons');
+  monthsDiv.innerHTML='';
+  const months = Object.keys(players[index].stats);
   months.forEach(m=>{
-    const btn=document.createElement('button');
-    btn.innerText=m;
-    btn.onclick=()=>showStats(player,m);
-    monthContainer.appendChild(btn);
+    const btn = document.createElement('button');
+    btn.className='button';
+    btn.textContent=m;
+    btn.onclick = ()=> showStats(index,m);
+    monthsDiv.appendChild(btn);
   });
-  const totalBtn=document.createElement('button');
-  totalBtn.innerText='Total';
-  totalBtn.onclick=()=>showStats(player,'total');
-  monthContainer.appendChild(totalBtn);
 
-  showStats(player,'2025-10');
+  const totalBtn = document.createElement('button');
+  totalBtn.className='button';
+  totalBtn.textContent='Total';
+  totalBtn.onclick=()=>showTotal(index);
+  monthsDiv.appendChild(totalBtn);
+
+  document.getElementById('playerStats').innerHTML='';
 }
 
-function showStats(player,month){
-  let stats;
-  if(month==='total'){
-    stats={matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0};
+// Show stats of a month
+function showStats(index,month){
+  const s = players[index].stats[month];
+  let html='<table class="table">';
+  html+='<tr><th>Matches</th><th>Goals</th><th>Assists</th><th>PassRate</th><th>ShotRate</th><th>MOTM</th><th>Red</th><th>WinRate</th><th>Rating</th></tr>';
+  html+='<tr>';
+  html+=`<td>${s.matches}</td><td>${s.goals}</td><td>${s.assists}</td><td>${s.passRate}</td><td>${s.shotRate}</td><td>${s.motm}</td><td>${s.red}</td><td>${s.winRate}</td><td>${s.rating}</td>`;
+  html+='</tr></table>';
+  document.getElementById('playerStats').innerHTML = html;
+}
+
+// Show total stats
+function showTotal(index){
+  const stats = players[index].stats;
+  const months = Object.keys(stats);
+  let total={matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0};
+  months.forEach(m=>{
+    const s=stats[m];
+    total.matches+=s.matches;
+    total.goals+=s.goals;
+    total.assists+=s.assists;
+    total.passRate+=s.passRate;
+    total.shotRate+=s.shotRate;
+    total.motm+=s.motm;
+    total.red+=s.red;
+    total.winRate+=s.winRate;
+    total.rating+=s.rating;
+  });
+  const len = months.length;
+  let html='<table class="table">';
+  html+='<tr><th>Matches</th><th>Goals</th><th>Assists</th><th>PassRate</th><th>ShotRate</th><th>MOTM</th><th>Red</th><th>WinRate</th><th>Rating</th></tr>';
+  html+='<tr>';
+  html+=`<td>${total.matches}</td><td>${total.goals}</td><td>${total.assists}</td><td>${Math.round(total.passRate/len)}</td><td>${Math.round(total.shotRate/len)}</td><td>${total.motm}</td><td>${total.red}</td><td>${Math.round(total.winRate/len)}</td><td>${(total.rating/len).toFixed(2)}</td>`;
+  html+='</tr></table>';
+  document.getElementById('playerStats').innerHTML = html;
+}
+
+// Show Blendor Points
+function showBlendor(){
+  document.getElementById('homePage').style.display='none';
+  document.getElementById('blendorPage').style.display='block';
+  let html='<table class="table"><tr><th>Player</th>';
+  const months = Object.keys(players[0].blendorPoints);
+  months.forEach(m=> html+='<th>'+m+'</th>');
+  html+='<th>Total</th></tr>';
+  players.forEach(p=>{
+    html+='<tr><td>'+p.name+'</td>';
+    let sum=0;
     months.forEach(m=>{
-      const s=player.stats[m];
-      stats.matches+=s.matches;
-      stats.goals+=s.goals;
-      stats.assists+=s.assists;
-      stats.passRate+=s.passRate;
-      stats.shotRate+=s.shotRate;
-      stats.motm+=s.motm;
-      stats.red+=s.red;
-      stats.winRate+=s.winRate;
-      stats.rating+=s.rating;
+      const val=p.blendorPoints[m];
+      html+='<td>'+val+'</td>';
+      sum+=val;
     });
-    stats.passRate=Math.round(stats.passRate/months.length);
-    stats.shotRate=Math.round(stats.shotRate/months.length);
-    stats.winRate=Math.round(stats.winRate/months.length);
-    stats.rating=(stats.rating/months.length).toFixed(1);
-  } else stats=player.stats[month];
-
-  let table='<table><tr><th>Matches</th><td>'+stats.matches+'</td></tr>';
-  table+='<tr><th>Goals</th><td>'+stats.goals+'</td></tr>';
-  table+='<tr><th>Assists</th><td>'+stats.assists+'</td></tr>';
-  table+='<tr><th>Pass %</th><td>'+stats.passRate+'</td></tr>';
-  table+='<tr><th>Shot %</th><td>'+stats.shotRate+'</td></tr>';
-  table+='<tr><th>MOTM</th><td>'+stats.motm+'</td></tr>';
-  table+='<tr><th>Red Cards</th><td>'+stats.red+'</td></tr>';
-  table+='<tr><th>Win %</th><td>'+stats.winRate+'</td></tr>';
-  table+='<tr><th>Rating</th><td>'+stats.rating+'</td></tr></table>';
-
-  document.getElementById('statsTable').innerHTML=table;
+    html+='<td>'+sum+'</td>';
+    html+='</tr>';
+  });
+  html+='</table>';
+  document.getElementById('blendorTable').innerHTML=html;
 }
 
+// Show award
+function showAward(type){
+  document.getElementById('homePage').style.display='none';
+  document.getElementById('awardPage').style.display='block';
+  document.getElementById('awardTitle').textContent=type;
+  let winner="";
+  if(type==='Goal of the Month') winner="H2ssain_28";
+  if(type==='Player of the Month') winner="M-_-_-_-11_11";
+  if(type==='Assist of the Month') winner="Almousa3m";
+  document.getElementById('awardWinner').textContent = winner;
+}
+
+// Show home
 function showHome(){
   document.getElementById('homePage').style.display='block';
   document.getElementById('playerPage').style.display='none';
-  renderPlayerButtons();
-  renderBlendorPoints();
+  document.getElementById('blendorPage').style.display='none';
+  document.getElementById('awardPage').style.display='none';
 }
-
-function renderBlendorPoints(){
-  const container=document.getElementById('blendorPointsTable');
-  let table='<table><tr><th>Player</th>';
-  months.forEach(m=>table+='<th>'+m+'</th>');
-  table+='<th>Total</th></tr>';
-  players.forEach(p=>{
-    table+='<tr><td>'+p.name+'</td>';
-    let total=0;
-    months.forEach(m=>{
-      const val=p.blendorPoints[m];
-      total+=val;
-      table+='<td>'+val+'</td>';
-    });
-    table+='<td>'+total+'</td></tr>';
-  });
-  table+='</table>';
-  container.innerHTML=table;
-}
-
-function showAward(type){
-  let winner = ""; // هنا تحط اسم اللاعب الذي تريد
-  if(type==='Goal of the Month') winner = "H2ssain_28"; // مثال
-  if(type==='Player of the Month') winner = "M-_-_-_-11_11"; 
-  if(type==='Assist of the Month') winner = "Almousa3m";
-  alert(type+' winner: '+winner);
-}
-
-showHome();
 </script>
-
 </body>
 </html>
+
