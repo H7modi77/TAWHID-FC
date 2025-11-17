@@ -3,172 +3,225 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tawhid FC Full Stats</title>
+<title>TAWHID FC Stats</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-body { background:#001f3f; color:white; font-family:Arial; margin:20px; }
-h1, h2, h3 { color: gold; text-align:center; }
-.section { margin-top:20px; }
-.line { width:100%; height:2px; background:white; margin:20px 0; }
-button { padding:10px; margin:5px; border:none; border-radius:8px; background:#003366; color:white; font-size:14px; cursor:pointer; }
-button:hover { background:#004080; }
-.player-buttons, .month-buttons, .award-buttons { display:flex; flex-wrap:wrap; justify-content:center; }
-.player-buttons button, .month-buttons button, .award-buttons button { flex:0 0 auto; margin:3px; }
-.page { display:none; }
-.back { background:#ffaa00; color:black; font-weight:bold; }
-.stat-box { background:#002b55; padding:10px; border-radius:8px; margin:5px; border:1px solid white; display:inline-block; min-width:80px; text-align:center; }
-.table { width:100%; border-collapse:collapse; margin-top:10px; }
-.table th, .table td { border:1px solid white; padding:8px; text-align:center; }
-.table th { background:gold; color:black; }
+body { background: linear-gradient(to bottom, #0b1d3f, #0f3057, #193d6f); color: #fff; font-family: 'Segoe UI', sans-serif; padding: 20px; }
+h2, h3 { color: gold; text-align: center; margin-bottom: 20px; }
+.btn-player { background: gold; color: #000; font-weight: bold; border-radius: 20px; margin:5px; flex:1; }
+.btn-player:hover { background:#ffd700; }
+.card { background-color: rgba(255,255,255,0.05); border-radius: 15px; margin-bottom: 20px; }
+.pointer { cursor:pointer; }
+.player-img { width:50px; height:50px; border-radius:50%; margin-right:10px; }
+.month-buttons { display:flex; flex-wrap:wrap; justify-content:center; margin-bottom:20px; }
+.month-buttons button { margin:3px; min-width:60px; font-size:14px; }
+
+table th { background:gold; color:#000; text-align:center; }
+table td { background: rgba(255,255,255,0.05); text-align:center; }
+
+@media(max-width:768px){
+  .month-buttons button { font-size:12px; min-width:50px; }
+}
 </style>
 </head>
 <body>
 
-<h1>Tawhid FC Dashboard</h1>
+<h2>TAWHID FC Dashboard</h2>
 
-<!-- HOME PAGE -->
-<div id="home" class="page" style="display:block;">
-    <div class="section">
-        <h2>Players</h2>
-        <div class="player-buttons" id="playerButtons"></div>
-    </div>
-
-    <div class="line"></div>
-
-    <div class="section">
-        <h2>Monthly Awards</h2>
-        <div class="award-buttons">
-            <button onclick="showAward('Goal of the Month')">Goal of the Month</button>
-            <button onclick="showAward('Player of the Month')">Player of the Month</button>
-            <button onclick="showAward('Assist of the Month')">Assist of the Month</button>
-        </div>
-    </div>
-
-    <div class="line"></div>
-
-    <div class="section">
-        <h2>Ballon d'Or</h2>
-        <div id="blendorTableDiv"></div>
-    </div>
+<!-- Home Page -->
+<div id="homePage">
+  <h3>Players</h3>
+  <div id="playersGrid" class="row"></div>
+  <hr style="border:2px solid white; margin:20px 0;">
+  <h3>Monthly Awards</h3>
+  <div class="text-center mb-4">
+    <button class="btn btn-player" onclick="showAward('Goal of the Month')">Goal of the Month</button>
+    <button class="btn btn-player" onclick="showAward('Player of the Month')">Player of the Month</button>
+    <button class="btn btn-player" onclick="showAward('Assist of the Month')">Assist of the Month</button>
+  </div>
+  <hr style="border:2px solid white; margin:20px 0;">
+  <h3>Ballon d'Or Points</h3>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover text-white" id="blendorTable">
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Oct 2025</th><th>Nov 2025</th><th>Dec 2025</th>
+          <th>Jan 2026</th><th>Feb 2026</th><th>Mar 2026</th>
+          <th>Apr 2026</th><th>May 2026</th><th>Jun 2026</th>
+          <th>Jul 2026</th><th>Aug 2026</th>
+          <th>Total Points</th>
+        </tr>
+      </thead>
+      <tbody id="blendorBody"></tbody>
+    </table>
+  </div>
 </div>
 
-<!-- PLAYER PAGE -->
-<div id="playerPage" class="page">
-    <button class="back" onclick="showHome()">Back</button>
-    <h2 id="playerName"></h2>
-    <div class="month-buttons" id="monthButtons"></div>
-    <div id="playerStats"></div>
+<!-- Player Page -->
+<div id="playerPage" class="d-none">
+  <button class="btn btn-secondary mb-3" onclick="showHome()">Back</button>
+  <h3 id="playerName"></h3>
+  <div class="month-buttons" id="monthButtons"></div>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover text-white" id="playerStatsTable">
+      <thead>
+        <tr>
+          <th>Matches</th><th>Goals</th><th>Assists</th>
+          <th>Pass %</th><th>Shot %</th><th>MOTM</th>
+          <th>Red</th><th>Win %</th><th>Rating</th>
+        </tr>
+      </thead>
+      <tbody id="playerStatsBody"></tbody>
+    </table>
+  </div>
 </div>
 
-<!-- AWARD PAGE -->
-<div id="awardPage" class="page">
-    <button class="back" onclick="showHome()">Back</button>
-    <h2 id="awardTitle"></h2>
-    <div id="awardContent"></div>
+<!-- Award Page -->
+<div id="awardPage" class="d-none">
+  <button class="btn btn-secondary mb-3" onclick="showHome()">Back</button>
+  <h3 id="awardTitle"></h3>
+  <div class="text-center mt-3"><h4 id="awardWinner"></h4></div>
 </div>
 
 <script>
-const months = ['2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07','2026-08'];
-
+// Players data with stats for each month
+const months = ["2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08"];
 const players = [
-  {number:78,name:"Almousa3m",stats:{'2025-10':{matches:58,goals:65,assists:61,rating:8.7}}},
-  {number:25,name:"Yo0ousef25",stats:{'2025-10':{matches:28,goals:23,assists:5,rating:8.3}}},
-  {number:28,name:"H2ssain_28",stats:{'2025-10':{matches:44,goals:36,assists:15,rating:8.2}}},
-  {number:7,name:"H7modi_77",stats:{'2025-10':{matches:45,goals:14,assists:36,rating:8.5}}},
-  {number:2,name:"Basabeso2",stats:{'2025-10':{matches:48,goals:36,assists:17,rating:8.6}}},
-  {number:11,name:"M-*-*-_-11_11",stats:{'2025-10':{matches:68,goals:38,assists:43,rating:8.8}}}
+  {number:78,name:"Almousa3m",img:"https://drive.google.com/uc?export=view&id=1Ms51uVWqoV0BBT749S8M4uJOWupv6gDJ",
+    stats:{
+      "2025-10":{matches:58,goals:65,assists:61,passRate:78,shotRate:33,motm:18,red:1,winRate:60,rating:8.7},
+      "2025-11":{matches:30,goals:28,assists:22,passRate:80,shotRate:35,motm:10,red:0,winRate:62,rating:8.5},
+      "2025-12":{matches:32,goals:25,assists:20,passRate:79,shotRate:30,motm:9,red:0,winRate:63,rating:8.4},
+      "2026-01":{matches:29,goals:27,assists:21,passRate:78,shotRate:33,motm:8,red:1,winRate:61,rating:8.3},
+      "2026-02":{matches:31,goals:30,assists:24,passRate:77,shotRate:32,motm:7,red:0,winRate:60,rating:8.2},
+      "2026-03":{matches:28,goals:26,assists:20,passRate:76,shotRate:31,motm:6,red:0,winRate:59,rating:8.1},
+      "2026-04":{matches:30,goals:29,assists:22,passRate:78,shotRate:30,motm:7,red:1,winRate:61,rating:8.2},
+      "2026-05":{matches:29,goals:25,assists:21,passRate:79,shotRate:32,motm:6,red:0,winRate:60,rating:8.1},
+      "2026-06":{matches:31,goals:28,assists:23,passRate:77,shotRate:31,motm:7,red:0,winRate:61,rating:8.2},
+      "2026-07":{matches:30,goals:27,assists:22,passRate:76,shotRate:30,motm:6,red:0,winRate:60,rating:8.1},
+      "2026-08":{matches:29,goals:26,assists:21,passRate:77,shotRate:32,motm:7,red:0,winRate:61,rating:8.2}
+    },
+    blendorPoints:{"2025-10":2,"2025-11":1.5,"2025-12":2,"2026-01":2,"2026-02":1,"2026-03":2,"2026-04":1.5,"2026-05":2,"2026-06":1,"2026-07":1.5,"2026-08":2}
+  },
+  // يمكنك إضافة باقي اللاعبين الستة بنفس النمط لكل شهر ونقاط البالندور
 ];
 
-// Generate random stats for other months
-players.forEach(p=>{
-  months.forEach(m=>{
-    if(!p.stats[m]) p.stats[m] = {matches: Math.floor(Math.random()*30)+20, goals: Math.floor(Math.random()*20), assists: Math.floor(Math.random()*15), rating: parseFloat((Math.random()*2+7).toFixed(1))};
-  });
-});
-
-// Ballon d'Or points (editable in code)
-const blendorPoints = {
-  'Almousa3m':[2,3,2,4,3,2,3,4,2,3,3],
-  'Yo0ousef25':[1,2,2,3,2,1,2,3,2,2,2],
-  'H2ssain_28':[2,2,1,3,2,2,3,2,3,2,3],
-  'H7modi_77':[2,3,2,2,3,2,2,3,2,3,3],
-  'Basabeso2':[3,2,2,3,3,2,3,2,3,2,3],
-  'M-*-*-_-11_11':[2,3,3,2,3,3,2,3,2,2,3]
-};
-
-function showHome(){
-  document.getElementById('home').style.display='block';
-  document.getElementById('playerPage').style.display='none';
-  document.getElementById('awardPage').style.display='none';
-  renderPlayerButtons();
-  renderBlendor();
-}
-
-function renderPlayerButtons(){
-  const div = document.getElementById('playerButtons'); div.innerHTML='';
+// Render players buttons
+function renderPlayers(){
+  const grid = document.getElementById('playersGrid'); grid.innerHTML='';
   players.forEach(p=>{
-    div.innerHTML+=`<button onclick="showPlayer(${p.number})">${p.name}</button>`;
+    const card = `<div class="col-12 col-md-6 mb-2">
+      <div class="card d-flex flex-row align-items-center p-2">
+        <img src="${p.img}" class="player-img" alt="${p.name}">
+        <div class="card-body">
+          <h5 class="card-title" style="color:white">${p.name}</h5>
+          <button class="btn btn-player" onclick="showPlayer(${p.number})">View Stats</button>
+        </div>
+      </div>
+    </div>`;
+    grid.innerHTML += card;
   });
 }
 
+// Show player stats page
 function showPlayer(number){
   const p = players.find(pl=>pl.number==number);
-  document.getElementById('home').style.display='none';
-  document.getElementById('playerPage').style.display='block';
+  document.getElementById('homePage').classList.add('d-none');
+  document.getElementById('playerPage').classList.remove('d-none');
   document.getElementById('playerName').innerText = p.name;
-  const monthDiv = document.getElementById('monthButtons'); monthDiv.innerHTML='';
-  months.forEach(m=>{ monthDiv.innerHTML+=`<button onclick="showMonthStats(${p.number},'${m}')">${m}</button>`; });
-  monthDiv.innerHTML+=`<button onclick="showTotalStats(${p.number})">Total</button>`;
-}
 
-function showMonthStats(number,month){
-  const p = players.find(pl=>pl.number==number);
-  const s = p.stats[month];
-  const statDiv = document.getElementById('playerStats');
-  statDiv.innerHTML=`<div class='stat-box'>Matches: ${s.matches}</div>
-                    <div class='stat-box'>Goals: ${s.goals}</div>
-                    <div class='stat-box'>Assists: ${s.assists}</div>
-                    <div class='stat-box'>Rating: ${s.rating}</div>`;
-}
-
-function showTotalStats(number){
-  const p = players.find(pl=>pl.number==number);
-  let totalMatches=0,totalGoals=0,totalAssists=0,totalRating=0;
-  months.forEach(m=>{ const s=p.stats[m]; totalMatches+=s.matches; totalGoals+=s.goals; totalAssists+=s.assists; totalRating+=s.rating; });
-  const avgRating=(totalRating/months.length).toFixed(1);
-  const statDiv=document.getElementById('playerStats');
-  statDiv.innerHTML=`<div class='stat-box'>Matches: ${totalMatches}</div>
-                        <div class='stat-box'>Goals: ${totalGoals}</div>
-                        <div class='stat-box'>Assists: ${totalAssists}</div>
-                        <div class='stat-box'>Rating: ${avgRating}</div>`;
-}
-
-function renderBlendor(){
-  const div = document.getElementById('blendorTableDiv');
-  let html=`<table class='table'><tr><th>Player</th>`;
-  months.forEach(m=>html+=`<th>${m}</th>`);
-  html+=`<th>Total</th></tr>`;
-  players.forEach(p=>{
-    html+=`<tr><td>${p.name}</td>`;
-    let total=0;
-    blendorPoints[p.name].forEach(pt=>{ html+=`<td>${pt}</td>`; total+=pt; });
-    html+=`<td>${total}</td></tr>`;
+  const monthButtonsDiv = document.getElementById('monthButtons');
+  monthButtonsDiv.innerHTML='';
+  months.forEach(m=>{
+    const btn = document.createElement('button');
+    btn.className='btn btn-player';
+    btn.innerText=m.split('-')[1]+'-'+m.split('-')[0];
+    btn.onclick = ()=> showMonthStats(p,m);
+    monthButtonsDiv.appendChild(btn);
   });
-  html+=`</table>`;
-  div.innerHTML=html;
+  // Total button
+  const totalBtn = document.createElement('button');
+  totalBtn.className='btn btn-player';
+  totalBtn.innerText='Total';
+  totalBtn.onclick = ()=> showTotalStats(p);
+  monthButtonsDiv.appendChild(totalBtn);
+
+  showTotalStats(p); // عرض الافتراضي لمجموع الأشهر
 }
 
+// Show month stats
+function showMonthStats(player,month){
+  const stats = player.stats[month];
+  const tbody = document.getElementById('playerStatsBody');
+  tbody.innerHTML=`<tr>
+    <td>${stats.matches}</td>
+    <td>${stats.goals}</td>
+    <td>${stats.assists}</td>
+    <td>${stats.passRate}</td>
+    <td>${stats.shotRate}</td>
+    <td>${stats.motm}</td>
+    <td>${stats.red}</td>
+    <td>${stats.winRate}</td>
+    <td>${stats.rating}</td>
+  </tr>`;
+}
+
+// Show total stats
+function showTotalStats(player){
+  let total={matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0};
+  months.forEach(m=>{
+    const s=player.stats[m];
+    total.matches+=s.matches; total.goals+=s.goals; total.assists+=s.assists;
+    total.passRate+=s.passRate; total.shotRate+=s.shotRate;
+    total.motm+=s.motm; total.red+=s.red; total.winRate+=s.winRate;
+    total.rating+=s.rating;
+  });
+  const avgRating=(total.rating/months.length).toFixed(1);
+  total.rating=avgRating;
+  const tbody = document.getElementById('playerStatsBody');
+  tbody.innerHTML=`<tr>
+    <td>${total.matches}</td>
+    <td>${total.goals}</td>
+    <td>${total.assists}</td>
+    <td>${Math.round(total.passRate/months.length)}</td>
+    <td>${Math.round(total.shotRate/months.length)}</td>
+    <td>${total.motm}</td>
+    <td>${total.red}</td>
+    <td>${Math.round(total.winRate/months.length)}</td>
+    <td>${total.rating}</td>
+  </tr>`;
+}
+
+// Show home
+function showHome(){ document.getElementById('homePage').classList.remove('d-none'); document.getElementById('playerPage').classList.add('d-none'); }
+
+// Render Blendor table
+function renderBlendor(){
+  const tbody=document.getElementById('blendorBody'); tbody.innerHTML='';
+  players.forEach(p=>{
+    let total=0; let row=`<tr><td>${p.name}</td>`;
+    months.forEach(m=>{
+      const val=p.blendorPoints[m] || 0; total+=val;
+      row+=`<td>${val}</td>`;
+    });
+    row+=`<td>${total}</td></tr>`;
+    tbody.innerHTML+=row;
+  });
+}
+
+// Award page
 function showAward(type){
-  document.getElementById('home').style.display='none';
-  document.getElementById('awardPage').style.display='block';
-  document.getElementById('awardTitle').innerText=type;
-  let winner='';
-  if(type==='Goal of the Month') winner='H2ssain_28';
-  if(type==='Assist of the Month') winner='Almousa3m';
-  if(type==='Player of the Month') winner='M-_-_-_-11_11';
-  document.getElementById('awardContent').innerHTML=`<h3>${winner}</h3><p>Write article here...</p>`;
+  const awardTitle=document.getElementById('awardTitle'); const awardWinner=document.getElementById('awardWinner');
+  awardTitle.innerText=type;
+  awardWinner.innerText='H7MODI_77'; // يمكنك تغييره من الكود
+  document.getElementById('homePage').classList.add('d-none');
+  document.getElementById('awardPage').classList.remove('d-none');
 }
 
-showHome();
+// Initial render
+renderPlayers();
+renderBlendor();
 </script>
 </body>
 </html>
