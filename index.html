@@ -5,138 +5,265 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TAWHID FC Stats</title>
 <style>
-/* ===== عام ===== */
-body { background:#001f3f; color:white; font-family:Arial; padding:20px; }
-h2,h3{ color:gold; text-align:center; margin-bottom:10px; }
-.section{ margin-bottom:30px; }
-.line{ width:100%; height:2px; background:white; margin:20px 0; }
-.button { background:gold; color:black; border:none; padding:10px 15px; margin:5px; border-radius:8px; cursor:pointer; }
-.button:hover { background:#ffd700; transform: scale(1.05); transition: 0.3s; }
-#playerPage, #blendorPage, #awardPage, #loginPage{ display:none; }
+body{
+  margin:0; padding:0;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color:white;
+  background: linear-gradient(135deg, #001f3f, #004080);
+  transition: background 1s ease-in-out;
+}
+body:hover{ background: linear-gradient(135deg, #003366, #0059b3); }
 
-/* ===== جدول ===== */
-.table{ width:100%; border-collapse:collapse; margin-top:10px; }
-.table th, .table td{ border:1px solid white; padding:8px; text-align:center; }
-.table th{ background:gold; color:black; }
+/* Login Modal */
+#loginPage{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  animation: fadeIn 1s ease;
+}
+#loginPage input{
+  padding:12px;
+  margin:8px;
+  border-radius:8px;
+  border:none;
+  width:250px;
+  font-size:16px;
+}
+#loginPage button{
+  background: gold;
+  color:black;
+  border:none;
+  padding:12px 25px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
+  box-shadow: 0 0 10px rgba(255,215,0,0.7);
+  transition: all 0.3s ease;
+}
+#loginPage button:hover{
+  background:#ffd700;
+  transform: scale(1.08);
+  box-shadow: 0 0 20px rgba(255,255,255,0.8);
+}
+#errorMsg{ color:red; font-weight:bold; margin-top:10px; text-shadow:1px 1px 2px black; }
 
-/* ===== أزرار اللاعبين ===== */
+/* Headers */
+h2,h3{
+  color: gold;
+  text-align:center;
+  text-shadow: 2px 2px 6px #000;
+  margin-bottom:10px;
+  transition: all 0.5s ease;
+}
+h2:hover,h3:hover{ text-shadow: 2px 2px 12px #fff; }
+
+/* Sections */
+.section{ margin-bottom:30px; padding:15px; border-radius:15px; background: rgba(0,0,0,0.3); box-shadow:0 4px 10px rgba(0,0,0,0.5);}
+.line{ width:100%; height:3px; background:white; margin:20px 0; border-radius:5px; }
+
+/* Buttons */
+.button {
+  background:gold;
+  color:black;
+  border:none;
+  padding:12px 25px;
+  margin:5px;
+  border-radius:15px;
+  cursor:pointer;
+  font-weight:bold;
+  box-shadow: 0 0 6px rgba(255,215,0,0.6);
+  transition: all 0.3s ease;
+}
+.button:hover{
+  background:#ffd700;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255,255,255,0.9);
+}
 .flex-wrap{ display:flex; flex-wrap:wrap; justify-content:center; }
 .flex-wrap .button{ margin:5px; min-width:100px; }
 
-/* ===== صور اللاعبين ===== */
-img.player-img {
-  width:150px;
-  height:150px;
-  border-radius:50%;
-  border:3px solid gold;
-  margin-bottom:10px;
-  box-shadow: 0 0 15px gold;
-  transition: 0.3s;
+/* Tables */
+.table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+  animation: fadeIn 0.7s ease;
 }
-img.player-img:hover { transform: scale(1.1); }
+.table th, .table td{
+  border:1px solid white;
+  padding:10px;
+  text-align:center;
+}
+.table th{
+  background: rgba(255,215,0,0.9);
+  color:black;
+  text-shadow:1px 1px 2px #000;
+}
+.table td{
+  background: rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+.table td:hover{ background: rgba(255,215,0,0.3); color:black; font-weight:bold; }
 
-/* ===== إعلانات ===== */
-#ad-section { margin-top:30px; text-align:center; font-size:18px; color:lightblue; }
-#ad-section p { margin:5px 0; }
+/* Ads */
+#ads{
+  margin-top:50px;
+  text-align:center;
+  font-size:20px;
+  color: #ffd700;
+  text-shadow: 1px 1px 2px black;
+  animation: fadeIn 2s ease;
+}
+#ads p{ margin:10px 0; animation: slide 10s infinite alternate; }
 
-/* ===== login ===== */
-#loginPage { display:block; text-align:center; }
-#loginPage input { padding:10px; margin:5px; border-radius:5px; border:none; }
+/* Animations */
+@keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+@keyframes slide{ 0%{ transform:translateX(-100px);} 100%{ transform:translateX(100px);} }
 </style>
 </head>
 <body>
 
-<!-- ===== صفحة تسجيل الدخول ===== -->
+<!-- Login -->
 <div id="loginPage">
-  <h2>Login to TAWHID FC Stats</h2>
-  <input type="text" id="username" placeholder="Username"><br>
-  <input type="password" id="password" placeholder="Password"><br>
-  <button class="button" onclick="login()">Login</button>
+  <h2>Login</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="checkLogin()">Login</button>
+  <div id="errorMsg"></div>
 </div>
 
-<!-- ===== الصفحة الرئيسية ===== -->
-<div id="homePage">
-  <h2>TAWHID FC</h2>
+<!-- Home -->
+<div id="homePage" style="display:none;">
+<h2>TAWHID FC</h2>
 
-  <div class="section">
-    <h3>Players</h3>
-    <div class="flex-wrap" id="playersButtons"></div>
-  </div>
-
-  <div class="line"></div>
-
-  <div class="section">
-    <h3>Ballon d'Or</h3>
-    <button class="button" onclick="showBlendor()">Ballon d'Or Points</button>
-  </div>
-
-  <div class="line"></div>
-
-  <div class="section">
-    <h3>Monthly Awards</h3>
-    <button class="button" onclick="showAward('Goal of the Month')">Goal of the Month</button>
-    <button class="button" onclick="showAward('Player of the Month')">Player of the Month</button>
-    <button class="button" onclick="showAward('Assist of the Month')">Assist of the Month</button>
-  </div>
-
-  <div id="ad-section">
-    <h3>الإعلانات</h3>
-    <p>هندسة المعصوب</p>
-    <p>الخطابة زكاي</p>
-    <p>معا للتنمر</p>
-  </div>
+<div class="section">
+<h3>Players</h3>
+<div class="flex-wrap" id="playersButtons"></div>
 </div>
 
-<!-- ===== Player Page ===== -->
-<div id="playerPage">
-  <button class="button" onclick="showHome()">Back</button>
-  <h3 id="playerName"></h3>
-  <div id="monthButtons" class="flex-wrap"></div>
-  <div id="playerStats"></div>
+<div class="line"></div>
+
+<div class="section">
+<h3>Ballon d'Or</h3>
+<button class="button" onclick="showBlendor()">Ballon d'Or Points</button>
 </div>
 
-<!-- ===== Blendor Page ===== -->
-<div id="blendorPage">
-  <button class="button" onclick="showHome()">Back</button>
-  <h3>Ballon d'Or Points</h3>
-  <div id="blendorTable"></div>
+<div class="line"></div>
+
+<div class="section">
+<h3>Monthly Awards</h3>
+<button class="button" onclick="showAward('Goal of the Month')">Goal of the Month</button>
+<button class="button" onclick="showAward('Player of the Month')">Player of the Month</button>
+<button class="button" onclick="showAward('Assist of the Month')">Assist of the Month</button>
+</div>
 </div>
 
-<!-- ===== Award Page ===== -->
-<div id="awardPage">
-  <button class="button" onclick="showHome()">Back</button>
-  <h3 id="awardTitle"></h3>
-  <p id="awardWinner" style="font-size:20px; text-align:center;"></p>
+<!-- Player Page -->
+<div id="playerPage" style="display:none;">
+<button class="button" onclick="showHome()">Back</button>
+<h3 id="playerName"></h3>
+<div id="monthButtons" class="flex-wrap"></div>
+<div id="playerStats"></div>
+</div>
+
+<!-- Blendor Page -->
+<div id="blendorPage" style="display:none;">
+<button class="button" onclick="showHome()">Back</button>
+<h3>Ballon d'Or Points</h3>
+<div id="blendorTable"></div>
+</div>
+
+<!-- Award Page -->
+<div id="awardPage" style="display:none;">
+<button class="button" onclick="showHome()">Back</button>
+<h3 id="awardTitle"></h3>
+<p id="awardWinner" style="font-size:20px; text-align:center;"></p>
+</div>
+
+<!-- Ads -->
+<div id="ads">
+<p>هندسة المعصوب</p>
+<p>الخطابة زكاي</p>
+<p>معا للتنمر</p>
 </div>
 
 <script>
-// ===== بيانات اللاعبين =====
+// Login
+function checkLogin(){
+  const u=document.getElementById('username').value.trim();
+  const p=document.getElementById('password').value.trim();
+  const passwords=['78','25','28','7','2','11'];
+  if(u==='TAWHID' && passwords.includes(p)){
+    document.getElementById('loginPage').style.display='none';
+    document.getElementById('homePage').style.display='block';
+  } else{
+    document.getElementById('errorMsg').textContent='Incorrect username or password';
+  }
+}
+
+// Players data
 const players = [
-  {number:78,name:"Almousa3m", image:"images/players/Almousa3m.png", stats:{}, blendorPoints:{}},
-  {number:25,name:"Yo0ousef25", image:"images/players/Yo0ousef25.png", stats:{}, blendorPoints:{}},
-  {number:28,name:"H2ssain_28", image:"images/players/H2ssain_28.png", stats:{}, blendorPoints:{}},
-  {number:7,name:"H7modi_77", image:"images/players/H7modi_77.png", stats:{}, blendorPoints:{}},
-  {number:2,name:"Basabeso2", image:"images/players/Basabeso2.png", stats:{}, blendorPoints:{}},
-  {number:11,name:"M-_-_-_-11_11", image:"images/players/M-_-_-_-11_11.png", stats:{}, blendorPoints:{}}
+  {number:78,name:"Almousa3m", stats:{}, blendorPoints:{}},
+  {number:25,name:"Yo0ousef25", stats:{}, blendorPoints:{}},
+  {number:28,name:"H2ssain_28", stats:{}, blendorPoints:{}},
+  {number:7,name:"H7modi_77", stats:{}, blendorPoints:{}},
+  {number:2,name:"Basabeso2", stats:{}, blendorPoints:{}},
+  {number:11,name:"M-_-_-_-11_11", stats:{}, blendorPoints:{}}
 ];
 
-// ===== إضافة كل الأشهر مع صفر افتراضي =====
-const months = ["2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08"];
+// Initialize months for each player (2025-10 to 2026-08)
+const months=['2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07','2026-08'];
 players.forEach(p=>{
   months.forEach(m=>{
-    p.stats[m]={matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0};
+    p.stats[m] = {matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0};
     p.blendorPoints[m]=0;
   });
 });
-// ===== تعيين إحصائيات شهر 10 فقط (مثال) =====
-players[0].stats["2025-10"]={matches:58,goals:65,assists:61,passRate:78,shotRate:33,motm:18,red:1,winRate:60,rating:8.7}; players[0].blendorPoints["2025-10"]=17.03;
-players[1].stats["2025-10"]={matches:28,goals:23,assists:5,passRate:78,shotRate:46,motm:0,red:0,winRate:67,rating:8.3}; players[1].blendorPoints["2025-10"]=16.24;
-players[2].stats["2025-10"]={matches:44,goals:36,assists:15,passRate:76,shotRate:23,motm:1,red:0,winRate:56,rating:8.2}; players[2].blendorPoints["2025-10"]=16.05;
-players[3].stats["2025-10"]={matches:45,goals:14,assists:36,passRate:79,shotRate:33,motm:2,red:5,winRate:62,rating:8.5}; players[3].blendorPoints["2025-10"]=16.63;
-players[4].stats["2025-10"]={matches:48,goals:36,assists:17,passRate:84,shotRate:40,motm:7,red:1,winRate:62,rating:8.6}; players[4].blendorPoints["2025-10"]=16.83;
-players[5].stats["2025-10"]={matches:68,goals:38,assists:43,passRate:81,shotRate:27,motm:9,red:1,winRate:57,rating:8.8}; players[5].blendorPoints["2025-10"]=17.22;
+// October 2025 stats
+players[0].stats['2025-10'] = {matches:58, goals:65, assists:61, passRate:78, shotRate:33, motm:18, red:1, winRate:60, rating:8.7};
+players[0].blendorPoints['2025-10'] = 17.03;
 
-// ===== buttons اللاعبين =====
+players[1].stats['2025-10'] = {matches:28, goals:23, assists:5, passRate:78, shotRate:46, motm:0, red:0, winRate:67, rating:8.3};
+players[1].blendorPoints['2025-10'] = 16.24;
+
+players[2].stats['2025-10'] = {matches:44, goals:36, assists:15, passRate:76, shotRate:23, motm:1, red:0, winRate:56, rating:8.2};
+players[2].blendorPoints['2025-10'] = 16.05;
+
+players[3].stats['2025-10'] = {matches:45, goals:14, assists:36, passRate:79, shotRate:33, motm:2, red:5, winRate:62, rating:8.5};
+players[3].blendorPoints['2025-10'] = 16.63;
+
+players[4].stats['2025-10'] = {matches:48, goals:36, assists:17, passRate:84, shotRate:40, motm:7, red:1, winRate:62, rating:8.6};
+players[4].blendorPoints['2025-10'] = 16.83;
+
+players[5].stats['2025-10'] = {matches:68, goals:38, assists:43, passRate:81, shotRate:27, motm:9, red:1, winRate:57, rating:8.8};
+players[5].blendorPoints['2025-10'] = 17.22;
+
+// November 2025 stats
+players[0].stats['2025-11'] = {matches:60, goals:66, assists:62, passRate:79, shotRate:34, motm:19, red:1, winRate:61, rating:8.8};
+players[0].blendorPoints['2025-11'] = 17.10;
+
+players[1].stats['2025-11'] = {matches:30, goals:24, assists:6, passRate:78, shotRate:47, motm:0, red:0, winRate:68, rating:8.4};
+players[1].blendorPoints['2025-11'] = 16.30;
+
+players[2].stats['2025-11'] = {matches:46, goals:37, assists:16, passRate:77, shotRate:24, motm:2, red:0, winRate:57, rating:8.3};
+players[2].blendorPoints['2025-11'] = 16.10;
+
+players[3].stats['2025-11'] = {matches:47, goals:15, assists:37, passRate:80, shotRate:34, motm:3, red:5, winRate:63, rating:8.6};
+players[3].blendorPoints['2025-11'] = 16.70;
+
+players[4].stats['2025-11'] = {matches:50, goals:37, assists:18, passRate:85, shotRate:41, motm:8, red:1, winRate:63, rating:8.7};
+players[4].blendorPoints['2025-11'] = 16.90;
+
+players[5].stats['2025-11'] = {matches:70, goals:39, assists:44, passRate:82, shotRate:28, motm:10, red:1, winRate:58, rating:8.9};
+players[5].blendorPoints['2025-11'] = 17.30;
+
+
+// Initialize players buttons
 const playersDiv = document.getElementById('playersButtons');
 players.forEach((p,i)=>{
   const btn = document.createElement('button');
@@ -146,15 +273,12 @@ players.forEach((p,i)=>{
   playersDiv.appendChild(btn);
 });
 
-// ===== عرض لاعب =====
+// Show player page
 function showPlayer(index){
   document.getElementById('homePage').style.display='none';
   document.getElementById('playerPage').style.display='block';
-  document.getElementById('playerName').innerHTML = `
-    <img src="${players[index].image}" alt="${players[index].name}" class="player-img"><br>
-    ${players[index].name}
-  `;
-
+  document.getElementById('playerName').textContent = players[index].name;
+  
   const monthsDiv = document.getElementById('monthButtons');
   monthsDiv.innerHTML='';
   months.forEach(m=>{
@@ -174,7 +298,7 @@ function showPlayer(index){
   document.getElementById('playerStats').innerHTML='';
 }
 
-// ===== إحصائيات شهر =====
+// Show stats of a month
 function showStats(index,month){
   const s = players[index].stats[month];
   let html='<table class="table">';
@@ -185,15 +309,21 @@ function showStats(index,month){
   document.getElementById('playerStats').innerHTML = html;
 }
 
-// ===== إجمالي =====
+// Show total stats
 function showTotal(index){
   const stats = players[index].stats;
   let total={matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0};
   months.forEach(m=>{
     const s=stats[m];
-    total.matches+=s.matches; total.goals+=s.goals; total.assists+=s.assists;
-    total.passRate+=s.passRate; total.shotRate+=s.shotRate; total.motm+=s.motm;
-    total.red+=s.red; total.winRate+=s.winRate; total.rating+=s.rating;
+    total.matches+=s.matches;
+    total.goals+=s.goals;
+    total.assists+=s.assists;
+    total.passRate+=s.passRate;
+    total.shotRate+=s.shotRate;
+    total.motm+=s.motm;
+    total.red+=s.red;
+    total.winRate+=s.winRate;
+    total.rating+=s.rating;
   });
   const len = months.length;
   let html='<table class="table">';
@@ -204,7 +334,7 @@ function showTotal(index){
   document.getElementById('playerStats').innerHTML = html;
 }
 
-// ===== Blendor Points =====
+// Show Blendor Points
 function showBlendor(){
   document.getElementById('homePage').style.display='none';
   document.getElementById('blendorPage').style.display='block';
@@ -226,7 +356,7 @@ function showBlendor(){
   document.getElementById('blendorTable').innerHTML=html;
 }
 
-// ===== جوائز الشهر =====
+// Show award
 function showAward(type){
   document.getElementById('homePage').style.display='none';
   document.getElementById('awardPage').style.display='block';
@@ -238,29 +368,17 @@ function showAward(type){
   document.getElementById('awardWinner').textContent = winner;
 }
 
-// ===== العودة للصفحة الرئيسية =====
+// Show home
 function showHome(){
   document.getElementById('homePage').style.display='block';
   document.getElementById('playerPage').style.display='none';
   document.getElementById('blendorPage').style.display='none';
   document.getElementById('awardPage').style.display='none';
 }
-
-// ===== صفحة تسجيل الدخول =====
-function login(){
-  const user=document.getElementById('username').value;
-  const pass=document.getElementById('password').value;
-  const validPass=["78","25","28","7","2","11"];
-  if(user==="TAWHID" && validPass.includes(pass)){
-    document.getElementById('loginPage').style.display='none';
-    showHome();
-  }else{
-    alert("Incorrect Username or Password!");
-  }
-}
 </script>
 </body>
 </html>
+
 
 
 
