@@ -15,6 +15,7 @@ h2,h3{ color:gold; text-align:center; }
 .table{ width:100%; border-collapse:collapse; margin-top:10px; }
 .table th, .table td{ border:1px solid white; padding:8px; text-align:center; }
 .table th{ background:gold; color:black; }
+.table .currentMonth{ background:yellow; color:black; }
 .flex-wrap{ display:flex; flex-wrap:wrap; justify-content:center; }
 .flex-wrap .button{ margin:5px; min-width:100px; }
 </style>
@@ -69,34 +70,16 @@ h2,h3{ color:gold; text-align:center; }
 </div>
 
 <script>
-// Players data with all months 10/2025 to 08/2026
 const monthsList = ["2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08"];
+const currentMonth = "2025-10"; // الشهر اللي نبي نميّزه باللون الأصفر
 
 const players = [
-  {number:78,name:"Almousa3m", stats:{
-      "2025-10":{matches:58,goals:65,assists:61,passRate:78,shotRate:33,motm:18,red:1,winRate:60,rating:8.7}
-    }, blendorPoints:{"2025-10":17.03}
-  },
-  {number:25,name:"Yo0ousef25", stats:{
-      "2025-10":{matches:28,goals:23,assists:5,passRate:78,shotRate:46,motm:0,red:0,winRate:67,rating:8.3}
-    }, blendorPoints:{"2025-10":16.24}
-  },
-  {number:28,name:"H2ssain_28", stats:{
-      "2025-10":{matches:44,goals:36,assists:15,passRate:76,shotRate:23,motm:1,red:0,winRate:56,rating:8.2}
-    }, blendorPoints:{"2025-10":16.05}
-  },
-  {number:7,name:"H7modi_77", stats:{
-      "2025-10":{matches:45,goals:14,assists:36,passRate:79,shotRate:33,motm:2,red:5,winRate:62,rating:8.5}
-    }, blendorPoints:{"2025-10":16.63}
-  },
-  {number:2,name:"Basabeso2", stats:{
-      "2025-10":{matches:48,goals:36,assists:17,passRate:84,shotRate:40,motm:7,red:1,winRate:62,rating:8.6}
-    }, blendorPoints:{"2025-10":16.83}
-  },
-  {number:2,name:"M-_-_-_-11_11", stats:{
-      "2025-10":{matches:68,goals:38,assists:43,passRate:81,shotRate:27,motm:9,red:1,winRate:57,rating:8.8}
-    }, blendorPoints:{"2025-10":17.22}
-  }
+  {number:78,name:"Almousa3m", stats:{"2025-10":{matches:58,goals:65,assists:61,passRate:78,shotRate:33,motm:18,red:1,winRate:60,rating:8.7}}, blendorPoints:{"2025-10":17.03}},
+  {number:25,name:"Yo0ousef25", stats:{"2025-10":{matches:28,goals:23,assists:5,passRate:78,shotRate:46,motm:0,red:0,winRate:67,rating:8.3}}, blendorPoints:{"2025-10":16.24}},
+  {number:28,name:"H2ssain_28", stats:{"2025-10":{matches:44,goals:36,assists:15,passRate:76,shotRate:23,motm:1,red:0,winRate:56,rating:8.2}}, blendorPoints:{"2025-10":16.05}},
+  {number:7,name:"H7modi_77", stats:{"2025-10":{matches:45,goals:14,assists:36,passRate:79,shotRate:33,motm:2,red:5,winRate:62,rating:8.5}}, blendorPoints:{"2025-10":16.63}},
+  {number:2,name:"Basabeso2", stats:{"2025-10":{matches:48,goals:36,assists:17,passRate:84,shotRate:40,motm:7,red:1,winRate:62,rating:8.6}}, blendorPoints:{"2025-10":16.83}},
+  {number:2,name:"M-_-_-_-11_11", stats:{"2025-10":{matches:68,goals:38,assists:43,passRate:81,shotRate:27,motm:9,red:1,winRate:57,rating:8.8}}, blendorPoints:{"2025-10":17.22}}
 ];
 
 // Fill missing months with zeros
@@ -160,7 +143,7 @@ function showTotal(index){
   let count=0;
   monthsList.forEach(m=>{
     const s=stats[m];
-    if(Object.values(s).some(v=>v>0)){ // فقط الأشهر اللي فيها بيانات
+    if(Object.values(s).some(v=>v>0)){
       total.matches+=s.matches;
       total.goals+=s.goals;
       total.assists+=s.assists;
@@ -187,14 +170,14 @@ function showBlendor(){
   document.getElementById('homePage').style.display='none';
   document.getElementById('blendorPage').style.display='block';
   let html='<table class="table"><tr><th>Player</th>';
-  monthsList.forEach(m=> html+='<th>'+m+'</th>');
+  monthsList.forEach(m=> html+='<th'+(m===currentMonth?' class="currentMonth"':'')+'>'+m+'</th>');
   html+='<th>Total</th></tr>';
   players.forEach(p=>{
     html+='<tr><td>'+p.name+'</td>';
     let sum=0;
     monthsList.forEach(m=>{
       const val=p.blendorPoints[m];
-      html+='<td>'+val+'</td>';
+      html+='<td'+(m===currentMonth?' class="currentMonth"':'')+'>'+val+'</td>';
       sum+=val;
     });
     html+='<td>'+sum+'</td>';
