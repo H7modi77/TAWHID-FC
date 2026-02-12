@@ -2,34 +2,39 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>TAWHID FC</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAWHID FC – Football Management System</title>
 <style>
-body{margin:0;font-family:Poppins;background:#eef2ff;}
-header{background:white;padding:20px;text-align:center;box-shadow:0 4px 15px #ccc;}
+body{
+  margin:0; font-family:Poppins,sans-serif;
+  background:#eef2ff; color:#333;
+}
+header{
+  text-align:center; background:white; padding:20px; box-shadow:0 4px 10px #ccc;
+}
 header img{height:80px;}
-nav{display:flex;justify-content:center;gap:12px;padding:15px;}
-nav button{background:#2563eb;color:white;border:none;padding:12px 22px;border-radius:14px;font-weight:600;cursor:pointer;}
+nav{display:flex;justify-content:center;gap:12px;padding:15px;flex-wrap:wrap;}
+nav button{
+  background:#2563eb;color:white;border:none;padding:12px 22px;
+  border-radius:14px;font-weight:600;cursor:pointer;
+}
 .section{display:none;padding:20px;}
 .active{display:block;}
-.card{background:white;padding:20px;margin-bottom:25px;border-radius:20px;box-shadow:0 0 20px #ccc;}
-.player-head{display:flex;gap:15px;flex-wrap:wrap;align-items:center;}
-.player-head img{width:110px;height:110px;border-radius:50%;object-fit:cover;border:4px solid #2563eb;}
-table{width:100%;border-collapse:collapse;margin-top:15px;}
+.card{background:white;padding:20px;margin-bottom:20px;border-radius:20px;box-shadow:0 0 15px #ccc;}
+table{width:100%;border-collapse:collapse;margin-top:10px;}
 th,td{border:1px solid #ccc;padding:8px;text-align:center;}
 th{background:#2563eb;color:white;}
-@media(max-width:600px){.player-head{flex-direction:column;text-align:center}}
+@media(max-width:600px){nav{flex-direction:column;align-items:center;} table{font-size:12px;}}
 .star{color:gold;font-size:28px;}
+video{width:100%;border-radius:15px;margin-top:10px;}
 </style>
 </head>
 <body>
 
 <header>
-  <img src="logo.png" alt="Club Logo"><br>
-  <b>TAWHID FC – Football Management System</b>
+<img src="logo.png" alt="Club Logo"><br>
+<b>TAWHID FC – Football Management System</b>
 </header>
-
 
 <nav>
 <button onclick="show('players')">Players</button>
@@ -43,93 +48,110 @@ th{background:#2563eb;color:white;}
 
 <script>
 // ================= MONTHS =================
-const months=["Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep"]
+const months=["Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep"];
 
 // ================= PLAYERS DATABASE =================
 const players=[
 {
-name:"H7modi77", age:21, nation:"Saudi Arabia", birth:"2004-06-12", photo:"images/h7modi77.jpg",
+name:"H7modi77", age:21, nation:"Saudi Arabia", birth:"2004-06-12", photo:"h7modi77.jpg",
 monthly:[
-{matches:8, goals:5, assists:3, passR:82, shotR:75, motm:2, redC:0, winR:70},
-{matches:7, goals:6, assists:2, passR:80, shotR:78, motm:1, redC:0, winR:65},
-{matches:9, goals:4, assists:5, passR:85, shotR:72, motm:2, redC:0, winR:68},
-{matches:8, goals:3, assists:3, passR:83, shotR:70, motm:1, redC:0, winR:66},
-{matches:7, goals:5, assists:4, passR:81, shotR:74, motm:2, redC:0, winR:72},
-{matches:9, goals:6, assists:3, passR:84, shotR:77, motm:3, redC:0, winR:75},
-{matches:8, goals:5, assists:5, passR:82, shotR:79, motm:2, redC:0, winR:70},
-{matches:7, goals:4, assists:4, passR:80, shotR:76, motm:1, redC:1, winR:68},
-{matches:9, goals:7, assists:2, passR:85, shotR:81, motm:3, redC:0, winR:73},
-{matches:8, goals:5, assists:3, passR:83, shotR:78, motm:2, redC:0, winR:70},
-{matches:7, goals:4, assists:5, passR:81, shotR:75, motm:1, redC:0, winR:68},
-{matches:9, goals:6, assists:4, passR:84, shotR:80, motm:2, redC:0, winR:72}
+{matches:4,goals:2,assists:1,passR:85,shotR:75,motm:1,redC:0,winR:78,rating:0},
+{matches:5,goals:3,assists:2,passR:80,shotR:70,motm:2,redC:0,winR:75,rating:0},
+{matches:4,goals:1,assists:3,passR:88,shotR:65,motm:0,redC:1,winR:80,rating:0},
+{matches:6,goals:4,assists:2,passR:83,shotR:72,motm:1,redC:0,winR:77,rating:0},
+{matches:5,goals:3,assists:2,passR:84,shotR:70,motm:2,redC:0,winR:79,rating:0},
+{matches:5,goals:2,assists:1,passR:86,shotR:75,motm:1,redC:0,winR:78,rating:0},
+{matches:6,goals:3,assists:2,passR:87,shotR:73,motm:2,redC:0,winR:80,rating:0},
+{matches:5,goals:2,assists:1,passR:85,shotR:74,motm:1,redC:0,winR:78,rating:0},
+{matches:4,goals:1,assists:3,passR:88,shotR:70,motm:0,redC:1,winR:81,rating:0},
+{matches:5,goals:3,assists:2,passR:86,shotR:72,motm:2,redC:0,winR:79,rating:0},
+{matches:6,goals:2,assists:1,passR:87,shotR:73,motm:1,redC:0,winR:78,rating:0},
+{matches:5,goals:3,assists:2,passR:85,shotR:74,motm:2,redC:0,winR:80,rating:0},
 ]
 },
 {
-name:"Yo0ousef25", age:22, nation:"Saudi Arabia", birth:"2003-02-08", photo:"images/yousef25.jpg",
+name:"Yo0ousef25", age:22, nation:"Saudi Arabia", birth:"2003-02-08", photo:"yousef25.jpg",
 monthly:[
-{matches:7, goals:3, assists:2, passR:78, shotR:70, motm:1, redC:0, winR:65},
-{matches:8, goals:4, assists:3, passR:79, shotR:72, motm:2, redC:0, winR:68},
-{matches:7, goals:5, assists:2, passR:77, shotR:74, motm:1, redC:0, winR:70},
-{matches:9, goals:4, assists:3, passR:80, shotR:71, motm:2, redC:0, winR:67},
-{matches:8, goals:6, assists:4, passR:82, shotR:76, motm:2, redC:0, winR:72},
-{matches:7, goals:3, assists:5, passR:79, shotR:73, motm:1, redC:0, winR:65},
-{matches:9, goals:5, assists:3, passR:81, shotR:77, motm:2, redC:0, winR:70},
-{matches:8, goals:4, assists:4, passR:80, shotR:75, motm:1, redC:0, winR:68},
-{matches:7, goals:6, assists:2, passR:82, shotR:78, motm:2, redC:0, winR:71},
-{matches:9, goals:5, assists:3, passR:83, shotR:76, motm:2, redC:0, winR:70},
-{matches:8, goals:4, assists:5, passR:80, shotR:74, motm:1, redC:0, winR:68},
-{matches:7, goals:3, assists:4, passR:79, shotR:72, motm:1, redC:0, winR:66}
+{matches:5,goals:3,assists:2,passR:80,shotR:70,motm:1,redC:0,winR:77,rating:0},
+{matches:6,goals:2,assists:1,passR:82,shotR:75,motm:2,redC:0,winR:79,rating:0},
+{matches:5,goals:1,assists:3,passR:83,shotR:68,motm:0,redC:1,winR:76,rating:0},
+{matches:5,goals:2,assists:2,passR:85,shotR:72,motm:1,redC:0,winR:78,rating:0},
+{matches:6,goals:4,assists:2,passR:87,shotR:74,motm:2,redC:0,winR:80,rating:0},
+{matches:5,goals:3,assists:1,passR:84,shotR:71,motm:1,redC:0,winR:79,rating:0},
+{matches:5,goals:2,assists:2,passR:85,shotR:72,motm:1,redC:0,winR:78,rating:0},
+{matches:6,goals:3,assists:1,passR:86,shotR:73,motm:2,redC:0,winR:80,rating:0},
+{matches:5,goals:2,assists:1,passR:84,shotR:70,motm:1,redC:0,winR:77,rating:0},
+{matches:6,goals:4,assists:3,passR:87,shotR:75,motm:2,redC:0,winR:81,rating:0},
+{matches:5,goals:3,assists:2,passR:85,shotR:72,motm:1,redC:0,winR:79,rating:0},
+{matches:5,goals:2,assists:1,passR:86,shotR:74,motm:1,redC:0,winR:78,rating:0},
 ]
 }
-]
+];
 
 // ================= AI RATING =================
-function ai(m){return +(m.goals*3 + m.assists*2 + m.passR*0.05 + m.shotR*0.08 + m.winR*0.04 + m.motm*3 - m.redC*6).toFixed(1)}
-players.forEach(p=>p.monthly.forEach(m=>m.rating=ai(m)))
-
-// ================= RENDER PLAYERS TABLE =================
-const playersDiv=document.getElementById("players")
-players.forEach((p,i)=>{
-let table=`<div class="card">
-<div class="player-head">
-<img src="${p.photo}" alt="${p.name}">
-<div><h2>${p.name}</h2>Age: ${p.age}<br>Nationality: ${p.nation}<br>Birth: ${p.birth}</div>
-</div>
-<table>
-<tr><th>Month</th><th>Matches</th><th>Goals</th><th>Assists</th><th>Pass%</th><th>Shot%</th><th>MOTM</th><th>Red</th><th>Win%</th><th>AI Rating</th></tr>`
-p.monthly.forEach((m,j)=>{
-table+=`<tr>
-<td>${months[j]}</td><td>${m.matches}</td><td>${m.goals}</td><td>${m.assists}</td>
-<td>${m.passR}</td><td>${m.shotR}</td><td>${m.motm}</td><td>${m.redC}</td>
-<td>${m.winR}</td><td>${m.rating}</td>
-</tr>`
-})
-table+=`</table></div>`
-playersDiv.innerHTML+=table
-})
-
-// ================= AI STAR =================
-let best="",score=0
 players.forEach(p=>{
-let s=p.monthly.reduce((a,b)=>a+b.rating,0)
-if(s>score){score=s;best=p.name}
-})
-document.getElementById("competition").innerHTML=`<div class="card"><h2>AI Star Of Season</h2><h1 class="star">${best}</h1></div>`
+  p.monthly.forEach(m=>{
+    m.rating= +(m.goals*3 + m.assists*2 + m.passR*0.05 + m.shotR*0.08 + m.winR*0.04 + m.motm*3 - m.redC*6).toFixed(1);
+  });
+});
+
+// ================= RENDER PLAYERS =================
+const playersDiv=document.getElementById("players");
+players.forEach(p=>{
+  let table="<table><tr><th>Month</th><th>Matches</th><th>Goals</th><th>Assists</th><th>Pass%</th><th>Shot%</th><th>MOTM</th><th>Red</th><th>Win%</th><th>Rating</th></tr>";
+  p.monthly.forEach((m,i)=>{
+    table+=`<tr><td>${months[i]}</td><td>${m.matches}</td><td>${m.goals}</td><td>${m.assists}</td><td>${m.passR}</td><td>${m.shotR}</td><td>${m.motm}</td><td>${m.redC}</td><td>${m.winR}</td><td>${m.rating}</td></tr>`;
+  });
+  table+="</table>";
+
+  playersDiv.innerHTML+=`
+  <div class="card">
+    <div class="player-head">
+      <img src="${p.photo}" alt="${p.name}">
+      <div>
+        <h2>${p.name}</h2>
+        Age: ${p.age}<br>
+        Nationality: ${p.nation}<br>
+        Birth: ${p.birth}
+      </div>
+    </div>
+    ${table}
+  </div>
+  `;
+});
+
+// ================= COMPETITION (AI STAR) =================
+let best="", score=0;
+players.forEach(p=>{
+  let s=p.monthly.reduce((a,b)=>a+b.rating,0);
+  if(s>score){score=s;best=p.name;}
+});
+const competitionDiv=document.getElementById("competition");
+competitionDiv.innerHTML=`
+<div class="card">
+  <h2>AI Star Of Season</h2>
+  <h1 class="star">${best}</h1>
+</div>
+`;
 
 // ================= AWARDS =================
-document.getElementById("awards").innerHTML=`<div class="card">
-<h2>Manual Monthly Awards</h2>
-Goal Of Month: H7modi77<br><br>
-Assist Of Month: Yo0ousef25<br><br>
-Top Scorer: H7modi77
-</div>`
+const awardsDiv=document.getElementById("awards");
+awardsDiv.innerHTML=`
+<div class="card">
+  <h2>Manual Monthly Awards</h2>
+  Goal Of Month:<br>
+  <video controls src="goalVideo.mp4"></video><br><br>
+  Assist Of Month: _______<br><br>
+  Top Scorer: _______
+</div>
+`;
 
 // ================= NAVIGATION =================
 function show(id){
-document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"))
-document.getElementById(id).classList.add("active")
+  document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
-
 </script>
+
 </body>
 </html>
