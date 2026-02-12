@@ -12,8 +12,12 @@ body{
 header{
   text-align:center; background:white; padding:20px; box-shadow:0 4px 10px #ccc;
 }
-header img{height:80px;}
-nav{display:flex;justify-content:center;gap:12px;padding:15px;flex-wrap:wrap;}
+header img{
+  height:60px; /* شعار أصغر */
+}
+nav{
+  display:flex; justify-content:center; gap:12px; padding:15px; flex-wrap:wrap;
+}
 nav button{
   background:#2563eb;color:white;border:none;padding:12px 22px;
   border-radius:14px;font-weight:600;cursor:pointer;
@@ -24,9 +28,25 @@ nav button{
 table{width:100%;border-collapse:collapse;margin-top:10px;}
 th,td{border:1px solid #ccc;padding:8px;text-align:center;}
 th{background:#2563eb;color:white;}
-@media(max-width:600px){nav{flex-direction:column;align-items:center;} table{font-size:12px;}}
 .star{color:gold;font-size:28px;}
 video{width:100%;border-radius:15px;margin-top:10px;}
+/* صور اللاعبين صغيرة وفريم دائري */
+.player-head{
+  display:flex; gap:15px; flex-wrap:wrap; align-items:center;
+}
+.player-head img{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid #2563eb;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+@media(max-width:600px){
+  nav{flex-direction:column;align-items:center;}
+  table{font-size:12px;}
+  .player-head{flex-direction:column;text-align:center;}
+}
 </style>
 </head>
 <body>
@@ -54,112 +74,34 @@ const months=["Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
 const players=[
 {
 name:"H7modi77", age:21, nation:"Saudi Arabia", birth:"2004-06-12", photo:"h7modi77.jpg",
-monthly:[
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-]
+monthly:Array(12).fill().map(()=>({matches:5,goals:2,assists:1,passR:85,shotR:75,motm:1,redC:0,winR:78,rating:0}))
 },
 {
 name:"Yo0ousef25", age:22, nation:"Saudi Arabia", birth:"2003-02-08", photo:"yousef25.jpg",
-monthly:[
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-]
+monthly:Array(12).fill().map(()=>({matches:4,goals:3,assists:2,passR:78,shotR:82,motm:2,redC:0,winR:80,rating:0}))
 },
 {
 name:"H2ssain_28", age:22, nation:"Saudi Arabia", birth:"2003-02-08", photo:"h28.jpg",
-monthly:[
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-]
-},,
+monthly:Array(12).fill().map(()=>({matches:6,goals:1,assists:3,passR:80,shotR:70,motm:1,redC:1,winR:65,rating:0}))
+},
 {
 name:"Almousa3M", age:22, nation:"Saudi Arabia", birth:"2003-02-08", photo:"memo.jpg",
-monthly:[
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-]
-},,
+monthly:Array(12).fill().map(()=>({matches:5,goals:2,assists:2,passR:82,shotR:77,motm:1,redC:0,winR:70,rating:0}))
+},
 {
 name:"Basabeso2", age:22, nation:"Saudi Arabia", birth:"2003-02-08", photo:"bsbs.jpg",
-monthly:[
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-]
-},,
+monthly:Array(12).fill().map(()=>({matches:4,goals:1,assists:1,passR:75,shotR:78,motm:0,redC:0,winR:68,rating:0}))
+},
 {
 name:"M-_-_-_-11_11", age:22, nation:"Saudi Arabia", birth:"2003-02-08", photo:"mbmb.jpg",
-monthly:[
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-{matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-]
+monthly:Array(12).fill().map(()=>({matches:5,goals:3,assists:1,passR:79,shotR:80,motm:2,redC:0,winR:72,rating:0}))
 }
 ];
 
 // ================= AI RATING =================
 players.forEach(p=>{
   p.monthly.forEach(m=>{
-    m.rating= +(m.goals*3 + m.assists*2 + m.passR*0.05 + m.shotR*0.08 + m.winR*0.04 + m.motm*3 - m.redC*6).toFixed(1);
+    m.rating= +(m.goals*2 + m.assists*2 + m.passR*1.5 + m.shotR*1.5 + m.winR*1.5 + m.motm*1.5 - m.redC*0).toFixed(1);
   });
 });
 
@@ -194,8 +136,7 @@ players.forEach(p=>{
   let s=p.monthly.reduce((a,b)=>a+b.rating,0);
   if(s>score){score=s;best=p.name;}
 });
-const competitionDiv=document.getElementById("competition");
-competitionDiv.innerHTML=`
+document.getElementById("competition").innerHTML=`
 <div class="card">
   <h2>AI Star Of Season</h2>
   <h1 class="star">${best}</h1>
@@ -203,8 +144,7 @@ competitionDiv.innerHTML=`
 `;
 
 // ================= AWARDS =================
-const awardsDiv=document.getElementById("awards");
-awardsDiv.innerHTML=`
+document.getElementById("awards").innerHTML=`
 <div class="card">
   <h2>Manual Monthly Awards</h2>
   Goal Of Month:<br>
@@ -223,3 +163,5 @@ function show(id){
 
 </body>
 </html>
+
+
