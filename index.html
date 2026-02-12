@@ -1,219 +1,387 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>TAWHID FC</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAWHID FC Stats</title>
 <style>
 body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(135deg,#f5f7ff,#ffffff);
-color:#111
+  margin:0; padding:0;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color:white;
+  background: linear-gradient(135deg, #001f3f, #004080);
+  transition: background 1s ease-in-out;
 }
+body:hover{ background: linear-gradient(135deg, #003366, #0059b3); }
 
-h1,h2{text-align:center;color:#0b2cff}
-
-.section{
-padding:40px;
-text-align:center
+/* Login Modal */
+#loginPage{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  animation: fadeIn 1s ease;
 }
-
-.bigbtn{
-background:#0b2cff;
-color:white;
-border:none;
-padding:25px;
-width:250px;
-font-size:22px;
-border-radius:20px;
-margin:20px;
-cursor:pointer
+#loginPage input{
+  padding:12px;
+  margin:8px;
+  border-radius:8px;
+  border:none;
+  width:250px;
+  font-size:16px;
 }
-
-.card{
-background:white;
-padding:20px;
-border-radius:20px;
-box-shadow:0 0 20px #ccc;
-margin:20px
+#loginPage button{
+  background: gold;
+  color:black;
+  border:none;
+  padding:12px 25px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
+  box-shadow: 0 0 10px rgba(255,215,0,0.7);
+  transition: all 0.3s ease;
 }
-
-select,button{
-padding:10px;
-border-radius:10px;
-border:1px solid #ccc;
-margin:10px
+#loginPage button:hover{
+  background:#ffd700;
+  transform: scale(1.08);
+  box-shadow: 0 0 20px rgba(255,255,255,0.8);
 }
+#errorMsg{ color:red; font-weight:bold; margin-top:10px; text-shadow:1px 1px 2px black; }
 
-table{
-width:100%;
-border-collapse:collapse
+/* Headers */
+h2,h3{
+  color: gold;
+  text-align:center;
+  text-shadow: 2px 2px 6px #000;
+  margin-bottom:10px;
+  transition: all 0.5s ease;
 }
+h2:hover,h3:hover{ text-shadow: 2px 2px 12px #fff; }
 
-th,td{
-border:1px solid #ddd;
-padding:8px;
-text-align:center
+/* Sections */
+.section{ margin-bottom:30px; padding:15px; border-radius:15px; background: rgba(0,0,0,0.3); box-shadow:0 4px 10px rgba(0,0,0,0.5);}
+.line{ width:100%; height:3px; background:white; margin:20px 0; border-radius:5px; }
+
+/* Buttons */
+.button {
+  background:gold;
+  color:black;
+  border:none;
+  padding:12px 25px;
+  margin:5px;
+  border-radius:15px;
+  cursor:pointer;
+  font-weight:bold;
+  box-shadow: 0 0 6px rgba(255,215,0,0.6);
+  transition: all 0.3s ease;
 }
+.button:hover{
+  background:#ffd700;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255,255,255,0.9);
+}
+.flex-wrap{ display:flex; flex-wrap:wrap; justify-content:center; }
+.flex-wrap .button{ margin:5px; min-width:100px; }
 
-th{background:#0b2cff;color:white}
+/* Tables */
+.table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+  animation: fadeIn 0.7s ease;
+}
+.table th, .table td{
+  border:1px solid white;
+  padding:10px;
+  text-align:center;
+}
+.table th{
+  background: rgba(255,215,0,0.9);
+  color:black;
+  text-shadow:1px 1px 2px #000;
+}
+.table td{
+  background: rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+.table td:hover{ background: rgba(255,215,0,0.3); color:black; font-weight:bold; }
 
-.star{color:gold;font-size:25px}
+/* Ads */
+#ads{
+  margin-top:50px;
+  text-align:center;
+  font-size:20px;
+  color: #ffd700;
+  text-shadow: 1px 1px 2px black;
+  animation: fadeIn 2s ease;
+}
+#ads p{ margin:10px 0; animation: slide 10s infinite alternate; }
+
+/* Animations */
+@keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+@keyframes slide{ 0%{ transform:translateX(-100px);} 100%{ transform:translateX(100px);} }
 </style>
 </head>
-
 <body>
 
-<div id="home" class="section">
-<h1>TAWHID FC</h1>
-
-<button class="bigbtn" onclick="openPlayers()">👥 اللاعبين</button>
-<button class="bigbtn" onclick="openMonthly()">🔥 المنافسة الشهرية</button>
-<button class="bigbtn" onclick="openAwards()">🏆 الجوائز الشهرية</button>
+<!-- Login -->
+<div id="loginPage">
+  <h2>Login</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="checkLogin()">Login</button>
+  <div id="errorMsg"></div>
 </div>
 
-<div id="players" class="section" style="display:none"></div>
-<div id="monthly" class="section" style="display:none"></div>
-<div id="awards" class="section" style="display:none"></div>
+<!-- Home -->
+<div id="homePage" style="display:none;">
+<h2>TAWHID FC</h2>
+
+<div class="section">
+<h3>Players</h3>
+<div class="flex-wrap" id="playersButtons"></div>
+</div>
+
+<div class="line"></div>
+
+<div class="section">
+<h3>Ballon d'Or</h3>
+<button class="button" onclick="showBlendor()">Ballon d'Or Points</button>
+</div>
+
+<div class="line"></div>
+
+<div class="section">
+<h3>Monthly Awards</h3>
+<button class="button" onclick="showAward('Goal of the Month')">Goal of the Month</button>
+<button class="button" onclick="showAward('Player of the Month')">Player of the Month</button>
+<button class="button" onclick="showAward('Assist of the Month')">Assist of the Month</button>
+</div>
+</div>
+
+<!-- Player Page -->
+<div id="playerPage" style="display:none;">
+<button class="button" onclick="showHome()">Back</button>
+<h3 id="playerName"></h3>
+<div id="monthButtons" class="flex-wrap"></div>
+<div id="playerStats"></div>
+</div>
+
+<!-- Blendor Page -->
+<div id="blendorPage" style="display:none;">
+<button class="button" onclick="showHome()">Back</button>
+<h3>Ballon d'Or Points</h3>
+<div id="blendorTable"></div>
+</div>
+
+<!-- Award Page -->
+<div id="awardPage" style="display:none;">
+<button class="button" onclick="showHome()">Back</button>
+<h3 id="awardTitle"></h3>
+<p id="awardWinner" style="font-size:20px; text-align:center;"></p>
+</div>
+
+<!-- Ads -->
+<div id="ads">
+<p>هندسة المعصوب</p>
+<p>الخطابة زكاي</p>
+<p>معا للتنمر</p>
+</div>
 
 <script>
-
-// months Oct 2025 → Sep 2026
-const months=[]
-let s=new Date(2025,9,1)
-for(let i=0;i<12;i++){
-months.push(s.toLocaleString("en",{month:"short",year:"numeric"}))
-s.setMonth(s.getMonth()+1)
+// Login
+function checkLogin(){
+  const u=document.getElementById('username').value.trim();
+  const p=document.getElementById('password').value.trim();
+  const passwords=['78','25','28','7','2','11'];
+  if(u==='TAWHID' && passwords.includes(p)){
+    document.getElementById('loginPage').style.display='none';
+    document.getElementById('homePage').style.display='block';
+  } else{
+    document.getElementById('errorMsg').textContent='Incorrect username or password';
+  }
 }
 
-// players
-const players=[
-{name:"Almousa3m",pos:"ST"},
-{name:"Yo0ousef25",pos:"RW"},
-{name:"H2ssain_28",pos:"CAM"},
-{name:"H7modi_77",pos:"CM"},
-{name:"Basabeso2",pos:"CB"},
-{name:"M-_-_-_-11_11",pos:"LW"}
-]
+// Players data
+const players = [
+  {number:78,name:"Almousa3m", stats:{}, blendorPoints:{}},
+  {number:25,name:"Yo0ousef25", stats:{}, blendorPoints:{}},
+  {number:28,name:"H2ssain_28", stats:{}, blendorPoints:{}},
+  {number:7,name:"H7modi_77", stats:{}, blendorPoints:{}},
+  {number:2,name:"Basabeso2", stats:{}, blendorPoints:{}},
+  {number:11,name:"M-_-_-_-11_11", stats:{}, blendorPoints:{}}
+];
 
-// stats random demo
+// Initialize months for each player (2025-10 to 2026-08)
+const months=['2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07','2026-08'];
 players.forEach(p=>{
-p.stats={}
-months.forEach(m=>{
-p.stats[m]={
-g:Math.floor(Math.random()*10),
-a:Math.floor(Math.random()*8),
-m:Math.floor(Math.random()*5),
-r:Math.floor(Math.random()*2)
-}
-})
-})
+  months.forEach(m=>{
+    p.stats[m] = {matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0};
+    p.blendorPoints[m]=0;
+  });
+});
+// October 2025 stats
+players[0].stats['2025-10'] = {matches:58, goals:65, assists:61, passRate:78, shotRate:33, motm:18, red:1, winRate:60, rating:8.7};
+players[0].blendorPoints['2025-10'] = 17.03;
 
-// AI rating
-function ai(s,pos){
-let base=s.g*2+s.a*1.5+s.m*3-s.r*2
-if(pos=="CB") base+=s.a
-if(pos=="ST") base+=s.g*2
-return base.toFixed(1)
-}
+players[1].stats['2025-10'] = {matches:28, goals:23, assists:5, passRate:78, shotRate:46, motm:0, red:0, winRate:67, rating:8.3};
+players[1].blendorPoints['2025-10'] = 16.24;
 
-// HOME
-function back(){
-home.style.display="block"
-playersDiv.style.display="none"
-monthly.style.display="none"
-awards.style.display="none"
-}
+players[2].stats['2025-10'] = {matches:44, goals:36, assists:15, passRate:76, shotRate:23, motm:1, red:0, winRate:56, rating:8.2};
+players[2].blendorPoints['2025-10'] = 16.05;
 
-// PLAYERS
-function openPlayers(){
-home.style.display="none"
-playersDiv.style.display="block"
+players[3].stats['2025-10'] = {matches:45, goals:14, assists:36, passRate:79, shotRate:33, motm:2, red:5, winRate:62, rating:8.5};
+players[3].blendorPoints['2025-10'] = 16.63;
 
-let h=`<button onclick="back()">⬅</button><h2>Players</h2>
-<select id=pSel>${players.map((p,i)=>`<option value=${i}>${p.name}</option>`)}</select>
-<select id=mSel>${months.map(m=>`<option>${m}</option>`)}</select>
-<button onclick=showPlayer()>Show</button>
-<div id=pData></div>`
+players[4].stats['2025-10'] = {matches:48, goals:36, assists:17, passRate:84, shotRate:40, motm:7, red:1, winRate:62, rating:8.6};
+players[4].blendorPoints['2025-10'] = 16.83;
 
-playersDiv.innerHTML=h
-}
+players[5].stats['2025-10'] = {matches:68, goals:38, assists:43, passRate:81, shotRate:27, motm:9, red:1, winRate:57, rating:8.8};
+players[5].blendorPoints['2025-10'] = 17.22;
 
-function showPlayer(){
-let p=players[pSel.value]
-let m=mSel.value
-let s=p.stats[m]
+// November 2025 stats
+players[0].stats['2025-11'] = {matches:57, goals:67, assists:72, passRate:77, shotRate:33, motm:15, red:0, winRate:53, rating:9.25};
+players[0].blendorPoints['2025-11'] = 17;
+//y
+players[1].stats['2025-11'] = {matches:26, goals:21, assists:8, passRate:78, shotRate:52, motm:3, red:1, winRate:58, rating:8.55};
+players[1].blendorPoints['2025-11'] = 15.7;
+//h2
+players[2].stats['2025-11'] = {matches:64, goals:59, assists:48, passRate:77, shotRate:25, motm:8, red:2, winRate:51, rating:8.77};
+players[2].blendorPoints['2025-11'] = 16.1;
+//h7
+players[3].stats['2025-11'] = {matches:77, goals:52, assists:54, passRate:76, shotRate:40, motm:8, red:7, winRate:54, rating:9.30};
+players[3].blendorPoints['2025-11'] = 17.1;
+//bas
+players[4].stats['2025-11'] = {matches:75, goals:54, assists:22, passRate:86, shotRate:39, motm:9, red:0, winRate:57, rating:9.16};
+players[4].blendorPoints['2025-11'] = 16.8;
+//m-m
+players[5].stats['2025-11'] = {matches:86, goals:48, assists:58, passRate:74, shotRate:29, motm:10, red:0, winRate:54, rating:9.36};
+players[5].blendorPoints['2025-11'] = 17.2;
 
-pData.innerHTML=`
-<div class=card>
-<h2>${p.name}</h2>
-<p>Position: ${p.pos}</p>
-<p>Goals: ${s.g}</p>
-<p>Assists: ${s.a}</p>
-<p>MOTM: ${s.m}</p>
-<p>Red: ${s.r}</p>
-<h2>AI Rating: ${ai(s,p.pos)}</h2>
-</div>`
-}
 
-// MONTHLY COMPETITION
-function openMonthly(){
-home.style.display="none"
-monthly.style.display="block"
+// Initialize players buttons
+const playersDiv = document.getElementById('playersButtons');
+players.forEach((p,i)=>{
+  const btn = document.createElement('button');
+  btn.className='button';
+  btn.textContent=p.name;
+  btn.onclick=()=>showPlayer(i);
+  playersDiv.appendChild(btn);
+});
 
-let h=`<button onclick="back()">⬅</button><h2>Monthly Competition</h2>
-<select id=mm>${months.map(m=>`<option>${m}</option>`)}</select>
-<button onclick=showMonthly()>Show</button>
-<div id=mTable></div>`
+// Show player page
+function showPlayer(index){
+  document.getElementById('homePage').style.display='none';
+  document.getElementById('playerPage').style.display='block';
+  document.getElementById('playerName').textContent = players[index].name;
+  
+  const monthsDiv = document.getElementById('monthButtons');
+  monthsDiv.innerHTML='';
+  months.forEach(m=>{
+    const btn = document.createElement('button');
+    btn.className='button';
+    btn.textContent=m;
+    btn.onclick = ()=> showStats(index,m);
+    monthsDiv.appendChild(btn);
+  });
 
-monthly.innerHTML=h
-}
+  const totalBtn = document.createElement('button');
+  totalBtn.className='button';
+  totalBtn.textContent='Total';
+  totalBtn.onclick=()=>showTotal(index);
+  monthsDiv.appendChild(totalBtn);
 
-function showMonthly(){
-let m=mm.value
-let arr=players.map(p=>({name:p.name,pos:p.pos,val:ai(p.stats[m],p.pos)}))
-arr.sort((a,b)=>b.val-a.val)
-
-let h=`<table><tr><th>#</th><th>Player</th><th>Rating</th></tr>`
-arr.forEach((p,i)=>{
-h+=`<tr><td>${i+1}</td><td>${p.name} ${i==0?"⭐":""}</td><td>${p.val}</td></tr>`
-})
-mTable.innerHTML=h+"</table>"
+  document.getElementById('playerStats').innerHTML='';
 }
 
-// AWARDS
-const awards={}
-
-function openAwards(){
-home.style.display="none"
-awardsDiv.style.display="block"
-
-let h=`<button onclick="back()">⬅</button>
-<h2>Monthly Awards</h2>
-<select id=am>${months.map(m=>`<option>${m}</option>`)}</select><br>
-
-Goal of Month:<select id=g>${players.map(p=>`<option>${p.name}</option>`)}</select><br>
-Assist of Month:<select id=a>${players.map(p=>`<option>${p.name}</option>`)}</select><br>
-Top Scorer:<select id=t>${players.map(p=>`<option>${p.name}</option>`)}</select><br>
-
-<button onclick=saveAward()>Save</button>
-<div id=awardRes></div>`
-
-awardsDiv.innerHTML=h
+// Show stats of a month
+function showStats(index,month){
+  const s = players[index].stats[month];
+  let html='<table class="table">';
+  html+='<tr><th>Matches</th><th>Goals</th><th>Assists</th><th>PassRate</th><th>ShotRate</th><th>MOTM</th><th>Red</th><th>WinRate</th><th>Rating</th></tr>';
+  html+='<tr>';
+  html+=`<td>${s.matches}</td><td>${s.goals}</td><td>${s.assists}</td><td>${s.passRate}</td><td>${s.shotRate}</td><td>${s.motm}</td><td>${s.red}</td><td>${s.winRate}</td><td>${s.rating}</td>`;
+  html+='</tr></table>';
+  document.getElementById('playerStats').innerHTML = html;
 }
 
-function saveAward(){
-awards[am.value]={goal:g.value,assist:a.value,top:t.value}
-awardRes.innerHTML=`Saved for ${am.value}`
+// Show total stats
+function showTotal(index){
+  const stats = players[index].stats;
+  let total={matches:0,goals:0,assists:0,passRate:0,shotRate:0,motm:0,red:0,winRate:0,rating:0};
+  months.forEach(m=>{
+    const s=stats[m];
+    total.matches+=s.matches;
+    total.goals+=s.goals;
+    total.assists+=s.assists;
+    total.passRate+=s.passRate;
+    total.shotRate+=s.shotRate;
+    total.motm+=s.motm;
+    total.red+=s.red;
+    total.winRate+=s.winRate;
+    total.rating+=s.rating;
+  });
+  const len = months.length;
+  let html='<table class="table">';
+  html+='<tr><th>Matches</th><th>Goals</th><th>Assists</th><th>PassRate</th><th>ShotRate</th><th>MOTM</th><th>Red</th><th>WinRate</th><th>Rating</th></tr>';
+  html+='<tr>';
+  html+=`<td>${total.matches}</td><td>${total.goals}</td><td>${total.assists}</td><td>${Math.round(total.passRate/len)}</td><td>${Math.round(total.shotRate/len)}</td><td>${total.motm}</td><td>${total.red}</td><td>${Math.round(total.winRate/len)}</td><td>${(total.rating/len).toFixed(2)}</td>`;
+  html+='</tr></table>';
+  document.getElementById('playerStats').innerHTML = html;
 }
 
-const home=document.getElementById("home")
-const playersDiv=document.getElementById("players")
-const awardsDiv=document.getElementById("awards")
+// Show Blendor Points
+function showBlendor(){
+  document.getElementById('homePage').style.display='none';
+  document.getElementById('blendorPage').style.display='block';
+  let html='<table class="table"><tr><th>Player</th>';
+  months.forEach(m=> html+='<th>'+m+'</th>');
+  html+='<th>Total</th></tr>';
+  players.forEach(p=>{
+    html+='<tr><td>'+p.name+'</td>';
+    let sum=0;
+    months.forEach(m=>{
+      const val=p.blendorPoints[m];
+      html+='<td>'+val+'</td>';
+      sum+=val;
+    });
+    html+='<td>'+sum+'</td>';
+    html+='</tr>';
+  });
+  html+='</table>';
+  document.getElementById('blendorTable').innerHTML=html;
+}
 
+// Show award
+function showAward(type){
+  document.getElementById('homePage').style.display='none';
+  document.getElementById('awardPage').style.display='block';
+  document.getElementById('awardTitle').textContent=type;
+  let winner="";
+  if(type==='Goal of the Month') winner="___";
+  if(type==='Player of the Month') winner="M-_-_-_-11_11";
+  if(type==='Assist of the Month') winner="___";
+  document.getElementById('awardWinner').textContent = winner;
+}
+
+// Show home
+function showHome(){
+  document.getElementById('homePage').style.display='block';
+  document.getElementById('playerPage').style.display='none';
+  document.getElementById('blendorPage').style.display='none';
+  document.getElementById('awardPage').style.display='none';
+}
 </script>
-
 </body>
 </html>
+
+ 
+
+
+
+
 
