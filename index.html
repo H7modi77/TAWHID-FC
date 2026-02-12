@@ -1,184 +1,216 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>TAWHID FC PRO</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<title>TAWHID FC</title>
 
 <style>
-body{margin:0;font-family:Arial;background:#081018;color:white}
-.hidden{display:none}
-button{background:gold;border:none;padding:10px 20px;border-radius:10px;font-weight:bold;cursor:pointer;margin:5px}
-input{padding:10px;border-radius:8px;border:none;margin:5px}
-.card{background:#111;padding:15px;border-radius:15px;margin:10px;box-shadow:0 0 10px black}
-.flex{display:flex;flex-wrap:wrap}
-.player{background:#161616;padding:10px;border-radius:12px;margin:10px;cursor:pointer;width:160px;text-align:center}
-table{width:100%;border-collapse:collapse}
-td,th{border:1px solid white;padding:8px;text-align:center}
-th{background:gold;color:black}
-h1,h2{text-align:center;color:gold}
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#f5f7ff,#ffffff);
+color:#111
+}
+
+h1,h2{text-align:center;color:#0b2cff}
+
+.section{
+padding:40px;
+text-align:center
+}
+
+.bigbtn{
+background:#0b2cff;
+color:white;
+border:none;
+padding:25px;
+width:250px;
+font-size:22px;
+border-radius:20px;
+margin:20px;
+cursor:pointer
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:20px;
+box-shadow:0 0 20px #ccc;
+margin:20px
+}
+
+select,button{
+padding:10px;
+border-radius:10px;
+border:1px solid #ccc;
+margin:10px
+}
+
+table{
+width:100%;
+border-collapse:collapse
+}
+
+th,td{
+border:1px solid #ddd;
+padding:8px;
+text-align:center
+}
+
+th{background:#0b2cff;color:white}
+
+.star{color:gold;font-size:25px}
 </style>
 </head>
 
 <body>
 
-<div id="login" class="card">
+<div id="home" class="section">
 <h1>TAWHID FC</h1>
-<input id="u" placeholder="Username">
-<input id="p" type="password">
-<br>
-<button onclick="login()">Login</button>
-<p id="err"></p>
+
+<button class="bigbtn" onclick="openPlayers()">👥 اللاعبين</button>
+<button class="bigbtn" onclick="openMonthly()">🔥 المنافسة الشهرية</button>
+<button class="bigbtn" onclick="openAwards()">🏆 الجوائز الشهرية</button>
 </div>
 
-<div id="app" class="hidden">
-
-<h1>TAWHID FC Dashboard</h1>
-
-<input id="search" placeholder="Search player..." oninput="renderPlayers()">
-
-<div id="players" class="flex"></div>
-
-<div class="card">
-<h2>Ballon d'Or Ranking</h2>
-<div id="ranking"></div>
-</div>
-
-<div class="card">
-<h2>MVP (Auto)</h2>
-<h1 id="mvp"></h1>
-</div>
-
-<div id="profile" class="card hidden"></div>
-
-</div>
+<div id="players" class="section" style="display:none"></div>
+<div id="monthly" class="section" style="display:none"></div>
+<div id="awards" class="section" style="display:none"></div>
 
 <script>
 
-// LOGIN
-const users={TAWHID:["78","25","28","7","2","11"]}
-
-function login(){
- if(users[u.value]?.includes(p.value)){
-  loginDiv.style.display="none"
-  app.classList.remove("hidden")
-  renderPlayers()
-  rank()
-  mvpCalc()
- }else err.textContent="Wrong login"
-}
-
-// AUTO MONTHS Oct 2025 → Sep 2026
+// months Oct 2025 → Sep 2026
 const months=[]
-let start=new Date(2025,9,1)
-let end=new Date(2026,8,1)
-
-while(start<=end){
- months.push(start.toLocaleString("en",{month:"short",year:"numeric"}))
- start.setMonth(start.getMonth()+1)
+let s=new Date(2025,9,1)
+for(let i=0;i<12;i++){
+months.push(s.toLocaleString("en",{month:"short",year:"numeric"}))
+s.setMonth(s.getMonth()+1)
 }
 
-// PLAYERS BASE
+// players
 const players=[
-{name:"Almousa3m",stats:{}},
-{name:"Yo0ousef25",stats:{}},
-{name:"H2ssain_28",stats:{}},
-{name:"H7modi_77",stats:{}},
-{name:"Basabeso2",stats:{}},
-{name:"M-_-_-_-11_11",stats:{}}
+{name:"Almousa3m",pos:"ST"},
+{name:"Yo0ousef25",pos:"RW"},
+{name:"H2ssain_28",pos:"CAM"},
+{name:"H7modi_77",pos:"CM"},
+{name:"Basabeso2",pos:"CB"},
+{name:"M-_-_-_-11_11",pos:"LW"}
 ]
 
-// INIT EMPTY MONTHS
+// stats random demo
 players.forEach(p=>{
- months.forEach(m=>{
-  p.stats[m]={g:0,a:0,m:0,r:0}
- })
+p.stats={}
+months.forEach(m=>{
+p.stats[m]={
+g:Math.floor(Math.random()*10),
+a:Math.floor(Math.random()*8),
+m:Math.floor(Math.random()*5),
+r:Math.floor(Math.random()*2)
+}
+})
 })
 
-// SAMPLE DATA (Oct + Nov only)
-players[0].stats[months[0]]={g:65,a:61,m:18,r:1}
-players[0].stats[months[1]]={g:67,a:72,m:15,r:0}
-
-players[1].stats[months[0]]={g:23,a:5,m:0,r:0}
-players[1].stats[months[1]]={g:21,a:8,m:3,r:1}
-
-players[2].stats[months[0]]={g:36,a:15,m:1,r:0}
-players[2].stats[months[1]]={g:59,a:48,m:8,r:2}
-
-players[3].stats[months[0]]={g:14,a:36,m:2,r:5}
-players[3].stats[months[1]]={g:52,a:54,m:8,r:7}
-
-players[4].stats[months[0]]={g:36,a:17,m:7,r:1}
-players[4].stats[months[1]]={g:54,a:22,m:9,r:0}
-
-players[5].stats[months[0]]={g:38,a:43,m:9,r:1}
-players[5].stats[months[1]]={g:48,a:58,m:10,r:0}
-
-// POWER INDEX
-function power(s){
- return s.g*2 + s.a*1.5 + s.m*3 - s.r*2
+// AI rating
+function ai(s,pos){
+let base=s.g*2+s.a*1.5+s.m*3-s.r*2
+if(pos=="CB") base+=s.a
+if(pos=="ST") base+=s.g*2
+return base.toFixed(1)
 }
 
-// TOTAL
-function total(p){
- let t=0
- months.forEach(m=>t+=power(p.stats[m]))
- return t.toFixed(1)
+// HOME
+function back(){
+home.style.display="block"
+playersDiv.style.display="none"
+monthly.style.display="none"
+awards.style.display="none"
 }
 
-// RENDER PLAYERS
-function renderPlayers(){
- playersDiv.innerHTML=""
- players.filter(p=>p.name.toLowerCase().includes(search.value.toLowerCase()))
- .forEach((p,i)=>{
-  playersDiv.innerHTML+=`
-  <div class="player" onclick="profile(${i})">
-  <h3>${p.name}</h3>
-  Power: ${total(p)}
-  </div>`
- })
+// PLAYERS
+function openPlayers(){
+home.style.display="none"
+playersDiv.style.display="block"
+
+let h=`<button onclick="back()">⬅</button><h2>Players</h2>
+<select id=pSel>${players.map((p,i)=>`<option value=${i}>${p.name}</option>`)}</select>
+<select id=mSel>${months.map(m=>`<option>${m}</option>`)}</select>
+<button onclick=showPlayer()>Show</button>
+<div id=pData></div>`
+
+playersDiv.innerHTML=h
 }
 
-// PROFILE
-function profile(i){
- profileDiv.classList.remove("hidden")
- let p=players[i]
- let h=`<h2>${p.name}</h2><table><tr><th>Month</th><th>Goals</th><th>Assists</th><th>MOTM</th><th>Red</th><th>Power</th></tr>`
- months.forEach(m=>{
-  let s=p.stats[m]
-  h+=`<tr><td>${m}</td><td>${s.g}</td><td>${s.a}</td><td>${s.m}</td><td>${s.r}</td><td>${power(s).toFixed(1)}</td></tr>`
- })
- h+=`</table><canvas id="c"></canvas>`
- profileDiv.innerHTML=h
+function showPlayer(){
+let p=players[pSel.value]
+let m=mSel.value
+let s=p.stats[m]
 
- new Chart(c,{
- type:"bar",
- data:{labels:["Goals","Assists","MOTM"],
- datasets:[{data:[
- months.reduce((x,m)=>x+p.stats[m].g,0),
- months.reduce((x,m)=>x+p.stats[m].a,0),
- months.reduce((x,m)=>x+p.stats[m].m,0)
- ]}]}
- })
+pData.innerHTML=`
+<div class=card>
+<h2>${p.name}</h2>
+<p>Position: ${p.pos}</p>
+<p>Goals: ${s.g}</p>
+<p>Assists: ${s.a}</p>
+<p>MOTM: ${s.m}</p>
+<p>Red: ${s.r}</p>
+<h2>AI Rating: ${ai(s,p.pos)}</h2>
+</div>`
 }
 
-// RANKING
-function rank(){
- players.sort((a,b)=>total(b)-total(a))
- let h="<table><tr><th>#</th><th>Player</th><th>Total Power</th></tr>"
- players.forEach((p,i)=>h+=`<tr><td>${i+1}</td><td>${p.name}</td><td>${total(p)}</td></tr>`)
- ranking.innerHTML=h+"</table>"
+// MONTHLY COMPETITION
+function openMonthly(){
+home.style.display="none"
+monthly.style.display="block"
+
+let h=`<button onclick="back()">⬅</button><h2>Monthly Competition</h2>
+<select id=mm>${months.map(m=>`<option>${m}</option>`)}</select>
+<button onclick=showMonthly()>Show</button>
+<div id=mTable></div>`
+
+monthly.innerHTML=h
 }
 
-// MVP
-function mvpCalc(){
- mvp.textContent=players[0].name
+function showMonthly(){
+let m=mm.value
+let arr=players.map(p=>({name:p.name,pos:p.pos,val:ai(p.stats[m],p.pos)}))
+arr.sort((a,b)=>b.val-a.val)
+
+let h=`<table><tr><th>#</th><th>Player</th><th>Rating</th></tr>`
+arr.forEach((p,i)=>{
+h+=`<tr><td>${i+1}</td><td>${p.name} ${i==0?"⭐":""}</td><td>${p.val}</td></tr>`
+})
+mTable.innerHTML=h+"</table>"
 }
 
-const loginDiv=document.getElementById("login")
-const app=document.getElementById("app")
+// AWARDS
+const awards={}
+
+function openAwards(){
+home.style.display="none"
+awardsDiv.style.display="block"
+
+let h=`<button onclick="back()">⬅</button>
+<h2>Monthly Awards</h2>
+<select id=am>${months.map(m=>`<option>${m}</option>`)}</select><br>
+
+Goal of Month:<select id=g>${players.map(p=>`<option>${p.name}</option>`)}</select><br>
+Assist of Month:<select id=a>${players.map(p=>`<option>${p.name}</option>`)}</select><br>
+Top Scorer:<select id=t>${players.map(p=>`<option>${p.name}</option>`)}</select><br>
+
+<button onclick=saveAward()>Save</button>
+<div id=awardRes></div>`
+
+awardsDiv.innerHTML=h
+}
+
+function saveAward(){
+awards[am.value]={goal:g.value,assist:a.value,top:t.value}
+awardRes.innerHTML=`Saved for ${am.value}`
+}
+
+const home=document.getElementById("home")
 const playersDiv=document.getElementById("players")
-const profileDiv=document.getElementById("profile")
+const awardsDiv=document.getElementById("awards")
 
 </script>
 
