@@ -5,23 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TAWHID FC – Football Management System</title>
 <style>
-body{
-  margin:0; font-family:Poppins,sans-serif;
-  background:#eef2ff; color:#333;
-}
-header{
-  text-align:center; background:white; padding:20px; box-shadow:0 4px 10px #ccc;
-}
-header img{
-  height:60px; /* شعار أصغر */
-}
-nav{
-  display:flex; justify-content:center; gap:12px; padding:15px; flex-wrap:wrap;
-}
-nav button{
-  background:#2563eb;color:white;border:none;padding:12px 22px;
-  border-radius:14px;font-weight:600;cursor:pointer;
-}
+body{margin:0;font-family:Poppins,sans-serif;background:#eef2ff;color:#333;}
+header{text-align:center;background:white;padding:20px;box-shadow:0 4px 10px #ccc;}
+header img{height:60px;}
+nav{display:flex;justify-content:center;gap:12px;padding:15px;flex-wrap:wrap;}
+nav button{background:#2563eb;color:white;border:none;padding:12px 22px;border-radius:14px;font-weight:600;cursor:pointer;}
 .section{display:none;padding:20px;}
 .active{display:block;}
 .card{background:white;padding:20px;margin-bottom:20px;border-radius:20px;box-shadow:0 0 15px #ccc;}
@@ -30,23 +18,9 @@ th,td{border:1px solid #ccc;padding:8px;text-align:center;}
 th{background:#2563eb;color:white;}
 .star{color:gold;font-size:28px;}
 video{width:100%;border-radius:15px;margin-top:10px;}
-/* صور اللاعبين صغيرة وفريم دائري */
-.player-head{
-  display:flex; gap:15px; flex-wrap:wrap; align-items:center;
-}
-.player-head img{
-  width:80px;
-  height:80px;
-  border-radius:50%;
-  object-fit:cover;
-  border:3px solid #2563eb;
-  box-shadow:0 2px 8px rgba(0,0,0,0.2);
-}
-@media(max-width:600px){
-  nav{flex-direction:column;align-items:center;}
-  table{font-size:12px;}
-  .player-head{flex-direction:column;text-align:center;}
-}
+.player-head{display:flex;gap:15px;flex-wrap:wrap;align-items:center;}
+.player-head img{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #2563eb;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+@media(max-width:600px){nav{flex-direction:column;align-items:center;}table{font-size:12px;}.player-head{flex-direction:column;text-align:center;}}
 </style>
 </head>
 <body>
@@ -71,41 +45,109 @@ video{width:100%;border-radius:15px;margin-top:10px;}
 const months=["Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep"];
 
 // ================= PLAYERS DATABASE =================
+// كل لاعب له إحصائيات مختلفة لكل شهر
 const players=[
 {
-name:"H7modi77", age:20, nation:"Saudi Arabia", birth:"2005-10-25", photo:"h7modi77.jpg",
-monthly:Array(12).fill().map(()=>({matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-                                  {matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-                                  {matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-                                  {matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-                                  {matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-                                  {matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-                                  {matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-                                  {matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-                                  {matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-                                  {matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-                                  {matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:0,winR:0,rating:0},
-                                  {matches:0,goals:0,assists:0,passR:0,shotR:0,motm:0,redC:100,winR:0,rating:0}))
+name:"H7modi77", age:21, nation:"Saudi Arabia", birth:"2004-06-12", photo:"h7modi77.jpg",
+monthly:[
+{matches:5,goals:2,assists:1,passR:85,shotR:75,motm:1,redC:0,winR:78,rating:0},
+{matches:4,goals:1,assists:0,passR:80,shotR:70,motm:0,redC:0,winR:70,rating:0},
+{matches:6,goals:3,assists:2,passR:88,shotR:80,motm:2,redC:0,winR:82,rating:0},
+{matches:5,goals:0,assists:1,passR:82,shotR:74,motm:0,redC:1,winR:75,rating:0},
+{matches:4,goals:2,assists:2,passR:86,shotR:78,motm:1,redC:0,winR:77,rating:0},
+{matches:5,goals:1,assists:1,passR:83,shotR:76,motm:0,redC:0,winR:80,rating:0},
+{matches:6,goals:3,assists:0,passR:85,shotR:79,motm:1,redC:0,winR:78,rating:0},
+{matches:4,goals:2,assists:1,passR:81,shotR:72,motm:1,redC:0,winR:74,rating:0},
+{matches:5,goals:0,assists:2,passR:84,shotR:77,motm:0,redC:0,winR:79,rating:0},
+{matches:6,goals:2,assists:1,passR:87,shotR:80,motm:1,redC:0,winR:81,rating:0},
+{matches:4,goals:1,assists:1,passR:82,shotR:73,motm:0,redC:0,winR:76,rating:0},
+{matches:5,goals:3,assists:2,passR:86,shotR:78,motm:2,redC:0,winR:80,rating:0},
+]
 },
 {
 name:"Yo0ousef25", age:22, nation:"Saudi Arabia", birth:"2003-02-08", photo:"yousef25.jpg",
-monthly:Array(12).fill().map(()=>({matches:4,goals:3,assists:2,passR:78,shotR:82,motm:2,redC:0,winR:80,rating:0}))
-},
-{
-name:"H2ssain_28", age:22, nation:"Saudi Arabia", birth:"2003-02-08", photo:"h28.jpg",
-monthly:Array(12).fill().map(()=>({matches:6,goals:1,assists:3,passR:80,shotR:70,motm:1,redC:1,winR:65,rating:0}))
+monthly:[
+{matches:4,goals:3,assists:2,passR:78,shotR:82,motm:2,redC:0,winR:80,rating:0},
+{matches:5,goals:1,assists:1,passR:81,shotR:75,motm:0,redC:0,winR:74,rating:0},
+{matches:6,goals:2,assists:3,passR:85,shotR:79,motm:1,redC:0,winR:82,rating:0},
+{matches:5,goals:0,assists:1,passR:83,shotR:76,motm:0,redC:1,winR:70,rating:0},
+{matches:4,goals:1,assists:0,passR:79,shotR:72,motm:0,redC:0,winR:68,rating:0},
+{matches:5,goals:2,assists:1,passR:82,shotR:77,motm:1,redC:0,winR:75,rating:0},
+{matches:6,goals:3,assists:0,passR:84,shotR:80,motm:2,redC:0,winR:81,rating:0},
+{matches:4,goals:1,assists:2,passR:80,shotR:74,motm:0,redC:0,winR:70,rating:0},
+{matches:5,goals:2,assists:1,passR:83,shotR:78,motm:1,redC:0,winR:77,rating:0},
+{matches:6,goals:0,assists:1,passR:85,shotR:80,motm:0,redC:0,winR:79,rating:0},
+{matches:4,goals:2,assists:2,passR:81,shotR:75,motm:1,redC:0,winR:74,rating:0},
+{matches:5,goals:3,assists:1,passR:86,shotR:82,motm:2,redC:0,winR:80,rating:0},
+]
 },
 {
 name:"Almousa3M", age:22, nation:"Saudi Arabia", birth:"2003-02-08", photo:"memo.jpg",
-monthly:Array(12).fill().map(()=>({matches:5,goals:2,assists:2,passR:82,shotR:77,motm:1,redC:0,winR:70,rating:0}))
-},
+monthly:[
+{matches:4,goals:3,assists:2,passR:78,shotR:82,motm:2,redC:0,winR:80,rating:0},
+{matches:5,goals:1,assists:1,passR:81,shotR:75,motm:0,redC:0,winR:74,rating:0},
+{matches:6,goals:2,assists:3,passR:85,shotR:79,motm:1,redC:0,winR:82,rating:0},
+{matches:5,goals:0,assists:1,passR:83,shotR:76,motm:0,redC:1,winR:70,rating:0},
+{matches:4,goals:1,assists:0,passR:79,shotR:72,motm:0,redC:0,winR:68,rating:0},
+{matches:5,goals:2,assists:1,passR:82,shotR:77,motm:1,redC:0,winR:75,rating:0},
+{matches:6,goals:3,assists:0,passR:84,shotR:80,motm:2,redC:0,winR:81,rating:0},
+{matches:4,goals:1,assists:2,passR:80,shotR:74,motm:0,redC:0,winR:70,rating:0},
+{matches:5,goals:2,assists:1,passR:83,shotR:78,motm:1,redC:0,winR:77,rating:0},
+{matches:6,goals:0,assists:1,passR:85,shotR:80,motm:0,redC:0,winR:79,rating:0},
+{matches:4,goals:2,assists:2,passR:81,shotR:75,motm:1,redC:0,winR:74,rating:0},
+{matches:5,goals:3,assists:1,passR:86,shotR:82,motm:2,redC:0,winR:80,rating:0},
+]
+},,
+{
+name:"H2ssain_28", age:22, nation:"Saudi Arabia", birth:"2003-02-08", photo:"h28.jpg",
+monthly:[
+{matches:4,goals:3,assists:2,passR:78,shotR:82,motm:2,redC:0,winR:80,rating:0},
+{matches:5,goals:1,assists:1,passR:81,shotR:75,motm:0,redC:0,winR:74,rating:0},
+{matches:6,goals:2,assists:3,passR:85,shotR:79,motm:1,redC:0,winR:82,rating:0},
+{matches:5,goals:0,assists:1,passR:83,shotR:76,motm:0,redC:1,winR:70,rating:0},
+{matches:4,goals:1,assists:0,passR:79,shotR:72,motm:0,redC:0,winR:68,rating:0},
+{matches:5,goals:2,assists:1,passR:82,shotR:77,motm:1,redC:0,winR:75,rating:0},
+{matches:6,goals:3,assists:0,passR:84,shotR:80,motm:2,redC:0,winR:81,rating:0},
+{matches:4,goals:1,assists:2,passR:80,shotR:74,motm:0,redC:0,winR:70,rating:0},
+{matches:5,goals:2,assists:1,passR:83,shotR:78,motm:1,redC:0,winR:77,rating:0},
+{matches:6,goals:0,assists:1,passR:85,shotR:80,motm:0,redC:0,winR:79,rating:0},
+{matches:4,goals:2,assists:2,passR:81,shotR:75,motm:1,redC:0,winR:74,rating:0},
+{matches:5,goals:3,assists:1,passR:86,shotR:82,motm:2,redC:0,winR:80,rating:0},
+]
+},,
 {
 name:"Basabeso2", age:22, nation:"Saudi Arabia", birth:"2003-02-08", photo:"bsbs.jpg",
-monthly:Array(12).fill().map(()=>({matches:4,goals:1,assists:1,passR:75,shotR:78,motm:0,redC:0,winR:68,rating:0}))
-},
+monthly:[
+{matches:4,goals:3,assists:2,passR:78,shotR:82,motm:2,redC:0,winR:80,rating:0},
+{matches:5,goals:1,assists:1,passR:81,shotR:75,motm:0,redC:0,winR:74,rating:0},
+{matches:6,goals:2,assists:3,passR:85,shotR:79,motm:1,redC:0,winR:82,rating:0},
+{matches:5,goals:0,assists:1,passR:83,shotR:76,motm:0,redC:1,winR:70,rating:0},
+{matches:4,goals:1,assists:0,passR:79,shotR:72,motm:0,redC:0,winR:68,rating:0},
+{matches:5,goals:2,assists:1,passR:82,shotR:77,motm:1,redC:0,winR:75,rating:0},
+{matches:6,goals:3,assists:0,passR:84,shotR:80,motm:2,redC:0,winR:81,rating:0},
+{matches:4,goals:1,assists:2,passR:80,shotR:74,motm:0,redC:0,winR:70,rating:0},
+{matches:5,goals:2,assists:1,passR:83,shotR:78,motm:1,redC:0,winR:77,rating:0},
+{matches:6,goals:0,assists:1,passR:85,shotR:80,motm:0,redC:0,winR:79,rating:0},
+{matches:4,goals:2,assists:2,passR:81,shotR:75,motm:1,redC:0,winR:74,rating:0},
+{matches:5,goals:3,assists:1,passR:86,shotR:82,motm:2,redC:0,winR:80,rating:0},
+]
+},,
 {
-name:"M-_-_-_-11_11", age:22, nation:"Saudi Arabia", birth:"2003-02-08", photo:"mbmb.jpg",
-monthly:Array(12).fill().map(()=>({matches:5,goals:3,assists:1,passR:79,shotR:80,motm:2,redC:0,winR:72,rating:0}))
+name:"M-_-_-_11_11", age:00, nation:"Saudi Arabia", birth:"2003-02-08", photo:"mb.jpg",
+monthly:[
+{matches:4,goals:3,assists:2,passR:78,shotR:82,motm:2,redC:0,winR:80,rating:0},
+{matches:5,goals:1,assists:1,passR:81,shotR:75,motm:0,redC:0,winR:74,rating:0},
+{matches:6,goals:2,assists:3,passR:85,shotR:79,motm:1,redC:0,winR:82,rating:0},
+{matches:5,goals:0,assists:1,passR:83,shotR:76,motm:0,redC:1,winR:70,rating:0},
+{matches:4,goals:1,assists:0,passR:79,shotR:72,motm:0,redC:0,winR:68,rating:0},
+{matches:5,goals:2,assists:1,passR:82,shotR:77,motm:1,redC:0,winR:75,rating:0},
+{matches:6,goals:3,assists:0,passR:84,shotR:80,motm:2,redC:0,winR:81,rating:0},
+{matches:4,goals:1,assists:2,passR:80,shotR:74,motm:0,redC:0,winR:70,rating:0},
+{matches:5,goals:2,assists:1,passR:83,shotR:78,motm:1,redC:0,winR:77,rating:0},
+{matches:6,goals:0,assists:1,passR:85,shotR:80,motm:0,redC:0,winR:79,rating:0},
+{matches:4,goals:2,assists:2,passR:81,shotR:75,motm:1,redC:0,winR:74,rating:0},
+{matches:5,goals:3,assists:1,passR:86,shotR:82,motm:2,redC:0,winR:80,rating:0},
+]
 }
 ];
 
@@ -124,7 +166,6 @@ players.forEach(p=>{
     table+=`<tr><td>${months[i]}</td><td>${m.matches}</td><td>${m.goals}</td><td>${m.assists}</td><td>${m.passR}</td><td>${m.shotR}</td><td>${m.motm}</td><td>${m.redC}</td><td>${m.winR}</td><td>${m.rating}</td></tr>`;
   });
   table+="</table>";
-
   playersDiv.innerHTML+=`
   <div class="card">
     <div class="player-head">
@@ -174,5 +215,4 @@ function show(id){
 
 </body>
 </html>
-
 
