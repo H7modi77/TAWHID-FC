@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TAWHID FC – Management System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{margin:0;font-family:Inter;background:#f4f7ff}
+header{text-align:center;padding:20px;background:white;box-shadow:0 4px 10px #ccc}
+.logo{height:70px}
+
+nav{display:flex;justify-content:center;gap:15px;margin:20px}
+button{
+padding:12px 22px;
+border:none;
+border-radius:12px;
+background:#2b4cff;
+color:white;
+font-weight:600;
+cursor:pointer
+}
+
+.section{display:none;padding:20px}
+.active{display:block}
+
+.card{
+background:white;
+padding:20px;
+margin-bottom:25px;
+border-radius:20px;
+box-shadow:0 0 15px #ccc
+}
+
+.player-head{
+display:flex;
+gap:15px;
+flex-wrap:wrap
+}
+
+.player-head img{
+width:110px;height:110px;border-radius:50%;object-fit:cover
+}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:13px}
+
+canvas{margin-top:20px}
+
+@media(max-width:600px){
+.grid{grid-template-columns:1fr}
+}
+
+.star{font-size:22px;color:gold}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<img src="images/logo.png" class="logo"><br>
+<b>TAWHID FC – Football Management System</b>
+</header>
+
+<nav>
+<button onclick="show('players')">Players</button>
+<button onclick="show('competition')">Monthly AI</button>
+<button onclick="show('awards')">Awards</button>
+</nav>
+
+<div id="players" class="section active"></div>
+<div id="competition" class="section"></div>
+<div id="awards" class="section"></div>
+
+<script>
+
+// ================= DATABASE =================
+
+const months=["Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep"]
+
+const players=[
+
+{
+name:"H7modi77",
+age:21,
+nation:"Saudi Arabia",
+birth:"2004-06-12",
+photo:"images/h7modi.jpg",
+
+monthly:Array(12).fill().map(()=>({
+matches:4,goals:1,assists:2,passR:88,shotR:72,motm:1,redC:0,winR:78,rating:0
+}))
+},
+
+{
+name:"Yo0ousef25",
+age:22,
+nation:"Saudi Arabia",
+birth:"2003-02-08",
+photo:"images/yousef.jpg",
+
+monthly:Array(12).fill().map(()=>({
+matches:4,goals:3,assists:1,passR:75,shotR:90,motm:2,redC:0,winR:80,rating:0
+}))
+}
+
+]
+
+// ================= AI ENGINE =================
+
+function ai(m){
+return (m.goals*3+m.assists*2+m.passR*.05+m.shotR*.08+m.winR*.04+m.motm*3-m.redC*6).toFixed(1)
+}
+
+// ================= PLAYERS =================
+
+players.forEach((p,i)=>{
+
+p.monthly.forEach(m=>m.rating=ai(m))
+
+playersDiv.innerHTML+=`
+
+<div class="card">
+
+<div class="player-head">
+<img src="${p.photo}">
+<div>
+<h2>${p.name}</h2>
+Age: ${p.age}<br>
+Nationality: ${p.nation}<br>
+Birth: ${p.birth}
+</div>
+</div>
+
+<canvas id="c${i}"></canvas>
+
+</div>
+`
+
+setTimeout(()=>{
+new Chart(document.getElementById("c"+i),{
+type:"line",
+data:{
+labels:months,
+datasets:[
+{label:"Goals",data:p.monthly.map(x=>x.goals)},
+{label:"Assists",data:p.monthly.map(x=>x.assists)},
+{label:"Pass%",data:p.monthly.map(x=>x.passR)},
+{label:"Shot%",data:p.monthly.map(x=>x.shotR)},
+{label:"Win%",data:p.monthly.map(x=>x.winR)},
+{label:"Rating",data:p.monthly.map(x=>x.rating)}
+]
+},
+options:{responsive:true,tension:.3}
+})
+},100)
+
+})
+
+// ================= MONTHLY COMPETITION =================
+
+let starMonth=0
+let bestPlayer=""
+
+players.forEach(p=>{
+let sum=p.monthly.reduce((a,b)=>a+Number(b.rating),0)
+if(sum>starMonth){starMonth=sum;bestPlayer=p.name}
+})
+
+competition.innerHTML=`
+<div class="card">
+<h2>AI Star Of The Season ⭐</h2>
+<h1>${bestPlayer}</h1>
+</div>
+`
+
+// ================= AWARDS =================
+
+awards.innerHTML=`
+<div class="card">
+<h2>Manual Awards</h2>
+Goal Of Month: _______<br><br>
+Assist Of Month: _______<br><br>
+Top Scorer: _______
+</div>
+`
+
+const playersDiv=document.getElementById("players")
+
+// ================= NAV =================
+
+function show(id){
+document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"))
+document.getElementById(id).classList.add("active")
+}
+
+</script>
+
+</body>
+</html>
