@@ -3,43 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TAWHID FC - Full System</title>
+<title>TAWHID FC – Hyper Site</title>
 <style>
-body{margin:0;font-family:sans-serif;background:#eef2ff;color:#333;transition:0.3s}
-.dark-mode{background:#111;color:#eee}
-header{text-align:center;background:white;padding:12px;transition:0.3s}
-header.dark-mode{background:#222}
-header img{width:80px}
-nav{display:flex;flex-wrap:wrap}
-nav button{flex:1;background:#2563eb;color:white;border:none;padding:12px;margin:1px;cursor:pointer;border-radius:8px}
-nav button.dark-mode{background:#444}
-.section{display:none;padding:15px}
-.active{display:block}
-.card{background:white;border-radius:15px;padding:15px;margin-bottom:15px;transition:0.3s}
-.card.dark-mode{background:#222}
-.player{text-align:center;margin:10px;display:inline-block}
-.player img{width:85px;height:85px;border-radius:50%}
-table{width:100%;border-collapse:collapse;font-size:11px}
+body{margin:0;font-family:sans-serif;background:#eef2ff;color:#333;transition:background 0.3s;color 0.3s;}
+.dark-mode{background:#111;color:#eee;}
+header{text-align:center;background:white;padding:15px;box-shadow:0 4px 10px #ccc;position:sticky;top:0;z-index:1000;}
+header img{width:90px}
+nav{display:flex;gap:5px;padding:10px;justify-content:center;flex-wrap:wrap;background:#2563eb;position:sticky;top:70px;z-index:999;}
+nav button{flex:1;min-width:80px;background:#1e40af;color:white;border:none;padding:10px;border-radius:10px;cursor:pointer;font-weight:600;transition:0.3s;}
+nav button:hover{background:#3b82f6}
+.section{display:none;padding:15px;}
+.active{display:block;}
+.card{background:white;border-radius:15px;padding:15px;margin-bottom:15px;box-shadow:0 0 15px rgba(0,0,0,0.1);}
+.player{display:inline-block;text-align:center;margin:10px;transition:0.3s;cursor:pointer;}
+.player:hover{transform:scale(1.1)}
+.player img{width:85px;height:85px;border-radius:50%;object-fit:cover;box-shadow:0 2px 10px rgba(0,0,0,0.2);}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px;}
 th,td{border:1px solid #ccc;padding:4px;text-align:center}
-th.dark-mode, td.dark-mode{border-color:#555}
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#0009;display:none;z-index:999}
-.modalBox{background:white;margin:15px;padding:15px;border-radius:15px;height:92%;overflow:auto}
-.close{float:right;font-size:22px;cursor:pointer}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#0009;display:none;z-index:9999;}
+.modalBox{background:white;margin:15px;padding:15px;border-radius:15px;height:92%;overflow:auto;}
+.close{float:right;font-size:22px;cursor:pointer;}
 video,img{width:100%;border-radius:10px;margin-top:8px}
-.sponsors{text-align:center}
+.sponsors{text-align:center;margin-top:10px}
 .sponsors img{width:120px;margin:10px}
-input{width:100%;padding:8px;margin-bottom:10px}
-.chart-container{width:100%;height:300px;margin-top:15px}
-.dark-toggle{position:fixed;top:10px;right:10px;padding:8px 12px;background:#2563eb;color:white;border:none;border-radius:8px;cursor:pointer;z-index:1000}
-.dark-toggle.dark-mode{background:#444}
+input{width:100%;padding:8px;margin-bottom:10px;border-radius:8px;border:1px solid #ccc}
+.toggle-dark{position:fixed;bottom:15px;right:15px;padding:10px 15px;background:#2563eb;color:white;border:none;border-radius:10px;cursor:pointer;z-index:1000;}
 </style>
 </head>
 <body>
 
-<button class="dark-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
-
 <header>
-<img src="logo.png"><br>
+<img src="logo.png" alt="TAWHID FC"><br>
 <b>TAWHID FC</b>
 </header>
 
@@ -47,96 +41,76 @@ input{width:100%;padding:8px;margin-bottom:10px}
 <button onclick="show('home')">Home</button>
 <button onclick="show('team')">Team</button>
 <button onclick="show('awards')">Awards</button>
-<button onclick="show('highlights')">Highlights</button>
-<button onclick="show('stats')">Team Stats</button>
-<button onclick="show('prediction')">Match Prediction</button>
+<button onclick="show('matches')">Matches</button>
+<button onclick="show('predictions')">AI Predictions</button>
 </nav>
+
+<button class="toggle-dark" onclick="toggleDark()">🌙 Dark Mode</button>
 
 <div id="home" class="section active"></div>
 <div id="team" class="section"></div>
 <div id="awards" class="section"></div>
-<div id="highlights" class="section"></div>
-<div id="stats" class="section"></div>
-<div id="prediction" class="section"></div>
+<div id="matches" class="section"></div>
+<div id="predictions" class="section"></div>
 
 <div class="modal" id="modal">
 <div class="modalBox" id="modalBox"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-
-// ================= NEWS =================
+// ==================== NEWS ====================
 const news=[
-{title:"يعلن نادي TAWHID FC عن إتمام التعاقد رسميًا مع ECMassage كراعٍ للنادي.",time:"2026-02-13",img:"ecmassage.png"},
-{title:"يعلن نادي TAWHID FC عن إتمام التعاقد رسميًا مع DoubleB كراعٍ للنادي.",time:"2026-02-01",img:"doubleb.png"}
+{title:"TAWHID FC يتعاقد رسميًا مع ECMassage كراعٍ للنادي.",time:"2026-02-13",img:"ecmassage.png"},
+{title:"TAWHID FC يتعاقد رسميًا مع DoubleB كراعٍ للنادي.",time:"2026-02-01",img:"doubleb.png"}
 ];
 
-// ================= PLAYERS =================
+// ==================== PLAYERS ====================
 const players=[
-{ name:"H7modi77",photo:"h7.jpg",pos:"Midfield",monthly:[ ["Oct",45,14,36,79,33,2,5,62], ["Nov",77,52,54,76,43,9,2,51], ["Jan",116,44,85,75,38,19,25,47] ]},
-{ name:"M-_-_-_11_11",photo:"m.jpg",pos:"Midfield",monthly:[ ["Oct",68,38,43,81,27,9,1,57], ["Nov",86,48,58,74,29,10,0,54], ["Jan",158,112,113,75,34,33,7,46] ]},
-{ name:"Almousa3M",photo:"a.jpg",pos:"Attack",monthly:[ ["Oct",58,65,61,78,33,18,1,60], ["Nov",57,67,72,77,33,15,0,53], ["Jan",126,161,146,77,40,24,1,49] ]},
-{ name:"H2ssain_28",photo:"h2.jpg",pos:"Attack",monthly:[ ["Oct",44,36,15,76,23,1,0,56], ["Nov",64,59,48,77,25,8,2,51], ["Jan",146,144,72,73,28,9,7,44] ]},
-{ name:"Yo0ousef25",photo:"y.jpg",pos:"Attack",monthly:[ ["Oct",28,23,5,78,46,0,0,67], ["Nov",26,21,8,78,52,3,1,58], ["Jan",99,57,17,74,47,0,5,43] ]},
-{ name:"Basabeso2",photo:"b.jpg",pos:"Attack",monthly:[ ["Oct",48,36,17,84,40,7,1,62], ["Nov",75,54,22,86,39,9,0,57], ["Jan",91,84,43,85,41,5,8,49] ]}
+{name:"H7modi77",photo:"h7.jpg",pos:"Midfield",monthly:[["Oct",45,14,36,79,33,2,5,62],["Nov",77,52,54,76,43,9,2,51],["Jan",116,44,85,75,38,19,25,47]]},
+{name:"M-_-_-_11_11",photo:"m.jpg",pos:"Midfield",monthly:[["Oct",68,38,43,81,27,9,1,57],["Nov",86,48,58,74,29,10,0,54],["Jan",158,112,113,75,34,33,7,46]]},
+{name:"Almousa3M",photo:"a.jpg",pos:"Attack",monthly:[["Oct",58,65,61,78,33,18,1,60],["Nov",57,67,72,77,33,15,0,53],["Jan",126,161,146,77,40,24,1,49]]},
+{name:"H2ssain_28",photo:"h2.jpg",pos:"Attack",monthly:[["Oct",44,36,15,76,23,1,0,56],["Nov",64,59,48,77,25,8,2,51],["Jan",146,144,72,73,28,9,7,44]]},
+{name:"Yo0ousef25",photo:"y.jpg",pos:"Attack",monthly:[["Oct",28,23,5,78,46,0,0,67],["Nov",26,21,8,78,52,3,1,58],["Jan",99,57,17,74,47,0,5,43]]},
+{name:"Basabeso2",photo:"b.jpg",pos:"Attack",monthly:[["Oct",48,36,17,84,40,7,1,62],["Nov",75,54,22,86,39,9,0,57],["Jan",91,84,43,85,41,5,8,49]]}
 ];
 
-// ================= AI =================
-players.forEach(p=>{
- p.monthly.forEach(m=>{
-   m.push(+(m[2]*2.1+m[3]*2.1+m[4]*1.5+m[5]*2.5+m[8]*1.5).toFixed(1));
- });
- p.totalAI=p.monthly.reduce((a,b)=>a+b[9],0).toFixed(1);
-});
+// ==================== AI ====================
+players.forEach(p=>{p.monthly.forEach(m=>{m.push(+(m[2]*2.1+m[3]*2.1+m[4]*1.5+m[5]*2.5+m[8]*1.5).toFixed(1));}); p.totalAI=p.monthly.reduce((a,b)=>a+b[9],0).toFixed(1);});
 
-// ================= MONTHLY AWARDS =================
+// ==================== MONTHLY AWARDS ====================
 const monthlyAwards={player:{name:"Almousa3M",image:"a.jpg",video:"playerAward.mp4"},goal:{name:"H2ssain_28",image:"h2.jpg",video:"goalVideo.mp4.MP4"},fun:{name:"H7modi77",image:"h7.jpg",video:"funAward.mp4"}};
 
-// ================= HOME =================
-home.innerHTML=news.map(n=>`<div class="card"><img src="${n.img}"><b>${n.title}</b><br>${n.time}</div>`).join("")+sponsor();
+// ==================== HOME ====================
+home.innerHTML=news.map(n=>`<div class='card'><img src='${n.img}'><b>${n.title}</b><br>${n.time}</div>`).join('')+sponsor();
 
-// ================= TEAM =================
-team.innerHTML=`<input placeholder="Search Player" onkeyup="search(this.value)">${renderTeam()}${sponsor()}`;
+// ==================== TEAM ====================
+team.innerHTML=`<input placeholder='Search Player' onkeyup='search(this.value)'>${renderTeam()}${sponsor()}`;
 
-// ================= AWARDS =================
-awards.innerHTML=`
-<div class="card"><h3>Ballon d’Or AI</h3><table><tr><th>Name</th><th>Total AI</th></tr>${players.sort((a,b)=>b.totalAI-a.totalAI).map(p=>`<tr><td>${p.name}</td><td>${p.totalAI}</td></tr>`).join("")}</table></div>
-<div class="card"><h3>Player Of The Month</h3>${monthlyAwards.player.name}<img src="${monthlyAwards.player.image}"><video controls src="${monthlyAwards.player.video}"></video></div>
-<div class="card"><h3>Goal Of The Month</h3>${monthlyAwards.goal.name}<img src="${monthlyAwards.goal.image}"><video controls src="${monthlyAwards.goal.video}"></video></div>
-<div class="card"><h3>Fun Player Of The Month</h3>${monthlyAwards.fun.name}<img src="${monthlyAwards.fun.image}"><video controls src="${monthlyAwards.fun.video}"></video></div>
-${sponsor()}`;
+// ==================== AWARDS ====================
+awards.innerHTML=`<div class='card'><h3>Ballon d'Or AI</h3><table><tr><th>Name</th><th>Total AI</th></tr>${players.sort((a,b)=>b.totalAI-a.totalAI).map(p=>`<tr><td>${p.name}</td><td>${p.totalAI}</td></tr>`).join('')}</table></div>
+<div class='card'><h3>Player Of The Month</h3>${monthlyAwards.player.name}<img src='${monthlyAwards.player.image}'><video controls src='${monthlyAwards.player.video}'></video></div>
+<div class='card'><h3>Goal Of The Month</h3>${monthlyAwards.goal.name}<img src='${monthlyAwards.goal.image}'><video controls src='${monthlyAwards.goal.video}'></video></div>
+<div class='card'><h3>Fun Player Of The Month</h3>${monthlyAwards.fun.name}<img src='${monthlyAwards.fun.image}'><video controls src='${monthlyAwards.fun.video}'></video></div>${sponsor()}`;
 
-// ================= HIGHLIGHTS =================
-highlights.innerHTML=`<div class="card"><h3>Highlights Videos</h3>`+players.map(p=>`<b>${p.name}</b><video controls src="${p.photo.replace('.jpg','.mp4')}"></video>`).join('')+`</div>`;
+// ==================== MATCHES ====================
+matches.innerHTML=`<div class='card'><h3>Upcoming Matches</h3><ul>${['Feb 20: vs AlHilal','Feb 27: vs AlNassr'].map(m=>`<li>${m}</li>`).join('')}</ul></div>`;
 
-// ================= STATS =================
-stats.innerHTML=`<div class="card"><h3>Team Stats</h3>Total AI: ${players.reduce((a,b)=>a+parseFloat(b.totalAI),0).toFixed(1)}<br>Total Goals: ${players.reduce((a,b)=>a+b.monthly.reduce((x,y)=>x+y[2],0),0)}<br>Total Assists: ${players.reduce((a,b)=>a+b.monthly.reduce((x,y)=>x+y[3],0),0)}</div>`;
+// ==================== AI PREDICTIONS ====================
+predictions.innerHTML=`<div class='card'><h3>AI Match Predictions</h3><ul>${['vs AlHilal: 65% win','vs AlNassr: 50% win'].map(p=>`<li>${p}</li>`).join('')}</ul></div>`;
 
-// ================= PREDICTION =================
-prediction.innerHTML=`<div class="card"><h3>AI Match Prediction</h3><b>TAWHID FC vs Opponent</b><br>Win: 62%<br>Draw: 21%<br>Lose: 17%</div>`;
-
-// ================= FUNCTIONS =================
+// ==================== FUNCTIONS ====================
 function renderTeam(){
- let h="<div class='card'><h3>Midfield</h3>";
- players.filter(p=>p.pos=="Midfield").forEach(p=>h+=player(p));
- h+="</div><div class='card'><h3>Attack</h3>";
- players.filter(p=>p.pos=="Attack").forEach(p=>h+=player(p));
- return h+"</div>";
+let h="<div class='card'><h3>Midfield</h3>"; players.filter(p=>p.pos=="Midfield").forEach(p=>h+=player(p)); h+="</div><div class='card'><h3>Attack</h3>"; players.filter(p=>p.pos=="Attack").forEach(p=>h+=player(p)); return h+"</div>";
 }
-function player(p){return `<div class="player" onclick="openPlayer('${p.name}')"><img src="${p.photo}"><b>${p.name}</b></div>`;}
-function openPlayer(n){
- let p=players.find(x=>x.name==n);
- modal.style.display="block";
- modalBox.innerHTML=`<span class="close" onclick="modal.style.display='none'">×</span><h2>${p.name}</h2><img src="${p.photo}"><b>Position:</b> ${p.pos}<br>Total AI: ${p.totalAI}<table><tr><th>Month</th><th>M</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>MOTM</th><th>Red</th><th>W%</th><th>AI</th></tr>${p.monthly.map(m=>`<tr>${m.map(x=>`<td>${x}</td>`).join("")}</tr>`).join("")}</table>`;
-}
-function search(v){document.querySelectorAll('.player').forEach(p=>{p.style.display=p.innerText.toLowerCase().includes(v.toLowerCase())?"inline-block":"none";});}
+function player(p){return `<div class='player' onclick="openPlayer('${p.name}')"><img src='${p.photo}'><b>${p.name}</b></div>`;}
+function openPlayer(n){let p=players.find(x=>x.name==n); modal.style.display='block'; modalBox.innerHTML=`<span class='close' onclick="modal.style.display='none'">×</span><h2>${p.name}</h2><img src='${p.photo}'>Total AI: ${p.totalAI}<table><tr><th>Month</th><th>M</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>MOTM</th><th>Red</th><th>W%</th><th>AI</th></tr>${p.monthly.map(m=>`<tr>${m.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</table>`;}
+function search(v){document.querySelectorAll('.player').forEach(p=>{p.style.display=p.innerText.toLowerCase().includes(v.toLowerCase())?'inline-block':'none';});}
 function show(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
-function sponsor(){return `<div class="sponsors"><img src="ecmassage.png"><img src="doubleb.png"></div>`;}
-function toggleDarkMode(){document.body.classList.toggle('dark-mode');document.querySelectorAll('.card').forEach(c=>c.classList.toggle('dark-mode'));document.querySelectorAll('th,td').forEach(x=>x.classList.toggle('dark-mode'));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('dark-mode'));document.querySelector('.dark-toggle').classList.toggle('dark-mode');document.querySelector('header').classList.toggle('dark-mode');}
-
+function sponsor(){return `<div class='sponsors'><img src='ecmassage.png'><img src='doubleb.png'></div>`;}
+function toggleDark(){document.body.classList.toggle('dark-mode');}
 </script>
 
 </body>
 </html>
+
 
