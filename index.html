@@ -7,27 +7,24 @@
 
 <style>
 body{margin:0;background:#eef2ff;font-family:sans-serif}
-header{text-align:center;background:white;padding:15px}
+header{text-align:center;background:white;padding:12px}
 header img{width:80px}
 nav{display:flex}
-nav button{flex:1;border:none;background:#2563eb;color:white;padding:12px}
+nav button{flex:1;background:#2563eb;color:white;border:none;padding:12px}
 .section{display:none;padding:15px}
-.active{display:block;animation:fade .4s}
-@keyframes fade{from{opacity:0}to{opacity:1}}
+.active{display:block}
 .card{background:white;border-radius:15px;padding:15px;margin-bottom:15px}
-.news img,.player img,.award img{width:100%;border-radius:10px}
 .player{text-align:center;margin:10px}
-.player img{width:90px;height:90px;border-radius:50%}
-.stats{display:none}
+.player img{width:85px;height:85px;border-radius:50%}
 table{width:100%;border-collapse:collapse;font-size:11px}
 th,td{border:1px solid #ccc;padding:4px;text-align:center}
-input{width:100%;padding:10px;margin-bottom:10px}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#0009;display:none}
+.modalBox{background:white;margin:15px;padding:15px;border-radius:15px;height:92%;overflow:auto}
+.close{float:right;font-size:22px}
+video,img{width:100%;border-radius:10px;margin-top:8px}
 .sponsors{text-align:center}
 .sponsors img{width:120px;margin:10px}
-video{width:100%;margin-top:10px}
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#0009;display:none}
-.modalContent{background:white;margin:40px;padding:15px;border-radius:15px;height:85%;overflow:auto}
-.close{float:right;font-size:22px}
+input{width:100%;padding:8px;margin-bottom:10px}
 </style>
 </head>
 
@@ -49,7 +46,7 @@ video{width:100%;margin-top:10px}
 <div id="awards" class="section"></div>
 
 <div class="modal" id="modal">
-<div class="modalContent" id="modalContent"></div>
+<div class="modalBox" id="modalBox"></div>
 </div>
 
 <script>
@@ -60,55 +57,85 @@ const news=[
 {title:"Team Promoted",time:"2026-02-01",img:"n2.jpg"}
 ];
 
-// ================= PLAYERS FULL DATA =================
+// ================= PLAYERS =================
 const players=[
-{name:"H7modi77",photo:"h7.jpg",pos:"Midfield",
+{
+name:"H7modi77",photo:"h7.jpg",pos:"Midfield",
 monthly:[
 ["Oct",45,14,36,79,33,2,5,62],
 ["Nov",77,52,54,76,43,9,2,51],
-["Dec",0,0,0,0,0,0,0,0],
 ["Jan",116,44,85,75,38,19,25,47]
 ]},
-{name:"Yo0ousef25",photo:"y.jpg",pos:"Attack",
+{
+name:"M-_-_-_11_11",photo:"m.jpg",pos:"Midfield",
 monthly:[
-["Oct",28,23,5,78,46,0,0,67],
-["Nov",26,21,8,78,52,3,1,58],
-["Jan",99,57,17,74,47,0,5,43]
+["Oct",68,38,43,81,27,9,1,57],
+["Nov",86,48,58,74,29,10,0,54],
+["Jan",158,112,113,75,34,33,7,46]
 ]},
-{name:"Almousa3M",photo:"a.jpg",pos:"Attack",
+{
+name:"Almousa3M",photo:"a.jpg",pos:"Attack",
 monthly:[
 ["Oct",58,65,61,78,33,18,1,60],
 ["Nov",57,67,72,77,33,15,0,53],
 ["Jan",126,161,146,77,40,24,1,49]
 ]},
-{name:"H2ssain_28",photo:"h2.jpg",pos:"Attack",
+{
+name:"H2ssain_28",photo:"h2.jpg",pos:"Attack",
 monthly:[
 ["Oct",44,36,15,76,23,1,0,56],
 ["Nov",64,59,48,77,25,8,2,51],
 ["Jan",146,144,72,73,28,9,7,44]
 ]},
-{name:"Basabeso2",photo:"b.jpg",pos:"Attack",
+{
+name:"Yo0ousef25",photo:"y.jpg",pos:"Attack",
+monthly:[
+["Oct",28,23,5,78,46,0,0,67],
+["Nov",26,21,8,78,52,3,1,58],
+["Jan",99,57,17,74,47,0,5,43]
+]},
+{
+name:"Basabeso2",photo:"b.jpg",pos:"Attack",
 monthly:[
 ["Oct",48,36,17,84,40,7,1,62],
 ["Nov",75,54,22,86,39,9,0,57],
 ["Jan",91,84,43,85,41,5,8,49]
-]},
-{name:"M-_-_-_11_11",photo:"m.jpg",pos:"Midfield",
-monthly:[
-["Oct",68,38,43,81,27,9,1,57],
-["Nov",86,48,58,74,29,10,0,54],
-["Jan",158,112,113,75,34,33,7,46]
 ]}
 ];
 
-// ================= AI CALC =================
+// month format:
+// [Month,Matches,Goals,Assists,Pass%,Shot%,MOTM,Red,Win%]
+
+// ================= AI PER MONTH =================
 players.forEach(p=>{
-p.ai=p.monthly.reduce((a,b)=>a+(b[2]*2.1+b[3]*2.1+b[4]*1.5+b[5]*2.5+b[8]*1.5),0).toFixed(1);
+p.monthly.forEach(m=>{
+m.push(+(m[2]*2.1+m[3]*2.1+m[4]*1.5+m[5]*2.5+m[8]*1.5).toFixed(1));
 });
+p.totalAI=p.monthly.reduce((a,b)=>a+b[9],0).toFixed(1);
+});
+
+// ================= MONTHLY AWARDS (EDIT HERE) =================
+const monthlyAwards={
+player:{
+name:"Almousa3M",
+image:"playerAward.jpg",
+video:"playerAward.mp4"
+},
+goal:{
+name:"H2ssain_28",
+image:"goalAward.jpg",
+video:"goalAward.mp4"
+},
+fun:{
+name:"H7modi77",
+image:"funAward.jpg",
+video:"funAward.mp4"
+}
+};
 
 // ================= HOME =================
 home.innerHTML=news.map(n=>`
-<div class="card news">
+<div class="card">
 <img src="${n.img}">
 <b>${n.title}</b><br>${n.time}
 </div>`).join("")+sponsor();
@@ -121,33 +148,48 @@ ${renderTeam()}${sponsor()}`;
 // ================= AWARDS =================
 awards.innerHTML=`
 <div class="card">
-<h3>AI Ballon d’Or</h3>
-<table><tr><th>Name</th><th>Total AI</th></tr>
-${players.sort((a,b)=>b.ai-a.ai).map(p=>`<tr><td>${p.name}</td><td>${p.ai}</td></tr>`).join("")}
+<h3>Ballon d’Or AI</h3>
+<table>
+<tr><th>Name</th><th>Total AI</th></tr>
+${players.sort((a,b)=>b.totalAI-a.totalAI).map(p=>`
+<tr><td>${p.name}</td><td>${p.totalAI}</td></tr>`).join("")}
 </table>
 </div>
 
-<div class="card award">
-Monthly Awards<br>
-Player: Almousa3M<br>
-Goal: H2ssain_28<br>
-Fun: H7modi77
-<img src="award.jpg">
-<video controls src="cup.mp4"></video>
+<div class="card">
+<h3>Player Of The Month</h3>
+${monthlyAwards.player.name}
+<img src="${monthlyAwards.player.image}">
+<video controls src="${monthlyAwards.player.video}"></video>
 </div>
+
+<div class="card">
+<h3>Goal Of The Month</h3>
+${monthlyAwards.goal.name}
+<img src="${monthlyAwards.goal.image}">
+<video controls src="${monthlyAwards.goal.video}"></video>
+</div>
+
+<div class="card">
+<h3>Fun Player Of The Month</h3>
+${monthlyAwards.fun.name}
+<img src="${monthlyAwards.fun.image}">
+<video controls src="${monthlyAwards.fun.video}"></video>
+</div>
+
 ${sponsor()}
 `;
 
 // ================= FUNCTIONS =================
 function renderTeam(){
 let h="<div class='card'><h3>Midfield</h3>";
-players.filter(p=>p.pos=="Midfield").forEach(p=>h+=playerCard(p));
+players.filter(p=>p.pos=="Midfield").forEach(p=>h+=player(p));
 h+="</div><div class='card'><h3>Attack</h3>";
-players.filter(p=>p.pos=="Attack").forEach(p=>h+=playerCard(p));
+players.filter(p=>p.pos=="Attack").forEach(p=>h+=player(p));
 return h+"</div>";
 }
 
-function playerCard(p){
+function player(p){
 return`
 <div class="player" onclick="openPlayer('${p.name}')">
 <img src="${p.photo}">
@@ -158,13 +200,13 @@ return`
 function openPlayer(n){
 let p=players.find(x=>x.name==n);
 modal.style.display="block";
-modalContent.innerHTML=`
+modalBox.innerHTML=`
 <span class="close" onclick="modal.style.display='none'">×</span>
 <h2>${p.name}</h2>
-<img src="${p.photo}" width="120"><br>
-AI Rating: ${p.ai}
+<img src="${p.photo}">
+Total AI: ${p.totalAI}
 <table>
-<tr><th>Month</th><th>Matches</th><th>Goals</th><th>Assists</th><th>Pass%</th><th>Shot%</th><th>MOTM</th><th>Red</th><th>Win%</th></tr>
+<tr><th>Month</th><th>M</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>MOTM</th><th>Red</th><th>W%</th><th>AI</th></tr>
 ${p.monthly.map(m=>`<tr>${m.map(x=>`<td>${x}</td>`).join("")}</tr>`).join("")}
 </table>`;
 }
