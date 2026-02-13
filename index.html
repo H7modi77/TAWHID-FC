@@ -1,229 +1,146 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TAWHID FC</title>
+<title>TAWHID FC Ultimate</title>
 
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
-
-body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(180deg,#f5f8ff,#eef2ff);
-}
-
-header{
-background:white;
-padding:15px;
-text-align:center;
-box-shadow:0 4px 15px rgba(0,0,0,.08)
-}
-
-header img{width:70px}
-
-nav{
-display:flex;
-background:#4f46e5
-}
-
-nav button{
-flex:1;
-border:none;
-padding:12px;
-color:white;
-background:none;
-font-weight:bold
-}
-
-.section{display:none;padding:20px}
+body{margin:0;font-family:sans-serif;background:#eef2ff;color:#333;}
+header{text-align:center;background:white;padding:12px;box-shadow:0 3px 8px rgba(0,0,0,0.2);}
+header img{width:80px}
+nav{display:flex}
+nav button{flex:1;background:#2563eb;color:white;border:none;padding:12px;cursor:pointer;}
+.section{display:none;padding:15px}
 .active{display:block}
-
-.card{
-background:white;
-border-radius:18px;
-padding:15px;
-margin-bottom:15px;
-box-shadow:0 5px 20px rgba(0,0,0,.08)
-}
-
-.player{
-display:inline-block;
-text-align:center;
-margin:10px;
-cursor:pointer
-}
-
-.player img{
-width:80px;
-height:80px;
-border-radius:50%;
-border:3px solid #6366f1
-}
-
-.modal{
-position:fixed;
-inset:0;
-background:#0008;
-display:none;
-z-index:999
-}
-
-.modalBox{
-background:white;
-margin:20px;
-padding:15px;
-border-radius:20px;
-height:90%;
-overflow:auto
-}
-
-.close{
-float:right;
-font-size:22px
-}
-
-input,select{
-width:100%;
-padding:8px;
-border-radius:8px;
-border:1px solid #ccc;
-margin-bottom:10px
-}
-
-table{width:100%;border-collapse:collapse;font-size:11px}
-td,th{border:1px solid #ccc;padding:4px}
-
-.clubRate{
-font-size:26px;
-color:#4f46e5;
-font-weight:bold
-}
-
-.sponsors{text-align:center}
-.sponsors img{width:110px;margin:8px}
-
+.card{background:white;border-radius:15px;padding:15px;margin-bottom:15px;box-shadow:0 2px 10px rgba(0,0,0,0.1);}
+.player{text-align:center;margin:10px;display:inline-block;cursor:pointer;transition:0.3s;}
+.player img{width:85px;height:85px;border-radius:50%;border:2px solid #2563eb;}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#0009;display:none;z-index:9999;}
+.modalBox{background:white;margin:15px;padding:15px;border-radius:15px;height:92%;overflow:auto;position:relative;}
+.close{position:absolute;top:10px;right:15px;font-size:22px;cursor:pointer;}
+table{width:100%;border-collapse:collapse;font-size:11px;margin-top:10px;}
+th,td{border:1px solid #ccc;padding:4px;text-align:center;}
+video,img{width:100%;border-radius:10px;margin-top:8px}
+.sponsors{text-align:center;margin-top:15px;}
+.sponsors img{width:120px;margin:10px}
+input{width:100%;padding:8px;margin-bottom:10px}
+.chart-container{width:100%;max-width:600px;margin:auto;margin-top:15px;}
+.dark-mode{background:#111;color:white}
+.dark-mode nav button{background:#444;color:white}
 </style>
 </head>
-
 <body>
 
 <header>
-<img src="logo.png">
-<h2>TAWHID FC Ultimate</h2>
-<div class="clubRate">Club Rating : 87.6</div>
+<img src="logo.png"><br>
+<b>TAWHID FC Ultimate</b>
 </header>
 
 <nav>
 <button onclick="show('home')">Home</button>
 <button onclick="show('team')">Team</button>
-<button onclick="show('compare')">Compare</button>
 <button onclick="show('awards')">Awards</button>
+<button onclick="toggleDark()">Dark Mode</button>
 </nav>
 
 <div id="home" class="section active"></div>
 <div id="team" class="section"></div>
-<div id="compare" class="section"></div>
 <div id="awards" class="section"></div>
-
 <div class="modal" id="modal"><div class="modalBox" id="modalBox"></div></div>
 
 <script>
-
-const colors=["#6366f1","#22c55e","#f97316","#ec4899","#14b8a6","#eab308"];
-
+// ================= DATA =================
 const news=[
-{title:"TAWHID FC signed ECMassage sponsor",img:"ecmassage.png"},
-{title:"TAWHID FC signed DoubleB sponsor",img:"doubleb.png"}
+{title:"ÙØ¹ÙÙ ÙØ§Ø¯Ù TAWHID FC Ø¹Ù Ø¥ØªÙØ§Ù Ø§ÙØªØ¹Ø§ÙØ¯ Ø±Ø³ÙÙÙØ§ ÙØ¹ ECMassage ÙØ±Ø§Ø¹Ù ÙÙÙØ§Ø¯Ù.",time:"2026-02-13",img:"ecmassage.png"},
+{title:"ÙØ¹ÙÙ ÙØ§Ø¯Ù TAWHID FC Ø¹Ù Ø¥ØªÙØ§Ù Ø§ÙØªØ¹Ø§ÙØ¯ Ø±Ø³ÙÙÙØ§ ÙØ¹ DoubleB ÙØ±Ø§Ø¹Ù ÙÙÙØ§Ø¯Ù.",time:"2026-02-01",img:"doubleb.png"}
 ];
+
+const months=["Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep"];
 
 const players=[
-{name:"H7modi77",photo:"h7.jpg",pos:"Midfield",ai:[45,77,116]},
-{name:"M-_-_-_11_11",photo:"m.jpg",pos:"Midfield",ai:[68,86,158]},
-{name:"Almousa3M",photo:"a.jpg",pos:"Attack",ai:[58,57,126]},
-{name:"H2ssain_28",photo:"h2.jpg",pos:"Attack",ai:[44,64,146]},
-{name:"Yo0ousef25",photo:"y.jpg",pos:"Attack",ai:[28,26,99]},
-{name:"Basabeso2",photo:"b.jpg",pos:"Attack",ai:[48,75,91]}
+{name:"H7modi77",photo:"h7.jpg",pos:"Midfield",monthly:[["Oct",45,14,36,79,33,2,5,62],["Nov",77,52,54,76,43,9,2,51],["Jan",116,44,85,75,38,19,25,47]]},
+{name:"M-_-_-_11_11",photo:"m.jpg",pos:"Midfield",monthly:[["Oct",68,38,43,81,27,9,1,57],["Nov",86,48,58,74,29,10,0,54],["Jan",158,112,113,75,34,33,7,46]]},
+{name:"Almousa3M",photo:"a.jpg",pos:"Attack",monthly:[["Oct",58,65,61,78,33,18,1,60],["Nov",57,67,72,77,33,15,0,53],["Jan",126,161,146,77,40,24,1,49]]},
+{name:"H2ssain_28",photo:"h2.jpg",pos:"Attack",monthly:[["Oct",44,36,15,76,23,1,0,56],["Nov",64,59,48,77,25,8,2,51],["Jan",146,144,72,73,28,9,7,44]]},
+{name:"Yo0ousef25",photo:"y.jpg",pos:"Attack",monthly:[["Oct",28,23,5,78,46,0,0,67],["Nov",26,21,8,78,52,3,1,58],["Jan",99,57,17,74,47,0,5,43]]},
+{name:"Basabeso2",photo:"b.jpg",pos:"Attack",monthly:[["Oct",48,36,17,84,40,7,1,62],["Nov",75,54,22,86,39,9,0,57],["Jan",91,84,43,85,41,5,8,49]]}
 ];
 
-// HOME
-home.innerHTML=news.map(n=>`
-<div class="card">
-<img src="${n.img}">
-<b>${n.title}</b>
-</div>`).join('')+sponsor();
+// ================= CALCULATE AI =================
+players.forEach(p=>{
+ p.monthly.forEach(m=>{
+   m.push(+(m[2]*2.1+m[3]*2.1+m[4]*1.5+m[5]*2.5+m[8]*1.5).toFixed(1));
+ });
+ p.totalAI=p.monthly.reduce((a,b)=>a+b[9],0).toFixed(1);
+});
 
-// TEAM
-team.innerHTML=players.map(p=>`
-<div class="player" onclick="openPlayer('${p.name}')">
-<img src="${p.photo}">
-<br>${p.name}
-</div>`).join('')+sponsor();
+const monthlyAwards={player:{name:"Almousa3M",image:"a.jpg",video:"playerAward.mp4"},goal:{name:"H2ssain_28",image:"h2.jpg",video:"goalVideo.mp4.MP4"},fun:{name:"H7modi77",image:"h7.jpg",video:"funAward.mp4"}};
 
-// COMPARE
-compare.innerHTML=`
-<div class="card">
-<select id="p1">${players.map(p=>`<option>${p.name}</option>`)}</select>
-<select id="p2">${players.map(p=>`<option>${p.name}</option>`)}</select>
-<button onclick="comparePlayers()">Compare</button>
-<canvas id="compareChart"></canvas>
-</div>`;
+// ================= RENDER HOME =================
+home.innerHTML=news.map(n=>`<div class="card"><img src="${n.img}"><b>${n.title}</b><br>${n.time}</div>`).join('')+sponsor();
 
-// AWARDS
-awards.innerHTML=`<div class="card"><canvas id="ballon"></canvas></div>`+sponsor();
+// ================= RENDER TEAM =================
+team.innerHTML=`<input placeholder="Search Player" onkeyup="search(this.value)">`+renderTeam()+sponsor();
 
-// PLAYER MODAL
+// ================= RENDER AWARDS =================
+awards.innerHTML=`
+<div class="card"><h3>Ballon dâOr AI</h3><canvas id="ballonChart"></canvas></div>
+<div class="card"><h3>Player Of The Month</h3>${monthlyAwards.player.name}<img src="${monthlyAwards.player.image}"><video controls src="${monthlyAwards.player.video}"></video></div>
+<div class="card"><h3>Goal Of The Month</h3>${monthlyAwards.goal.name}<img src="${monthlyAwards.goal.image}"><video controls src="${monthlyAwards.goal.video}"></video></div>
+<div class="card"><h3>Fun Player Of The Month</h3>${monthlyAwards.fun.name}<img src="${monthlyAwards.fun.image}"><video controls src="${monthlyAwards.fun.video}"></video></div>
+`+sponsor();
+
+// ================= FUNCTIONS =================
+function renderTeam(){
+ let h='';
+ ['Midfield','Attack'].forEach(pos=>{
+   h+=`<div class='card'><h3>${pos}</h3>`;
+   players.filter(p=>p.pos==pos).forEach(p=>{
+     h+=`<div class='player' onclick="openPlayer('${p.name}')"><img src='${p.photo}'><b>${p.name}</b></div>`;
+   });
+   h+='</div>';
+ });
+ return h;
+}
+
 function openPlayer(n){
-let p=players.find(x=>x.name==n);
-modal.style.display="block";
-modalBox.innerHTML=`
-<span class="close" onclick="modal.style.display='none'">×</span>
-<h2>${p.name}</h2>
-<img src="${p.photo}">
-<canvas id="pc"></canvas>
-`;
-new Chart(pc,{
-type:'bar',
-data:{labels:["Oct","Nov","Jan"],
-datasets:[{data:p.ai,backgroundColor:colors}]}
-});
+ let p=players.find(x=>x.name==n);
+ modal.style.display='block';
+ modalBox.innerHTML=`<span class='close' onclick="modal.style.display='none'">Ã</span>
+ <h2>${p.name}</h2>
+ <img src='${p.photo}'>
+ Total AI: ${p.totalAI}
+ <canvas id='playerChart'></canvas>
+ <canvas id='playerRadar'></canvas>
+ <table><tr><th>Month</th><th>M</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>MOTM</th><th>Red</th><th>W%</th><th>AI</th></tr>
+ ${p.monthly.map(m=>`<tr>${m.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}
+ </table>`;
+ renderPlayerCharts(p);
 }
 
-// COMPARE FUNCTION
-function comparePlayers(){
-let a=players.find(x=>x.name==p1.value);
-let b=players.find(x=>x.name==p2.value);
-new Chart(compareChart,{
-type:'line',
-data:{
-labels:["Oct","Nov","Jan"],
-datasets:[
-{label:a.name,data:a.ai,borderColor:"#6366f1"},
-{label:b.name,data:b.ai,borderColor:"#22c55e"}
-]}
-});
+function renderPlayerCharts(p){
+ let ctx=document.getElementById('playerChart').getContext('2d');
+ new Chart(ctx,{type:'bar',data:{labels:p.monthly.map(m=>m[0]),datasets:[{label:'AI per Month',data:p.monthly.map(m=>m[9]),backgroundColor:'#2563eb'}]},options:{responsive:true}});
+ let radar=document.getElementById('playerRadar').getContext('2d');
+ new Chart(radar,{type:'radar',data:{labels:['Goals','Assists','Pass%','Shot%','Win%'],datasets:[{label:p.name,data:p.monthly.map(m=>[m[2],m[3],m[4],m[5],m[8]]).flat(),backgroundColor:'rgba(37,99,235,0.2)',borderColor:'#2563eb',borderWidth:2}]},options:{responsive:true}});
 }
 
-// BALLON
-new Chart(ballon,{
-type:'bar',
-data:{
-labels:players.map(p=>p.name),
-datasets:[{data:players.map(p=>p.ai.reduce((a,b)=>a+b)),backgroundColor:colors}]
-}
-});
+function search(v){document.querySelectorAll('.player').forEach(p=>{p.style.display=p.innerText.toLowerCase().includes(v.toLowerCase())?'inline-block':'none';});}
+function show(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function sponsor(){return `<div class='sponsors'><img src='ecmassage.png'><img src='doubleb.png'></div>`;}
+function toggleDark(){document.body.classList.toggle('dark-mode');}
 
-function sponsor(){
-return `<div class='sponsors'><img src='ecmassage.png'><img src='doubleb.png'></div>`;
-}
-
-function show(id){
-document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-}
+// ================= BALLON CHART =================
+let ctxBallon=document.getElementById('ballonChart').getContext('2d');
+new Chart(ctxBallon,{type:'bar',data:{labels:players.map(p=>p.name),datasets:[{label:'Total AI',data:players.map(p=>p.totalAI),backgroundColor:'#2563eb'}]},options:{responsive:true}});
 
 </script>
+
 </body>
 </html>
+
+
+
