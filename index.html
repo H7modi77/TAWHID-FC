@@ -186,25 +186,35 @@ let players=[
     {name:"Yo0ousef25",photo:"yo0ousef25.png",pos:"Attack"}
 ];
 
-// ALL STATS
+// STATS
 const stats={
-Basabeso2:{October:{m:48,g:36,a:17,p:84,s:40,w:62},November:{m:75,g:54,a:22,p:86,s:39,w:57},January:{m:91,g:84,a:43,p:85,s:41,w:49}},
-"M---_11_11":{October:{m:68,g:38,a:43,p:81,s:27,w:57},November:{m:86,g:48,a:58,p:74,s:29,w:54},January:{m:158,g:112,a:113,p:75,s:34,w:46}},
-H7modi77:{October:{m:45,g:14,a:36,p:79,s:33,w:62},November:{m:77,g:52,a:54,p:76,s:43,w:51},January:{m:116,g:44,a:85,p:75,s:38,w:47}},
-Almousa3M:{October:{m:58,g:65,a:61,p:78,s:33,w:60},November:{m:57,g:67,a:72,p:77,s:33,w:53},January:{m:126,g:161,a:146,p:77,s:40,w:49}},
-H2ssain_28:{October:{m:44,g:36,a:15,p:76,s:23,w:56},November:{m:64,g:59,a:48,p:77,s:25,w:51},January:{m:146,g:144,a:72,p:73,s:28,w:44}},
-Yo0ousef25:{October:{m:28,g:23,a:5,p:78,s:46,w:67},November:{m:26,g:21,a:8,p:78,s:52,w:58},January:{m:99,g:57,a:17,p:74,s:47,w:43}}
+Basabeso2:{October:{m:48,g:36,a:17,cs:5,p:84,best:7,w:62},November:{m:75,g:54,a:22,cs:8,p:86,best:9,w:57},January:{m:91,g:84,a:43,cs:6,p:85,best:5,w:49}},
+"M---_11_11":{October:{m:68,g:38,a:43,p:81,best:9,w:57},November:{m:86,g:48,a:58,p:74,best:10,w:54},January:{m:158,g:112,a:113,p:75,best:11,w:46}},
+H7modi77:{October:{m:45,g:14,a:36,p:79,best:2,w:62},November:{m:77,g:52,a:54,p:76,best:9,w:51},January:{m:116,g:44,a:85,p:75,best:19,w:47}},
+Almousa3M:{October:{m:58,g:65,a:61,p:78,s:33,best:18,w:60},November:{m:57,g:67,a:72,p:77,s:33,best:15,w:53},January:{m:126,g:161,a:146,p:77,s:40,best:24,w:49}},
+H2ssain_28:{October:{m:44,g:36,a:15,p:76,s:23,best:1,w:56},November:{m:64,g:59,a:48,p:77,s:25,best:8,w:51},January:{m:146,g:144,a:72,p:73,s:28,best:9,w:44}},
+Yo0ousef25:{October:{m:28,g:23,a:5,p:78,s:46,best:0,w:67},November:{m:26,g:21,a:8,p:78,s:52,best:3,w:58},January:{m:99,g:57,a:17,p:74,s:47,best:0,w:43}}
 };
 
-// AI
-function calcAI(d){return Math.round((d.g*2.1)+(d.a*2.1)+(d.p*1.5)+(d.s*2.5)+(d.w*1.5));}
+// CALC AI
+function calcAI(d,pos){
+    let ai=(d.g*2.1)+(d.a*2.1)+(d.p*1.5)+(d.w*1.5);
+    if(pos=="Attack") ai+=d.s*2.5;
+    if(pos=="Defender") ai+= (d.cs||0)*2.0;
+    return Math.round(ai);
+}
 
-// TOTAL STATS
-function totalStats(name){
+// TOTAL STATS BY POSITION
+function totalStatsByPosition(name,pos){
     let months=stats[name];
-    let t={m:0,g:0,a:0,p:0,s:0,w:0}; let c=0;
-    for(let m in months){let d=months[m]; t.m+=d.m; t.g+=d.g; t.a+=d.a; t.p+=d.p; t.s+=d.s; t.w+=d.w; c++;}
-    t.p=Math.round(t.p/c); t.s=Math.round(t.s/c); t.w=Math.round(t.w/c); 
+    let t={m:0,g:0,a:0,p:0,s:0,w:0,cs:0,best:0};
+    let c=0;
+    for(let m in months){
+        let d=months[m];
+        t.m+=d.m;t.g+=d.g;t.a+=d.a;t.p+=d.p;t.s+=d.s||0;t.w+=d.w;t.cs+=d.cs||0;t.best+=d.best||0;
+        c++;
+    }
+    t.p=Math.round(t.p/c); t.s=Math.round(t.s/c); t.w=Math.round(t.w/c); t.cs=Math.round(t.cs/c); t.best=Math.round(t.best/c);
     return t;
 }
 
@@ -212,7 +222,8 @@ function totalStats(name){
 function renderTeam(){
     playersContainer.innerHTML="";
     players.forEach(p=>{
-        let ai=calcAI(totalStats(p.name));
+        let pos = p.pos.includes("Defender")?"Defender":p.pos.includes("Midfield")?"Midfield":"Attack";
+        let ai = calcAI(totalStatsByPosition(p.name,pos),pos);
         playersContainer.innerHTML+=
         `<div class="card" onclick="openPlayer('${p.name}')">
             <img src="${p.photo}">
@@ -226,25 +237,24 @@ renderTeam();
 
 // PLAYER MODAL
 function openPlayer(name){
-    let t=totalStats(name); 
-    let ai=calcAI(t);
+    let player = players.find(p=>p.name===name);
+    let pos = player.pos.includes("Defender")?"Defender":player.pos.includes("Midfield")?"Midfield":"Attack";
+    let t = totalStatsByPosition(name,pos);
+    let ai = calcAI(t,pos);
     modal.style.display="block";
-    modalContent.innerHTML=
-    `<h2>${name}</h2>
-    <p>Goals ${t.g}</p>
-    <p>Assist ${t.a}</p>
-    <p>Pass ${t.p}%</p>
-    <p>Shot ${t.s}%</p>
-    <p>Win ${t.w}%</p>
-    <h1>AI ${ai}</h1>`;
+    let html=`<h2>${name}</h2>`;
+    html+=`<p>Matches: ${t.m}</p><p>Goals: ${t.g}</p><p>Assists: ${t.a}</p>`;
+    if(pos=="Defender") html+=`<p>Clean Sheet: ${t.cs}</p>`;
+    html+=`<p>Pass: ${t.p}%</p>`;
+    if(pos=="Attack") html+=`<p>Shot: ${t.s}%</p>`;
+    html+=`<p>Best: ${t.best}</p><p>Win: ${t.w}%</p>`;
+    html+=`<h1>AI ${ai}</h1>`;
+    modalContent.innerHTML=html;
 }
 modal.onclick=e=>{if(e.target.id==="modal") modal.style.display="none";};
 
 // AWARDS
-const awards={
-    player:{name:"Almousa3M",img:"award-player.png",month:"January"},
-    goal:{player:"Yo0ousef25",img:"award-goal.png",video:"goal.mp4"}
-};
+const awards={player:{name:"Almousa3M",img:"award-player.png",month:"January"},goal:{player:"Yo0ousef25",img:"award-goal.png",video:"goal.mp4"}};
 awardsBox.innerHTML=
 `<div class="card">
     <h3>🏆 لاعب الشهر</h3>
@@ -274,16 +284,26 @@ news.forEach(n=>{
 });
 
 // STATS TABLE
-for(let name in stats){
+for(let player of players){
+    let name = player.name;
+    let pos = player.pos.includes("Defender")?"Defender":player.pos.includes("Midfield")?"Midfield":"Attack";
     let months=stats[name]; 
-    let html=`<div class="card"><h3>${name}</h3><table>
-    <tr><th>Month</th><th>M</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>W%</th></tr>`;
+    let html=`<div class="card"><h3>${name} (${pos})</h3><table><tr><th>Month</th>`;
+    if(pos=="Defender") html+=`<th>M</th><th>G</th><th>A</th><th>CS</th><th>P%</th><th>Best</th><th>W%</th></tr>`;
+    else if(pos=="Midfield") html+=`<th>M</th><th>G</th><th>A</th><th>P%</th><th>Best</th><th>W%</th></tr>`;
+    else html+=`<th>M</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>Best</th><th>W%</th></tr>`;
+
     for(let m in months){
         let d=months[m];
-        html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.s}</td><td>${d.w}</td></tr>`;
+        if(pos=="Defender") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.cs||0}</td><td>${d.p}</td><td>${d.best||0}</td><td>${d.w}</td></tr>`;
+        else if(pos=="Midfield") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.best||0}</td><td>${d.w}</td></tr>`;
+        else html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.s}</td><td>${d.best||0}</td><td>${d.w}</td></tr>`;
     }
-    let t=totalStats(name);
-    html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.s}</th><th>${t.w}</th></tr></table></div>`;
+    let t=totalStatsByPosition(name,pos);
+    if(pos=="Defender") html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.cs}</th><th>${t.p}</th><th>${t.best}</th><th>${t.w}</th></tr>`;
+    else if(pos=="Midfield") html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.best}</th><th>${t.w}</th></tr>`;
+    else html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.s}</th><th>${t.best}</th><th>${t.w}</th></tr>`;
+    html+=`</table></div>`;
     statsBox.innerHTML+=html;
 }
 
