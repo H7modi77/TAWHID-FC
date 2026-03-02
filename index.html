@@ -155,20 +155,34 @@ document.addEventListener("DOMContentLoaded", function() {
     return t;
 }
 
-    function renderTeam(){
-        const container = document.getElementById("playersContainer");
-        container.innerHTML="";
-        players.forEach(p=>{
-            let pos = p.pos.includes("Defender")?"Defender":p.pos.includes("Midfield")?"Midfield":"Attack";
-            let ai = calcAI(totalStatsByPosition(p.name,pos),pos);
-            container.innerHTML+=`<div class="card" onclick="openPlayer('${p.name}')">
-                <img src="${p.photo}">
-                <h3>${p.name}</h3>
+    function renderRanking(){
+    // احسب AI لكل لاعب
+    players.forEach(p=>{
+        let pos = p.pos.includes("Defender") ? "Defender" : p.pos.includes("Midfield") ? "Midfield" : "Attack";
+        p.ai = calcAI(totalStatsByPosition(p.name,pos), pos);
+    });
+
+    // رتب اللاعبين حسب AI تنازلي
+    let sorted = [...players].sort((a,b)=>b.ai - a.ai);
+    rankingBox.innerHTML = "";
+
+    sorted.forEach((p,index)=>{
+        let className="", icon="";
+        if(index===0){className="rankingGold"; icon="🥇";}
+        else if(index===1){className="rankingSilver"; icon="🥈";}
+        else if(index===2){className="rankingBronze"; icon="🥉";}
+
+        rankingBox.innerHTML += `
+        <div class="card ${className}" style="display:flex; align-items:center; gap:10px;">
+            <img src="${p.photo}" style="width:40px; height:40px; border-radius:50%;">
+            <div>
+                <h3>${icon} ${index+1} - ${p.name}</h3>
                 <p>${p.pos}</p>
-                <h2>AI ${ai}</h2>
-            </div>`;
-        });
-    }
+                <h2>AI ${p.ai}</h2>
+            </div>
+        </div>`;
+    });
+}
 
     renderTeam();
 
