@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>نادي التوحيد</title>
+<title>TAWHID CLUB</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -19,13 +19,14 @@
 <button onclick="show('home')">الرئيسية</button>
 <button onclick="show('team')">اللاعبين</button>
 <button onclick="show('awards')">الجوائز</button>
+<button onclick="show('stats')">الإحصائيات</button>
 <button onclick="show('admin')">Admin</button>
 </nav>
 
 <!-- HOME -->
 <section id="home" class="section active">
-<h2>مرحبا في نادي التوحيد</h2>
-<p>نظام إحصائيات ذكي مثل FIFA Ultimate Team</p>
+<h2>آخر الأخبار</h2>
+<div id="newsBox" class="grid"></div>
 </section>
 
 <!-- TEAM -->
@@ -37,32 +38,38 @@
 <!-- AWARDS -->
 <section id="awards" class="section">
 <h2>جوائز الشهر</h2>
-<div id="awardsBox"></div>
+<div id="awardsBox" class="grid"></div>
+</section>
+
+<!-- STATS -->
+<section id="stats" class="section">
+<h2>إحصائيات اللاعبين</h2>
+<div id="statsBox"></div>
 </section>
 
 <!-- ADMIN -->
 <section id="admin" class="section">
-<h2>تسجيل دخول الأدمن</h2>
-
 <input id="user" placeholder="User">
 <input id="pass" type="password" placeholder="Password">
 <button onclick="login()">Login</button>
 
 <div id="panel" style="display:none">
-<h3>إضافة لاعب</h3>
-
 <input id="pname" placeholder="اسم اللاعب">
-<input id="pphoto" placeholder="اسم الصورة">
+<input id="pphoto" placeholder="الصورة">
 <input id="ppos" placeholder="المركز">
-
-<button onclick="addPlayer()">إضافة</button>
+<button onclick="addPlayer()">إضافة لاعب</button>
 </div>
 </section>
 
 <!-- PLAYER MODAL -->
 <div id="modal" class="modal">
-<div class="modalBox" id="modalContent"></div>
+<div id="modalContent" class="modalBox"></div>
 </div>
+
+<footer class="sponsors">
+<img src="images/sponsor1.png">
+<img src="images/sponsor2.png">
+</footer>
 
 <script src="app.js"></script>
 </body>
