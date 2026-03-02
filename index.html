@@ -190,10 +190,10 @@ let players=[
 const stats={
 Basabeso2:{February:{m:24,g:2,a:3,cs:4,p:85,best:3,w:50}},
 "M---_11_11":{October:{m:68,g:38,a:43,p:81,best:9,w:57},November:{m:86,g:48,a:58,p:74,best:10,w:54},January:{m:158,g:112,a:113,p:75,best:11,w:46},February:{m:40,g:24,a:19,p:75,best:8,w:46}},
-H7modi77:{October:{m:45,g:14,a:36,p:79,s=37,best:2,w:62},November:{m:77,g:52,a:54,p:76,s=40,best:9,w:51},January:{m:116,g:44,a:85,p:75,s=39,best:19,w:47},February:{m:44,g:20,a:26,p:75,s=37,best:9,w:47}},
-Almousa3M:{October:{m:58,g:65,a:61,p:78,s:33,best:18,w:60},November:{m:57,g:67,a:72,p:77,s:33,best:15,w:53},January:{m:126,g:161,a:146,p:77,s:40,best:24,w:49},February:{m:42,g:48,a:41,s=39,p:77,best:9,w:49}},
-H2ssain_28:{October:{m:44,g:36,a:15,p:76,s:23,best:1,w:56},November:{m:64,g:59,a:48,p:77,s:25,best:8,w:51},January:{m:146,g:144,a:72,p:73,s:28,best:9,w:44},February:{m:31,g:31,a:55,s=28,p:73,best:1,w:44}},
-Yo0ousef25:{October:{m:28,g:23,a:5,p:78,s:46,best:0,w:67},November:{m:26,g:21,a:8,p:78,s:52,best:3,w:58},January:{m:99,g:57,a:17,p:74,s:47,best:0,w:43},February:{m:18,g:11,a:2,s=47,p:74,best:1,w:43}}
+H7modi77:{October:{m:45,g:14,a:36,p:79,s:37,best:2,w:62},November:{m:77,g:52,a:54,p:76,s:40,best:9,w:51},January:{m:116,g:44,a:85,p:75,s:39,best:19,w:47},February:{m:44,g:20,a:26,p:75,s:37,best:9,w:47}},
+Almousa3M:{October:{m:58,g:65,a:61,p:78,s:33,best:18,w:60},November:{m:57,g:67,a:72,p:77,s:33,best:15,w:53},January:{m:126,g:161,a:146,p:77,s:40,best:24,w:49},February:{m:42,g:48,a:41,p:77,s:39,best:9,w:49}},
+H2ssain_28:{October:{m:44,g:36,a:15,p:76,s:23,best:1,w:56},November:{m:64,g:59,a:48,p:77,s:25,best:8,w:51},January:{m:146,g:144,a:72,p:73,s:28,best:9,w:44},February:{m:31,g:31,a:55,p:73,s:28,best:1,w:44}},
+Yo0ousef25:{October:{m:28,g:23,a:5,p:78,s:46,best:0,w:67},November:{m:26,g:21,a:8,p:78,s:52,best:3,w:58},January:{m:99,g:57,a:17,p:74,s:47,best:0,w:43},February:{m:18,g:11,a:2,p:74,s:47,best:1,w:43}}
 };
 
 // CALC AI
@@ -297,7 +297,7 @@ for(let player of players){
         let d=months[m];
         if(pos=="Defender") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.cs||0}</td><td>${d.p}</td><td>${d.best||0}</td><td>${d.w}</td></tr>`;
         else if(pos=="Midfield") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.best||0}</td><td>${d.w}</td></tr>`;
-        else html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.s}</td><td>${d.best||0}</td><td>${d.w}</td></tr>`;
+        else html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.s||0}</td><td>${d.best||0}</td><td>${d.w}</td></tr>`;
     }
     let t=totalStatsByPosition(name,pos);
     if(pos=="Defender") html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.cs}</th><th>${t.p}</th><th>${t.best}</th><th>${t.w}</th></tr>`;
