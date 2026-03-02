@@ -254,16 +254,16 @@ function openPlayer(name){
 modal.onclick=e=>{if(e.target.id==="modal") modal.style.display="none";};
 
 // AWARDS
-const awards={player:{name:"Almousa3M",img:"award-player.png",month:"January"},goal:{player:"Yo0ousef25",img:"award-goal.png",video:"goal.mp4"}};
+const awards={player:{name:"Almousa3M",img:"award-player.png",month:"Feb"},goal:{player:"Yo0ousef25",img:"award-goal.png",video:"goal.mp4"}};
 awardsBox.innerHTML=
 `<div class="card">
-    <h3>🏆 لاعب الشهر</h3>
+    <h3> لاعب الشهر</h3>
     <img src="${awards.player.img}">
     <h2>${awards.player.name}</h2>
     <p>${awards.player.month}</p>
 </div>
 <div class="card">
-    <h3>⚽ هدف الشهر</h3>
+    <h3> هدف الشهر</h3>
     <img src="${awards.goal.img}">
     <p>${awards.goal.player}</p>
     <video controls><source src="${awards.goal.video}"></video>
