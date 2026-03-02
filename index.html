@@ -3,94 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>TAWHID FC Ultimate</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+
 <style>
 
-/* ===== GENERAL ===== */
+/* ===== GLOBAL DESIGN ===== */
 
 body{
 margin:0;
-font-family:sans-serif;
-background:#eef2ff;
-color:#333;
-transition:.3s;
+font-family:'Tajawal',sans-serif;
+background:linear-gradient(135deg,#0f172a,#1e3a8a);
+color:white;
 overflow-x:hidden;
 }
 
-header{
-text-align:center;
-background:white;
-padding:12px;
-box-shadow:0 3px 8px rgba(0,0,0,.2);
+/* glowing background lines */
+body::before{
+content:"";
+position:fixed;
+width:200%;
+height:200%;
+background:
+linear-gradient(90deg,transparent 48%,rgba(255,255,255,.05) 50%,transparent 52%);
+background-size:60px 60px;
+animation:moveBg 20s linear infinite;
+z-index:-1;
 }
 
-header img{width:80px}
+@keyframes moveBg{
+from{transform:translateY(0)}
+to{transform:translateY(-60px)}
+}
+
+/* ===== HERO ===== */
+
+.hero{
+text-align:center;
+padding:40px 20px;
+background:linear-gradient(135deg,#2563eb,#9333ea);
+box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+
+.hero img{width:110px}
+
+.hero h1{
+margin:10px 0;
+font-size:32px;
+font-weight:900;
+}
+
+/* ===== NAV ===== */
 
 nav{
 display:flex;
 flex-wrap:wrap;
+padding:10px;
+justify-content:center;
 }
 
 nav button{
-flex:1;
-min-width:100px;
-background:#2563eb;
-color:white;
+background:rgba(255,255,255,.1);
 border:none;
-padding:12px;
+color:white;
+padding:12px 18px;
+margin:5px;
+border-radius:12px;
 cursor:pointer;
-margin:2px;
-transition:.25s;
+transition:.3s;
+backdrop-filter:blur(10px);
 }
 
 nav button:hover{
-transform:translateY(-2px);
-background:#1d4ed8;
+background:#2563eb;
+transform:translateY(-3px);
 }
+
+/* ===== SECTIONS ===== */
 
 .section{
 display:none;
-padding:15px;
-animation:fade .4s ease;
+padding:20px;
+animation:fade .4s;
 }
 
 .active{display:block}
 
 @keyframes fade{
-from{opacity:0;transform:translateY(10px)}
-to{opacity:1;transform:translateY(0)}
+from{opacity:0;transform:translateY(15px)}
+to{opacity:1}
 }
 
+/* ===== CARDS ===== */
+
 .card{
-background:white;
-border-radius:15px;
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(12px);
+border-radius:18px;
 padding:15px;
 margin-bottom:15px;
-box-shadow:0 2px 10px rgba(0,0,0,.1);
+box-shadow:0 10px 25px rgba(0,0,0,.3);
 }
 
 /* ===== PLAYERS ===== */
 
 .player{
-text-align:center;
-margin:6px;
 display:inline-block;
+text-align:center;
+margin:8px;
 cursor:pointer;
-transition:.25s;
+transition:.3s;
 }
 
-.player:hover{
-transform:scale(1.08);
-}
+.player:hover{transform:scale(1.1)}
 
 .player img{
-width:65px;
-height:65px;
+width:70px;
+height:70px;
 border-radius:50%;
-border:2px solid #2563eb;
+border:3px solid #60a5fa;
 object-fit:cover;
 }
 
@@ -102,108 +137,98 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:#0009;
+background:#000a;
 display:none;
-z-index:9999;
-overflow-y:auto;
-padding:20px 0;
+overflow:auto;
+z-index:999;
 }
 
 .modalBox{
-background:white;
-margin:auto;
-padding:15px;
-border-radius:15px;
-width:90%;
-max-width:800px;
+background:#020617;
+margin:40px auto;
+padding:20px;
+border-radius:20px;
+max-width:850px;
 max-height:90vh;
-overflow-y:auto;
-position:relative;
-animation:fade .3s;
+overflow:auto;
 }
 
 .close{
-position:absolute;
-top:10px;
-right:15px;
-font-size:28px;
+font-size:30px;
 cursor:pointer;
+float:left;
 }
 
-/* ===== TABLE ===== */
+/* ===== LOGIN ===== */
 
-table{
-width:100%;
-border-collapse:collapse;
-font-size:12px;
-margin-top:10px;
+#loginBox{
+max-width:400px;
+margin:100px auto;
 }
-
-th,td{
-border:1px solid #ccc;
-padding:6px;
-text-align:center;
-}
-
-video,img{
-width:100%;
-border-radius:10px;
-margin-top:8px
-}
-
-/* ===== SPONSORS ===== */
-
-.sponsors{text-align:center;margin-top:15px;}
-.sponsors img{width:120px;margin:10px}
-
-/* ===== INPUT ===== */
 
 input{
 width:100%;
-padding:8px;
-margin-bottom:10px;
-border-radius:5px;
-border:1px solid #ccc
+padding:10px;
+margin:8px 0;
+border-radius:10px;
+border:none;
 }
 
-/* ===== DARK MODE ===== */
-
-.dark-mode{
-background:#0b0f1a;
-color:#eee;
-}
-
-.dark-mode .card,
-.dark-mode header,
-.dark-mode .modalBox{
-background:#111827;
+button.login{
+width:100%;
+background:#2563eb;
 color:white;
+padding:12px;
+border:none;
+border-radius:10px;
+cursor:pointer;
 }
 
-.dark-mode nav button{
-background:#374151;
-}
+/* ===== ADMIN ===== */
+
+.admin{display:none}
 
 </style>
 </head>
 
 <body>
 
-<header>
-<img src="logo.png"><br>
-<b>TAWHID FC Ultimate</b>
-</header>
+<div class="hero">
+<img src="logo.png">
+<h1>TAWHID FC Ultimate</h1>
+</div>
 
 <nav>
 <button onclick="show('home')">الرئيسية</button>
 <button onclick="show('team')">الفريق</button>
 <button onclick="show('awards')">الجوائز</button>
-<button onclick="toggleDark()">الوضع الليلي</button>
+<button onclick="show('admin')">Admin</button>
 </nav>
 
 <div id="home" class="section active"></div>
 <div id="team" class="section"></div>
 <div id="awards" class="section"></div>
+
+<!-- LOGIN -->
+<div id="admin" class="section">
+<div id="loginBox" class="card">
+<h2>تسجيل الدخول</h2>
+<input id="user" placeholder="Username">
+<input id="pass" type="password" placeholder="Password">
+<button class="login" onclick="login()">Login</button>
+</div>
+
+<div id="adminPanel" class="admin card">
+<h2>إضافة لاعب</h2>
+<input id="pname" placeholder="اسم اللاعب">
+<input id="pphoto" placeholder="رابط صورة اللاعب">
+<select id="ppos">
+<option>Attack</option>
+<option>Midfield</option>
+</select>
+<button class="login" onclick="addPlayer()">إضافة</button>
+</div>
+</div>
 
 <div class="modal" id="modal">
 <div class="modalBox" id="modalBox"></div>
@@ -211,162 +236,100 @@ background:#374151;
 
 <script>
 
-/* ===== NEWS ===== */
+/* ===== LOGIN SYSTEM ===== */
 
-const news=[
-{
-title:`يتقدم نادي TAWHID FC بأصدق التهاني والتبريكات بمناسبة حلول شهر رمضان المبارك،
-سائلين الله أن يجعله شهر خير وبركة،
-وأن يتقبل منا ومنكم الصيام والقيام وصالح الأعمال.`,
-time:"2026-02-18",
-img:"ramadan.png"
-},
-{title:"يعلن نادي TAWHID FC عن توقيع التعاون الرسمي مع ECMassage.",time:"2026-02-13",img:"ecmassage.png"}
+function login(){
+if(user.value==="TAWHID" && pass.value==="2"){
+loginBox.style.display="none";
+adminPanel.style.display="block";
+}
+else alert("بيانات خاطئة");
+}
+
+/* ===== DATA ===== */
+
+let players=JSON.parse(localStorage.getItem("players"))||[
+{name:"H7modi77",photo:"h7.jpg",pos:"Midfield"},
+{name:"Almousa3M",photo:"a.jpg",pos:"Attack"}
 ];
 
-/* ===== PLAYERS ===== */
+/* ===== ADD PLAYER ===== */
 
-const players=[
-{name:"H7modi77",photo:"h7.jpg",pos:"Midfield",monthly:[["Oct",45,14,36,79,33,2,5,62],["Nov",77,52,54,76,43,9,2,51],["Jan",116,44,85,75,38,19,25,47]]},
-{name:"M-_-_-_11_11",photo:"m.jpg",pos:"Midfield",monthly:[["Oct",68,38,43,81,27,9,1,57],["Nov",86,48,58,74,29,10,0,54],["Jan",158,112,113,75,34,33,7,46]]},
-{name:"Almousa3M",photo:"a.jpg",pos:"Attack",monthly:[["Oct",58,65,61,78,33,18,1,60],["Nov",57,67,72,77,33,15,0,53],["Jan",126,161,146,77,40,24,1,49]]},
-{name:"H2ssain_28",photo:"h2.jpg",pos:"Attack",monthly:[["Oct",44,36,15,76,23,1,0,56],["Nov",64,59,48,77,25,8,2,51],["Jan",146,144,72,73,28,9,7,44]]},
-{name:"Yo0ousef25",photo:"y.jpg",pos:"Attack",monthly:[["Oct",28,23,5,78,46,0,0,67],["Nov",26,21,8,78,52,3,1,58],["Jan",99,57,17,74,47,0,5,43]]},
-{name:"Basabeso2",photo:"b.jpg",pos:"Attack",monthly:[["Oct",48,36,17,84,40,7,1,62],["Nov",75,54,22,86,39,9,0,57],["Jan",91,84,43,85,41,5,8,49]]}
-];
-
-/* ===== AI CALC ===== */
-
-players.forEach(p=>{
- p.monthly.forEach(m=>{
-   m.push(+(m[2]*2.1+m[3]*2.1+m[4]*1.5+m[5]*2.5+m[8]*1.5).toFixed(1));
- });
- p.totalAI=p.monthly.reduce((a,b)=>a+b[9],0);
+function addPlayer(){
+players.push({
+name:pname.value,
+photo:pphoto.value,
+pos:ppos.value
 });
+localStorage.setItem("players",JSON.stringify(players));
+renderTeam();
+alert("تمت الإضافة");
+}
 
-/* ترتيب تلقائي */
-players.sort((a,b)=>b.totalAI-a.totalAI);
-
-/* ===== RENDER ===== */
-
-home.innerHTML=news.map(n=>`
-<div class="card">
-<img src="${n.img}">
-<b>${n.title}</b><br>${n.time}
-</div>`).join('')+sponsor();
-
-team.innerHTML=`<input placeholder="ابحث عن لاعب" onkeyup="search(this.value)">`+renderTeam()+sponsor();
-
-awards.innerHTML=`
-<div class="card"><h3>Ballon d'Or AI</h3><canvas id="ballonChart"></canvas></div>
-`+sponsor();
-
-/* ===== TEAM ===== */
+/* ===== RENDER TEAM ===== */
 
 function renderTeam(){
- let h='';
- ['Midfield','Attack'].forEach(pos=>{
- h+=`<div class='card'><h3>${pos}</h3>`;
- players.filter(p=>p.pos==pos).forEach(p=>{
- h+=`<div class='player' onclick="openPlayer('${p.name}')">
- <img src='${p.photo}'><br><b>${p.name}</b></div>`;
- });
- h+='</div>';
- });
- return h;
+team.innerHTML="";
+players.forEach(p=>{
+team.innerHTML+=`
+<div class="player" onclick="openPlayer('${p.name}')">
+<img src="${p.photo}">
+<br>${p.name}
+</div>`;
+});
 }
 
-/* ===== MODAL ===== */
+renderTeam();
 
-function openPlayer(n){
+/* ===== AWARDS FROM CODE ===== */
 
-let p=players.find(x=>x.name==n);
+const awardsData={
+playerMonth:{
+name:"Almousa3M",
+image:"a.jpg"
+},
+goalMonth:{
+name:"H2ssain_28",
+image:"h2.jpg",
+video:"goal.mp4"
+}
+};
 
-modal.style.display='block';
-document.body.style.overflow='hidden';
+awards.innerHTML=`
+<div class="card">
+<h2>🏆 لاعب الشهر</h2>
+<img src="${awardsData.playerMonth.image}">
+<h3>${awardsData.playerMonth.name}</h3>
+</div>
 
-let last=p.monthly[p.monthly.length-1];
-
-modalBox.innerHTML=`
-<span class='close' onclick="closeModal()">&times;</span>
-<h2>${p.name}</h2>
-<img src='${p.photo}'>
-<h3>Total AI: ${p.totalAI.toFixed(1)}</h3>
-
-<canvas id='playerChart'></canvas>
-<canvas id='playerRadar'></canvas>
-
-<table>
-<tr><th>Month</th><th>M</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>MOTM</th><th>Red</th><th>W%</th><th>AI</th></tr>
-${p.monthly.map(m=>`<tr>${m.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}
-</table>
+<div class="card">
+<h2>⚽ هدف الشهر</h2>
+<img src="${awardsData.goalMonth.image}">
+<video controls src="${awardsData.goalMonth.video}"></video>
+<h3>${awardsData.goalMonth.name}</h3>
+</div>
 `;
 
-new Chart(playerChart,{
-type:'bar',
-data:{labels:p.monthly.map(m=>m[0]),
-datasets:[{label:'AI',data:p.monthly.map(m=>m[9])}]}
-});
+/* ===== PLAYER MODAL ===== */
 
-new Chart(playerRadar,{
-type:'radar',
-data:{
-labels:['Goals','Assists','Pass%','Shot%','Win%'],
-datasets:[{label:p.name,data:[last[2],last[3],last[4],last[5],last[8]]}]
-}
-});
+function openPlayer(n){
+let p=players.find(x=>x.name==n);
+modal.style.display="block";
+modalBox.innerHTML=`
+<span class="close" onclick="modal.style.display='none'">&times;</span>
+<h2>${p.name}</h2>
+<img src="${p.photo}">
+`;
 }
 
-function closeModal(){
-modal.style.display='none';
-document.body.style.overflow='auto';
-}
-
-modal.addEventListener('click',e=>{
-if(e.target===modal) closeModal();
-});
-
-/* ===== SEARCH ===== */
-
-function search(v){
-document.querySelectorAll('.player').forEach(p=>{
-p.style.display=p.innerText.toLowerCase().includes(v.toLowerCase())
-?'inline-block':'none';
-});
-}
+modal.onclick=e=>{if(e.target===modal)modal.style.display="none"};
 
 /* ===== NAV ===== */
 
 function show(id){
-document.querySelectorAll('.section')
-.forEach(s=>s.classList.remove('active'));
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
 document.getElementById(id).classList.add('active');
 }
-
-/* ===== SPONSORS ===== */
-
-function sponsor(){
-return `<div class='sponsors'>
-<img src='ecmassage.png'>
-<img src='doubleb.png'>
-</div>`;
-}
-
-/* ===== DARK MODE ===== */
-
-function toggleDark(){
-document.body.classList.toggle('dark-mode');
-}
-
-/* ===== MAIN CHART ===== */
-
-new Chart(ballonChart,{
-type:'bar',
-data:{
-labels:players.map(p=>p.name),
-datasets:[{label:'Total AI',data:players.map(p=>p.totalAI)}]
-}
-});
 
 </script>
 
