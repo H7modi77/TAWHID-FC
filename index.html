@@ -4,10 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TAWHID CLUB</title>
-
-<!-- Chart.js for AI graphs -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
 body{
     margin:0;
@@ -60,7 +56,6 @@ nav button{
     border-radius:15px;
     padding:10px;
     cursor:pointer;
-    text-align:center;
 }
 .card img{
     width:100%;
@@ -73,12 +68,10 @@ nav button{
     width:100%;
     height:100%;
     background:#000a;
-    overflow:auto;
-    padding-top:50px;
 }
 .modalBox{
     background:#111;
-    margin:20px auto;
+    margin:20% auto;
     width:90%;
     padding:20px;
     border-radius:15px;
@@ -107,9 +100,6 @@ td,th{
 video{width:100%;border-radius:10px;}
 .newsCard img{width:100%;border-radius:10px;}
 .newsDate{font-size:12px;opacity:.7;}
-.commentBox{margin-top:10px;text-align:left;}
-.commentBox input{width:70%;padding:5px;margin-right:5px;}
-.commentBox button{padding:5px;}
 </style>
 </head>
 <body>
@@ -127,6 +117,7 @@ video{width:100%;border-radius:10px;}
     <button onclick="show('team')">اللاعبين</button>
     <button onclick="show('awards')">الجوائز</button>
     <button onclick="show('stats')">الإحصائيات</button>
+    <button onclick="show('ranking')">الترتيب</button>
     <button onclick="show('admin')">Admin</button>
 </nav>
 
@@ -139,18 +130,6 @@ video{width:100%;border-radius:10px;}
 <!-- TEAM -->
 <section id="team" class="section">
     <h2>الفريق</h2>
-    <div style="margin-bottom:10px;">
-        <label>فلترة حسب المركز:</label>
-        <select id="filterPos" onchange="renderTeam()">
-            <option value="All">الكل</option>
-            <option value="Defender">Defender</option>
-            <option value="Midfield">Midfield</option>
-            <option value="Attack">Attack</option>
-        </select>
-        <button onclick="sortPlayers('ai')">ترتيب حسب AI</button>
-        <button onclick="sortPlayers('g')">ترتيب حسب Goals</button>
-        <button onclick="sortPlayers('best')">ترتيب حسب Best</button>
-    </div>
     <div id="playersContainer" class="grid"></div>
 </section>
 
@@ -164,6 +143,12 @@ video{width:100%;border-radius:10px;}
 <section id="stats" class="section">
     <h2>إحصائيات اللاعبين</h2>
     <div id="statsBox"></div>
+</section>
+
+<!-- RANKING -->
+<section id="ranking" class="section">
+    <h2>ترتيب اللاعبين</h2>
+    <div id="rankingBox" class="grid"></div>
 </section>
 
 <!-- ADMIN -->
@@ -217,7 +202,7 @@ H2ssain_28:{October:{m:44,g:36,a:15,p:76,s:23,best:1,w:56},November:{m:64,g:59,a
 Yo0ousef25:{October:{m:28,g:23,a:5,p:78,s:46,best:0,w:67},November:{m:26,g:21,a:8,p:78,s:52,best:3,w:58},January:{m:99,g:57,a:17,p:74,s:47,best:0,w:43},February:{m:18,g:11,a:2,p:74,s:47,best:1,w:43}}
 };
 
-// AI CALC
+// CALC AI
 function calcAI(d,pos){
     let ai=(d.g*2.1)+(d.a*2.1)+(d.p*1.5)+(d.w*1.5);
     if(pos=="Attack") ai+=d.s*2.5;
@@ -225,50 +210,29 @@ function calcAI(d,pos){
     return Math.round(ai);
 }
 
-// TOTAL STATS BY POSITION
+// TOTAL STATS BY POSITION (Best مجموع)
 function totalStatsByPosition(name,pos){
     let months=stats[name];
     let t={m:0,g:0,a:0,p:0,s:0,w:0,cs:0,best:0};
+    let c=0;
     for(let m in months){
         let d=months[m];
-        t.m+=d.m;t.g+=d.g;t.a+=d.a;t.p+=d.p;t.s+=d.s||0;t.w+=d.w;t.cs+=d.cs||0;t.best+=d.best||0;
+        t.m+=d.m; t.g+=d.g; t.a+=d.a; t.p+=d.p; t.s+=d.s||0; t.w+=d.w; t.cs+=d.cs||0; t.best += d.best || 0;
+        c++;
     }
+    t.p = Math.round(t.p/c); t.s = Math.round(t.s/c); t.w = Math.round(t.w/c); t.cs = Math.round(t.cs/c);
     return t;
 }
 
-// RENDER TEAM with FILTER & SORT
-let currentSort="none";
-function sortPlayers(by){
-    currentSort=by;
-    renderTeam();
-}
+// RENDER TEAM
 function renderTeam(){
-    let container=document.getElementById("playersContainer");
-    let filter=document.getElementById("filterPos").value;
-    let filtered=players.filter(p=>{
-        if(filter=="All") return true;
-        if(p.pos.includes(filter)) return true;
-        return false;
-    });
-    // sort
-    if(currentSort!="none"){
-        filtered.sort((a,b)=>{
-            let posA=a.pos.includes("Defender")?"Defender":a.pos.includes("Midfield")?"Midfield":"Attack";
-            let posB=b.pos.includes("Defender")?"Defender":b.pos.includes("Midfield")?"Midfield":"Attack";
-            let statsA=totalStatsByPosition(a.name,posA);
-            let statsB=totalStatsByPosition(b.name,posB);
-            if(currentSort=="ai") return calcAI(statsB,posB)-calcAI(statsA,posA);
-            if(currentSort=="g") return statsB.g-statsA.g;
-            if(currentSort=="best") return statsB.best-statsA.best;
-        });
-    }
-    container.innerHTML="";
-    filtered.forEach(p=>{
+    playersContainer.innerHTML="";
+    players.forEach(p=>{
         let pos = p.pos.includes("Defender")?"Defender":p.pos.includes("Midfield")?"Midfield":"Attack";
         let ai = calcAI(totalStatsByPosition(p.name,pos),pos);
-        container.innerHTML+=
+        playersContainer.innerHTML+=
         `<div class="card" onclick="openPlayer('${p.name}')">
-            <img src="${p.photo}" width="50">
+            <img src="${p.photo}">
             <h3>${p.name}</h3>
             <p>${p.pos}</p>
             <h2>AI ${ai}</h2>
@@ -277,86 +241,26 @@ function renderTeam(){
 }
 renderTeam();
 
-// PLAYER MODAL with Chart & Comments
-let playerComments={};
+// PLAYER MODAL
 function openPlayer(name){
     let player = players.find(p=>p.name===name);
     let pos = player.pos.includes("Defender")?"Defender":player.pos.includes("Midfield")?"Midfield":"Attack";
-    let months=stats[name];
-    let labels=Object.keys(months);
-    let aiValues=labels.map(m=>calcAI(months[m],pos));
+    let t = totalStatsByPosition(name,pos);
+    let ai = calcAI(t,pos);
     modal.style.display="block";
     let html=`<h2>${name}</h2>`;
-    let t=totalStatsByPosition(name,pos);
-    html+=`<p>Matches: ${t.m} | Goals: ${t.g} | Assists: ${t.a}</p>`;
+    html+=`<p>Matches: ${t.m}</p><p>Goals: ${t.g}</p><p>Assists: ${t.a}</p>`;
     if(pos=="Defender") html+=`<p>Clean Sheet: ${t.cs}</p>`;
     html+=`<p>Pass: ${t.p}%</p>`;
     if(pos=="Attack") html+=`<p>Shot: ${t.s}%</p>`;
-    html+=`<p>Best: ${t.best} | Win: ${t.w}%</p>`;
-    html+=`<h3>AI: ${calcAI(t,pos)}</h3>`;
-    html+=`<canvas id="aiChart" height="150"></canvas>`;
-    // Comments
-    if(!playerComments[name]) playerComments[name]=[];
-    html+=`<div class="commentBox">
-        ${playerComments[name].map(c=>`<p>💬 ${c}</p>`).join("")}
-        <input id="cInput" placeholder="تعليق...">
-        <button onclick="addComment('${name}')">إضافة</button>
-    </div>`;
+    html+=`<p>Best: ${t.best}</p><p>Win: ${t.w}%</p>`;
+    html+=`<h1>AI ${ai}</h1>`;
     modalContent.innerHTML=html;
-    new Chart(document.getElementById("aiChart").getContext("2d"),{
-        type:'bar',
-        data:{
-            labels:labels,
-            datasets:[{label:'AI',data:aiValues,backgroundColor:'#0ea5ff'}]
-        },
-        options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
-    });
-}
-function addComment(name){
-    let val=document.getElementById("cInput").value;
-    if(val.trim()!=""){
-        playerComments[name].push(val);
-        openPlayer(name);
-    }
 }
 modal.onclick=e=>{if(e.target.id==="modal") modal.style.display="none";};
 
-// NEWS with Comments & Likes
-let news=[
-    {title:"اجتماع لأعضاء النادي حول قضية عدم اللعب بسبب غياب لاعب",img:"news1.png",date:"2026-02-25",likes:0,comments:[]},
-    {title:"مقابلة اللاعب yo0ousef25 مع قناة skysports",img:"news2.png",date:"2026-02-27",likes:0,comments:[]}
-];
-function renderNews(){
-    let box=document.getElementById("newsBox");
-    box.innerHTML="";
-    news.forEach((n,i)=>{
-        box.innerHTML+=
-        `<div class="card newsCard">
-            <img src="${n.img}">
-            <h3>${n.title}</h3>
-            <p class="newsDate">${n.date}</p>
-            <p>👍 ${n.likes}</p>
-            <div class="commentBox">
-                ${n.comments.map(c=>`<p>💬 ${c}</p>`).join("")}
-                <input id="newsInput${i}" placeholder="تعليق...">
-                <button onclick="addNewsComment(${i})">إضافة</button>
-            </div>
-            <button onclick="newsLike(${i})">Like</button>
-        </div>`;
-    });
-}
-function addNewsComment(i){
-    let val=document.getElementById(`newsInput${i}`).value;
-    if(val.trim()!=""){
-        news[i].comments.push(val);
-        renderNews();
-    }
-}
-function newsLike(i){news[i].likes++;renderNews();}
-renderNews();
-
 // AWARDS
-const awards={player:{name:"Almousa3M",img:"award-player.png",month:"Feb"},goal:{player:"H7modi77",img:"award-goal.png",video:"goal.mp4"}};
+const awards={player:{name:"Almousa3M",img:"award-player.png",month:"Feb"},goal:{player:"H7modi77",img:"award-goal.png",video:"https://raw.githubusercontent.com/H7modi77/TAWHID-FC/main/19c9ebcbc1934-master_playlist.mov"}};
 awardsBox.innerHTML=
 `<div class="card">
     <h3> لاعب الشهر</h3>
@@ -371,6 +275,48 @@ awardsBox.innerHTML=
     <video controls><source src="${awards.goal.video}"></video>
 </div>`;
 
+// NEWS
+const news=[
+    {title:"اجتماع لأعضاء النادي حول قضية عدم اللعب بسبب غياب لاعب",img:"news1.png",date:"2026-02-25"},
+    {title:"مقابلة اللاعب yo0ousef25 مع قناة skysports",img:"news2.png",date:"2026-02-27"}
+];
+news.forEach(n=>{
+    newsBox.innerHTML+=
+    `<div class="card newsCard">
+        <img src="${n.img}">
+        <h3>${n.title}</h3>
+        <p class="newsDate">${n.date}</p>
+    </div>`;
+});
+
+// STATS TABLE
+for(let player of players){
+    let name = player.name;
+    let pos = player.pos.includes("Defender")?"Defender":player.pos.includes("Midfield")?"Midfield":"Attack";
+    let months=stats[name]; 
+    let html=`<div class="card"><h3>${name} (${pos})</h3><table><tr><th>Month</th>`;
+    
+    if(pos=="Defender") html+=`<th>M</th><th>G</th><th>A</th><th>CS</th><th>P%</th><th>Best</th><th>W%</th><th>Final AI</th></tr>`;
+    else if(pos=="Midfield") html+=`<th>M</th><th>G</th><th>A</th><th>P%</th><th>Best</th><th>W%</th><th>Final AI</th></tr>`;
+    else html+=`<th>M</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>Best</th><th>W%</th><th>Final AI</th></tr>`;
+
+    for(let m in months){
+        let d=months[m];
+        let ai = calcAI(d,pos);
+        if(pos=="Defender") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.cs||0}</td><td>${d.best||0}</td><td>${d.w}</td><td>${ai}</td></tr>`;
+        else if(pos=="Midfield") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.best||0}</td><td>${d.w}</td><td>${ai}</td></tr>`;
+        else html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.s||0}</td><td>${d.best||0}</td><td>${d.w}</td><td>${ai}</td></tr>`;
+    }
+
+    let t=totalStatsByPosition(name,pos);
+    let totalAI = calcAI(t,pos);
+    if(pos=="Defender") html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.cs}</th><th>${t.best}</th><th>${t.w}</th><th>${totalAI}</th></tr>`;
+    else if(pos=="Midfield") html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.best}</th><th>${t.w}</th><th>${totalAI}</th></tr>`;
+    else html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.s}</th><th>${t.best}</th><th>${t.w}</th><th>${totalAI}</th></tr>`;
+    html+=`</table></div>`;
+    statsBox.innerHTML+=html;
+}
+
 // ADMIN
 function login(){
     if(user.value==="TAWHID" && pass.value==="2"){
@@ -378,12 +324,39 @@ function login(){
         alert("تم تسجيل الدخول");
     } else alert("بيانات خاطئة");
 }
+
 function addPlayer(){
     players.push({name:pname.value,photo:pphoto.value,pos:ppos.value});
     renderTeam();
     pname.value="";pphoto.value="";ppos.value="";
     alert("تمت إضافة اللاعب");
 }
+
+// RANKING
+function renderRanking(){
+    players.forEach(p=>{
+        let pos = p.pos.includes("Defender") ? "Defender" : p.pos.includes("Midfield") ? "Midfield" : "Attack";
+        p.ai = calcAI(totalStatsByPosition(p.name,pos), pos);
+    });
+    let sorted = [...players].sort((a,b)=>b.ai - a.ai);
+    rankingBox.innerHTML = "";
+    sorted.forEach((p,index)=>{
+        let className="", icon="";
+        if(index===0){className="rankingGold"; icon="🥇";}
+        else if(index===1){className="rankingSilver"; icon="🥈";}
+        else if(index===2){className="rankingBronze"; icon="🥉";}
+        rankingBox.innerHTML += `
+        <div class="card ${className}" style="display:flex; align-items:center; gap:10px;">
+            <img src="${p.photo}" style="width:40px; height:40px; border-radius:50%;">
+            <div>
+                <h3>${icon} ${index+1} - ${p.name}</h3>
+                <p>${p.pos}</p>
+                <h2>AI ${p.ai}</h2>
+            </div>
+        </div>`;
+    });
+}
+renderRanking();
 </script>
 
 </body>
