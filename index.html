@@ -69,11 +69,14 @@ nav button{
     width:100%;
     height:100%;
     background:#000a;
+    justify-content:center;
+    align-items:center;
 }
 .modalBox{
     background:#111;
-    margin:20% auto;
-    width:90%;
+    margin:0 auto;
+    width:80%;
+    max-width:700px;
     padding:20px;
     border-radius:15px;
 }
@@ -98,9 +101,38 @@ td,th{
     padding:8px;
 }
 .sponsors img{height:40px;}
-video{width:100%;border-radius:10px;}
+video{width:100%;border-radius:10px;cursor:pointer;}
 .newsCard img{width:100%;border-radius:10px;}
 .newsDate{font-size:12px;opacity:.7;}
+/* ألوان Leaderboard */
+.rankingGold{border:2px solid #FFD700;}
+.rankingSilver{border:2px solid #C0C0C0;}
+.rankingBronze{border:2px solid #CD7F32;}
+/* فيديو fullscreen */
+#videoModal{
+    display:none;
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:#000c;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+#videoModal video{
+    width:90%;
+    max-width:900px;
+    border-radius:10px;
+}
+#videoModal button{
+    position:absolute;
+    top:20px;right:20px;
+    background:#fff;
+    border:none;
+    padding:8px 12px;
+    border-radius:5px;
+    cursor:pointer;
+}
 </style>
 </head>
 <body>
@@ -118,6 +150,7 @@ video{width:100%;border-radius:10px;}
     <button onclick="show('team')">اللاعبين</button>
     <button onclick="show('awards')">الجوائز</button>
     <button onclick="show('stats')">الإحصائيات</button>
+    <button onclick="show('ranking')">الترتيب</button>
     <button onclick="show('admin')">Admin</button>
 </nav>
 
@@ -145,6 +178,12 @@ video{width:100%;border-radius:10px;}
     <div id="statsBox"></div>
 </section>
 
+<!-- RANKING -->
+<section id="ranking" class="section">
+    <h2>ترتيب اللاعبين</h2>
+    <div id="rankingBox" class="grid"></div>
+</section>
+
 <!-- ADMIN -->
 <section id="admin" class="section">
     <input id="user" placeholder="User">
@@ -158,9 +197,15 @@ video{width:100%;border-radius:10px;}
     </div>
 </section>
 
-<!-- MODAL -->
+<!-- MODAL للاعب -->
 <div id="modal" class="modal">
     <div id="modalContent" class="modalBox"></div>
+</div>
+
+<!-- MODAL للفيديو fullscreen -->
+<div id="videoModal">
+    <video controls></video>
+    <button onclick="closeVideo()">إغلاق</button>
 </div>
 
 <!-- SPONSORS -->
@@ -241,7 +286,7 @@ function openPlayer(name){
     let pos = player.pos.includes("Defender")?"Defender":player.pos.includes("Midfield")?"Midfield":"Attack";
     let t = totalStatsByPosition(name,pos);
     let ai = calcAI(t,pos);
-    modal.style.display="block";
+    modal.style.display="flex";
     let html=`<h2>${name}</h2>`;
     html+=`<p>Matches: ${t.m}</p><p>Goals: ${t.g}</p><p>Assists: ${t.a}</p>`;
     if(pos=="Defender") html+=`<p>Clean Sheet: ${t.cs}</p>`;
@@ -254,20 +299,7 @@ function openPlayer(name){
 modal.onclick=e=>{if(e.target.id==="modal") modal.style.display="none";};
 
 // AWARDS
-const awards={player:{name:"Almousa3M",img:"award-player.png",month:"Feb"},goal:{player:"H7modi_77",img:"award-goal.png",video:"https://raw.githubusercontent.com/H7modi77/TAWHID-FC/main/19c9ebcbc1934-master_playlist.mov"}};
-awardsBox.innerHTML=
-`<div class="card">
-    <h3> لاعب الشهر</h3>
-    <img src="${awards.player.img}">
-    <h2>${awards.player.name}</h2>
-    <p>${awards.player.month}</p>
-</div>
-<div class="card">
-    <h3> هدف الشهر</h3>
-    <img src="${awards.goal.img}">
-    <p>${awards.goal.player}</p>
-    <video controls><source src="${awards.goal.video}"></video>
-</div>`;
+let awards={player:{name:"Almousa3M",img:"award-player.png",month:"Feb"},goal:{player:"H7modi77",img:"award-goal.png",video:"https://raw.githubusercontent.com/H7modi77/TAWHID-FC/main/19c9ebcbc1934-master_playlist.mov"}};
 
 // NEWS
 const news=[
@@ -284,51 +316,59 @@ news.forEach(n=>{
 });
 
 // STATS TABLE مع Final AI لكل شهر
-for(let player of players){
-    let name = player.name;
-    let pos = player.pos.includes("Defender")?"Defender":player.pos.includes("Midfield")?"Midfield":"Attack";
-    let months=stats[name]; 
-    let html=`<div class="card"><h3>${name} (${pos})</h3><table><tr><th>Month</th>`;
-    
-    // تحديد الأعمدة حسب المركز
-    if(pos=="Defender") html+=`<th>M</th><th>G</th><th>A</th><th>CS</th><th>P%</th><th>Best</th><th>W%</th><th>Final AI</th></tr>`;
-    else if(pos=="Midfield") html+=`<th>M</th><th>G</th><th>A</th><th>P%</th><th>Best</th><th>W%</th><th>Final AI</th></tr>`;
-    else html+=`<th>M</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>Best</th><th>W%</th><th>Final AI</th></tr>`;
-
-    for(let m in months){
-        let d=months[m];
-        let ai = calcAI(d,pos); // حساب AI لكل شهر
-        if(pos=="Defender") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.cs||0}</td><td>${d.p}</td><td>${d.best||0}</td><td>${d.w}</td><td>${ai}</td></tr>`;
-        else if(pos=="Midfield") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.best||0}</td><td>${d.w}</td><td>${ai}</td></tr>`;
-        else html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.s||0}</td><td>${d.best||0}</td><td>${d.w}</td><td>${ai}</td></tr>`;
+function renderStats(){
+    statsBox.innerHTML = "";
+    for(let player of players){
+        let name = player.name;
+        let pos = player.pos.includes("Defender")?"Defender":player.pos.includes("Midfield")?"Midfield":"Attack";
+        let months=stats[name]; 
+        let html=`<div class="card"><h3>${name} (${pos})</h3><table><tr><th>Month</th>`;
+        if(pos=="Defender") html+=`<th>M</th><th>G</th><th>A</th><th>CS</th><th>P%</th><th>Best</th><th>W%</th><th>Final AI</th></tr>`;
+        else if(pos=="Midfield") html+=`<th>M</th><th>G</th><th>A</th><th>P%</th><th>Best</th><th>W%</th><th>Final AI</th></tr>`;
+        else html+=`<th>M</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>Best</th><th>W%</th><th>Final AI</th></tr>`;
+        for(let m in months){
+            let d=months[m];
+            let ai = calcAI(d,pos);
+            if(pos=="Defender") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.cs||0}</td><td>${d.p}</td><td>${d.best||0}</td><td>${d.w}</td><td>${ai}</td></tr>`;
+            else if(pos=="Midfield") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.best||0}</td><td>${d.w}</td><td>${ai}</td></tr>`;
+            else html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.s||0}</td><td>${d.best||0}</td><td>${d.w}</td><td>${ai}</td></tr>`;
+        }
+        let t=totalStatsByPosition(name,pos);
+        let totalAI = calcAI(t,pos);
+        if(pos=="Defender") html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.cs}</th><th>${t.p}</th><th>${t.best}</th><th>${t.w}</th><th>${totalAI}</th></tr>`;
+        else if(pos=="Midfield") html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.best}</th><th>${t.w}</th><th>${totalAI}</th></tr>`;
+        else html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.s}</th><th>${t.best}</th><th>${t.w}</th><th>${totalAI}</th></tr>`;
+        html+=`</table></div>`;
+        statsBox.innerHTML+=html;
     }
-
-    // حساب المجموع كما قبل
-    let t=totalStatsByPosition(name,pos);
-    let totalAI = calcAI(t,pos); // AI النهائي للمجموع
-    if(pos=="Defender") html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.cs}</th><th>${t.p}</th><th>${t.best}</th><th>${t.w}</th><th>${totalAI}</th></tr>`;
-    else if(pos=="Midfield") html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.best}</th><th>${t.w}</th><th>${totalAI}</th></tr>`;
-    else html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.s}</th><th>${t.best}</th><th>${t.w}</th><th>${totalAI}</th></tr>`;
-
-    html+=`</table></div>`;
-    statsBox.innerHTML+=html;
 }
+renderStats();
 
-// ADMIN
-function login(){
-    if(user.value==="TAWHID" && pass.value==="2"){
-        panel.style.display="block";
-        alert("تم تسجيل الدخول");
-    } else alert("بيانات خاطئة");
-}
+// =======================
+// Leaderboard احترافي + لاعب الشهر تلقائي
+// =======================
+function renderRanking(){
+    rankingBox.innerHTML = "";
+    let rankingData = players.map(p=>{
+        let pos = p.pos.includes("Defender")?"Defender":p.pos.includes("Midfield")?"Midfield":"Attack";
+        let t = totalStatsByPosition(p.name,pos);
+        let ai = calcAI(t,pos);
+        return {...p, ai:ai};
+    });
+    rankingData.sort((a,b)=>b.ai - a.ai);
 
-function addPlayer(){
-    players.push({name:pname.value,photo:pphoto.value,pos:ppos.value});
-    renderTeam();
-    pname.value="";pphoto.value="";ppos.value="";
-    alert("تمت إضافة اللاعب");
-}
-</script>
+    // لاعب الشهر تلقائي
+    let bestPlayer = rankingData[0];
+    awards.player.name = bestPlayer.name;
+    awards.player.img = "award-player.png";
+    awards.player.month = "Auto";
 
-</body>
-</html>
+    rankingData.forEach((p,index)=>{
+        let className="", icon="";
+        if(index===0){className="rankingGold"; icon="🥇";}
+        else if(index===1){className="rankingSilver"; icon="🥈";}
+        else if(index===2){className="rankingBronze"; icon="🥉";}
+        rankingBox.innerHTML += `
+        <div class="card ${className}">
+            <h3>${icon} ${index+1} - ${p.name}</h3>
+            <p>${p.pos}</p>
