@@ -283,26 +283,33 @@ news.forEach(n=>{
     </div>`;
 });
 
-// STATS TABLE
+// STATS TABLE مع Final AI لكل شهر
 for(let player of players){
     let name = player.name;
     let pos = player.pos.includes("Defender")?"Defender":player.pos.includes("Midfield")?"Midfield":"Attack";
     let months=stats[name]; 
     let html=`<div class="card"><h3>${name} (${pos})</h3><table><tr><th>Month</th>`;
-    if(pos=="Defender") html+=`<th>M</th><th>G</th><th>A</th><th>CS</th><th>P%</th><th>Best</th><th>W%</th></tr>`;
-    else if(pos=="Midfield") html+=`<th>M</th><th>G</th><th>A</th><th>P%</th><th>Best</th><th>W%</th></tr>`;
-    else html+=`<th>M</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>Best</th><th>W%</th></tr>`;
+    
+    // تحديد الأعمدة حسب المركز
+    if(pos=="Defender") html+=`<th>M</th><th>G</th><th>A</th><th>CS</th><th>P%</th><th>Best</th><th>W%</th><th>Final AI</th></tr>`;
+    else if(pos=="Midfield") html+=`<th>M</th><th>G</th><th>A</th><th>P%</th><th>Best</th><th>W%</th><th>Final AI</th></tr>`;
+    else html+=`<th>M</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>Best</th><th>W%</th><th>Final AI</th></tr>`;
 
     for(let m in months){
         let d=months[m];
-        if(pos=="Defender") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.cs||0}</td><td>${d.p}</td><td>${d.best||0}</td><td>${d.w}</td></tr>`;
-        else if(pos=="Midfield") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.best||0}</td><td>${d.w}</td></tr>`;
-        else html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.s||0}</td><td>${d.best||0}</td><td>${d.w}</td></tr>`;
+        let ai = calcAI(d,pos); // حساب AI لكل شهر
+        if(pos=="Defender") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.cs||0}</td><td>${d.p}</td><td>${d.best||0}</td><td>${d.w}</td><td>${ai}</td></tr>`;
+        else if(pos=="Midfield") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.best||0}</td><td>${d.w}</td><td>${ai}</td></tr>`;
+        else html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.s||0}</td><td>${d.best||0}</td><td>${d.w}</td><td>${ai}</td></tr>`;
     }
+
+    // حساب المجموع كما قبل
     let t=totalStatsByPosition(name,pos);
-    if(pos=="Defender") html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.cs}</th><th>${t.p}</th><th>${t.best}</th><th>${t.w}</th></tr>`;
-    else if(pos=="Midfield") html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.best}</th><th>${t.w}</th></tr>`;
-    else html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.s}</th><th>${t.best}</th><th>${t.w}</th></tr>`;
+    let totalAI = calcAI(t,pos); // AI النهائي للمجموع
+    if(pos=="Defender") html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.cs}</th><th>${t.p}</th><th>${t.best}</th><th>${t.w}</th><th>${totalAI}</th></tr>`;
+    else if(pos=="Midfield") html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.best}</th><th>${t.w}</th><th>${totalAI}</th></tr>`;
+    else html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.s}</th><th>${t.best}</th><th>${t.w}</th><th>${totalAI}</th></tr>`;
+
     html+=`</table></div>`;
     statsBox.innerHTML+=html;
 }
