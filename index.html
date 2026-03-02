@@ -2,336 +2,68 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>TAWHID FC Ultimate</title>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-
-<style>
-
-/* ===== GLOBAL DESIGN ===== */
-
-body{
-margin:0;
-font-family:'Tajawal',sans-serif;
-background:linear-gradient(135deg,#0f172a,#1e3a8a);
-color:white;
-overflow-x:hidden;
-}
-
-/* glowing background lines */
-body::before{
-content:"";
-position:fixed;
-width:200%;
-height:200%;
-background:
-linear-gradient(90deg,transparent 48%,rgba(255,255,255,.05) 50%,transparent 52%);
-background-size:60px 60px;
-animation:moveBg 20s linear infinite;
-z-index:-1;
-}
-
-@keyframes moveBg{
-from{transform:translateY(0)}
-to{transform:translateY(-60px)}
-}
-
-/* ===== HERO ===== */
-
-.hero{
-text-align:center;
-padding:40px 20px;
-background:linear-gradient(135deg,#2563eb,#9333ea);
-box-shadow:0 10px 30px rgba(0,0,0,.4);
-}
-
-.hero img{width:110px}
-
-.hero h1{
-margin:10px 0;
-font-size:32px;
-font-weight:900;
-}
-
-/* ===== NAV ===== */
-
-nav{
-display:flex;
-flex-wrap:wrap;
-padding:10px;
-justify-content:center;
-}
-
-nav button{
-background:rgba(255,255,255,.1);
-border:none;
-color:white;
-padding:12px 18px;
-margin:5px;
-border-radius:12px;
-cursor:pointer;
-transition:.3s;
-backdrop-filter:blur(10px);
-}
-
-nav button:hover{
-background:#2563eb;
-transform:translateY(-3px);
-}
-
-/* ===== SECTIONS ===== */
-
-.section{
-display:none;
-padding:20px;
-animation:fade .4s;
-}
-
-.active{display:block}
-
-@keyframes fade{
-from{opacity:0;transform:translateY(15px)}
-to{opacity:1}
-}
-
-/* ===== CARDS ===== */
-
-.card{
-background:rgba(255,255,255,.08);
-backdrop-filter:blur(12px);
-border-radius:18px;
-padding:15px;
-margin-bottom:15px;
-box-shadow:0 10px 25px rgba(0,0,0,.3);
-}
-
-/* ===== PLAYERS ===== */
-
-.player{
-display:inline-block;
-text-align:center;
-margin:8px;
-cursor:pointer;
-transition:.3s;
-}
-
-.player:hover{transform:scale(1.1)}
-
-.player img{
-width:70px;
-height:70px;
-border-radius:50%;
-border:3px solid #60a5fa;
-object-fit:cover;
-}
-
-/* ===== MODAL ===== */
-
-.modal{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#000a;
-display:none;
-overflow:auto;
-z-index:999;
-}
-
-.modalBox{
-background:#020617;
-margin:40px auto;
-padding:20px;
-border-radius:20px;
-max-width:850px;
-max-height:90vh;
-overflow:auto;
-}
-
-.close{
-font-size:30px;
-cursor:pointer;
-float:left;
-}
-
-/* ===== LOGIN ===== */
-
-#loginBox{
-max-width:400px;
-margin:100px auto;
-}
-
-input{
-width:100%;
-padding:10px;
-margin:8px 0;
-border-radius:10px;
-border:none;
-}
-
-button.login{
-width:100%;
-background:#2563eb;
-color:white;
-padding:12px;
-border:none;
-border-radius:10px;
-cursor:pointer;
-}
-
-/* ===== ADMIN ===== */
-
-.admin{display:none}
-
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>نادي التوحيد</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="hero">
-<img src="logo.png">
-<h1>TAWHID FC Ultimate</h1>
-</div>
+<header class="hero">
+<img src="images/logo.png" class="logo">
+<h1>TAWHID CLUB</h1>
+<p>Ultimate Team System</p>
+</header>
 
 <nav>
 <button onclick="show('home')">الرئيسية</button>
-<button onclick="show('team')">الفريق</button>
+<button onclick="show('team')">اللاعبين</button>
 <button onclick="show('awards')">الجوائز</button>
 <button onclick="show('admin')">Admin</button>
 </nav>
 
-<div id="home" class="section active"></div>
-<div id="team" class="section"></div>
-<div id="awards" class="section"></div>
+<!-- HOME -->
+<section id="home" class="section active">
+<h2>مرحبا في نادي التوحيد</h2>
+<p>نظام إحصائيات ذكي مثل FIFA Ultimate Team</p>
+</section>
 
-<!-- LOGIN -->
-<div id="admin" class="section">
-<div id="loginBox" class="card">
-<h2>تسجيل الدخول</h2>
-<input id="user" placeholder="Username">
+<!-- TEAM -->
+<section id="team" class="section">
+<h2>الفريق</h2>
+<div id="playersContainer" class="grid"></div>
+</section>
+
+<!-- AWARDS -->
+<section id="awards" class="section">
+<h2>جوائز الشهر</h2>
+<div id="awardsBox"></div>
+</section>
+
+<!-- ADMIN -->
+<section id="admin" class="section">
+<h2>تسجيل دخول الأدمن</h2>
+
+<input id="user" placeholder="User">
 <input id="pass" type="password" placeholder="Password">
-<button class="login" onclick="login()">Login</button>
-</div>
+<button onclick="login()">Login</button>
 
-<div id="adminPanel" class="admin card">
-<h2>إضافة لاعب</h2>
+<div id="panel" style="display:none">
+<h3>إضافة لاعب</h3>
+
 <input id="pname" placeholder="اسم اللاعب">
-<input id="pphoto" placeholder="رابط صورة اللاعب">
-<select id="ppos">
-<option>Attack</option>
-<option>Midfield</option>
-</select>
-<button class="login" onclick="addPlayer()">إضافة</button>
+<input id="pphoto" placeholder="اسم الصورة">
+<input id="ppos" placeholder="المركز">
+
+<button onclick="addPlayer()">إضافة</button>
 </div>
-</div>
+</section>
 
-<div class="modal" id="modal">
-<div class="modalBox" id="modalBox"></div>
-</div>
-
-<script>
-
-/* ===== LOGIN SYSTEM ===== */
-
-function login(){
-if(user.value==="TAWHID" && pass.value==="2"){
-loginBox.style.display="none";
-adminPanel.style.display="block";
-}
-else alert("بيانات خاطئة");
-}
-
-/* ===== DATA ===== */
-
-let players=JSON.parse(localStorage.getItem("players"))||[
-{name:"H7modi77",photo:"h7.jpg",pos:"Midfield"},
-{name:"Almousa3M",photo:"a.jpg",pos:"Attack"}
-];
-
-/* ===== ADD PLAYER ===== */
-
-function addPlayer(){
-players.push({
-name:pname.value,
-photo:pphoto.value,
-pos:ppos.value
-});
-localStorage.setItem("players",JSON.stringify(players));
-renderTeam();
-alert("تمت الإضافة");
-}
-
-/* ===== RENDER TEAM ===== */
-
-function renderTeam(){
-team.innerHTML="";
-players.forEach(p=>{
-team.innerHTML+=`
-<div class="player" onclick="openPlayer('${p.name}')">
-<img src="${p.photo}">
-<br>${p.name}
-</div>`;
-});
-}
-
-renderTeam();
-
-/* ===== AWARDS FROM CODE ===== */
-
-const awardsData={
-playerMonth:{
-name:"Almousa3M",
-image:"a.jpg"
-},
-goalMonth:{
-name:"H2ssain_28",
-image:"h2.jpg",
-video:"goal.mp4"
-}
-};
-
-awards.innerHTML=`
-<div class="card">
-<h2>🏆 لاعب الشهر</h2>
-<img src="${awardsData.playerMonth.image}">
-<h3>${awardsData.playerMonth.name}</h3>
+<!-- PLAYER MODAL -->
+<div id="modal" class="modal">
+<div class="modalBox" id="modalContent"></div>
 </div>
 
-<div class="card">
-<h2>⚽ هدف الشهر</h2>
-<img src="${awardsData.goalMonth.image}">
-<video controls src="${awardsData.goalMonth.video}"></video>
-<h3>${awardsData.goalMonth.name}</h3>
-</div>
-`;
-
-/* ===== PLAYER MODAL ===== */
-
-function openPlayer(n){
-let p=players.find(x=>x.name==n);
-modal.style.display="block";
-modalBox.innerHTML=`
-<span class="close" onclick="modal.style.display='none'">&times;</span>
-<h2>${p.name}</h2>
-<img src="${p.photo}">
-`;
-}
-
-modal.onclick=e=>{if(e.target===modal)modal.style.display="none"};
-
-/* ===== NAV ===== */
-
-function show(id){
-document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-}
-
-</script>
-
+<script src="app.js"></script>
 </body>
 </html>
