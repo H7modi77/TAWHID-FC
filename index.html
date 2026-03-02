@@ -5,98 +5,97 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TAWHID CLUB</title>
 
-<!-- ===================== CSS داخلي ===================== -->
 <style>
 body{
-margin:0;
-font-family:sans-serif;
-background:#0b0f1a;
-color:white;
-text-align:center;
-padding-bottom:70px;
+    margin:0;
+    font-family:sans-serif;
+    background:#0b0f1a;
+    color:white;
+    text-align:center;
+    padding-bottom:70px;
 }
 body::before{
-content:"";
-position:fixed;
-width:200%;
-height:200%;
-background:linear-gradient(45deg,#001,#112,#001);
-animation:bg 20s linear infinite;
-z-index:-1;
+    content:"";
+    position:fixed;
+    width:200%;
+    height:200%;
+    background:linear-gradient(45deg,#001,#112,#001);
+    animation:bg 20s linear infinite;
+    z-index:-1;
 }
 @keyframes bg{100%{transform:translate(-50%,-50%)}} 
 .hero{
-padding:40px;
-background:linear-gradient(90deg,#0ea5ff,#7c3aed);
+    padding:40px;
+    background:linear-gradient(90deg,#0ea5ff,#7c3aed);
 }
 .logo{width:80px;}
 nav{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:8px;
-padding:10px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px;
+    padding:10px;
 }
 nav button{
-background:#ffffff22;
-border:none;
-color:white;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
+    background:#ffffff22;
+    border:none;
+    color:white;
+    padding:10px;
+    border-radius:10px;
+    cursor:pointer;
 }
 .section{display:none;padding:15px;}
 .active{display:block;}
 .grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
 }
 .card{
-background:#ffffff11;
-backdrop-filter:blur(12px);
-border-radius:15px;
-padding:10px;
-cursor:pointer;
+    background:#ffffff11;
+    backdrop-filter:blur(12px);
+    border-radius:15px;
+    padding:10px;
+    cursor:pointer;
 }
 .card img{
-width:100%;
-border-radius:12px;
+    width:100%;
+    border-radius:12px;
 }
 .modal{
-display:none;
-position:fixed;
-top:0;
-width:100%;
-height:100%;
-background:#000a;
+    display:none;
+    position:fixed;
+    top:0;
+    width:100%;
+    height:100%;
+    background:#000a;
 }
 .modalBox{
-background:#111;
-margin:20% auto;
-width:90%;
-padding:20px;
-border-radius:15px;
+    background:#111;
+    margin:20% auto;
+    width:90%;
+    padding:20px;
+    border-radius:15px;
 }
 table{
-width:100%;
-border-collapse:collapse;
-margin-top:10px;
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
 }
 td,th{
-border:1px solid #ffffff22;
-padding:6px;
-font-size:12px;
+    border:1px solid #ffffff22;
+    padding:6px;
+    font-size:12px;
 }
 .sponsors{
-position:fixed;
-bottom:0;
-width:100%;
-background:#000c;
-display:flex;
-justify-content:center;
-gap:20px;
-padding:8px;
+    position:fixed;
+    bottom:0;
+    width:100%;
+    background:#000c;
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    padding:8px;
 }
 .sponsors img{height:40px;}
 video{width:100%;border-radius:10px;}
@@ -106,160 +105,201 @@ video{width:100%;border-radius:10px;}
 </head>
 <body>
 
-<!-- ========== HERO ========== -->
+<!-- HERO -->
 <header class="hero">
-<img src="logo.png" class="logo">
-<h1>TAWHID CLUB</h1>
-<p>Ultimate Team System</p>
+    <img src="logo.png" class="logo">
+    <h1>TAWHID CLUB</h1>
+    <p>Ultimate Team System</p>
 </header>
 
-<!-- ========== NAV ========== -->
+<!-- NAV -->
 <nav>
-<button onclick="show('home')">الرئيسية</button>
-<button onclick="show('team')">اللاعبين</button>
-<button onclick="show('awards')">الجوائز</button>
-<button onclick="show('stats')">الإحصائيات</button>
-<button onclick="show('admin')">Admin</button>
+    <button onclick="show('home')">الرئيسية</button>
+    <button onclick="show('team')">اللاعبين</button>
+    <button onclick="show('awards')">الجوائز</button>
+    <button onclick="show('stats')">الإحصائيات</button>
+    <button onclick="show('admin')">Admin</button>
 </nav>
 
-<!-- ========== HOME ========== -->
+<!-- HOME -->
 <section id="home" class="section active">
-<h2>آخر الأخبار</h2>
-<div id="newsBox" class="grid"></div>
+    <h2>آخر الأخبار</h2>
+    <div id="newsBox" class="grid"></div>
 </section>
 
-<!-- ========== TEAM ========== -->
+<!-- TEAM -->
 <section id="team" class="section">
-<h2>الفريق</h2>
-<div id="playersContainer" class="grid"></div>
+    <h2>الفريق</h2>
+    <div id="playersContainer" class="grid"></div>
 </section>
 
-<!-- ========== AWARDS ========== -->
+<!-- AWARDS -->
 <section id="awards" class="section">
-<h2>جوائز الشهر</h2>
-<div id="awardsBox" class="grid"></div>
+    <h2>جوائز الشهر</h2>
+    <div id="awardsBox" class="grid"></div>
 </section>
 
-<!-- ========== STATS ========== -->
+<!-- STATS -->
 <section id="stats" class="section">
-<h2>إحصائيات اللاعبين</h2>
-<div id="statsBox"></div>
+    <h2>إحصائيات اللاعبين</h2>
+    <div id="statsBox"></div>
 </section>
 
-<!-- ========== ADMIN ========== -->
+<!-- ADMIN -->
 <section id="admin" class="section">
-<input id="user" placeholder="User">
-<input id="pass" type="password" placeholder="Password">
-<button onclick="login()">Login</button>
-<div id="panel" style="display:none">
-<input id="pname" placeholder="اسم اللاعب">
-<input id="pphoto" placeholder="الصورة">
-<input id="ppos" placeholder="المركز">
-<button onclick="addPlayer()">إضافة لاعب</button>
-</div>
+    <input id="user" placeholder="User">
+    <input id="pass" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <div id="panel" style="display:none">
+        <input id="pname" placeholder="اسم اللاعب">
+        <input id="pphoto" placeholder="الصورة">
+        <input id="ppos" placeholder="المركز">
+        <button onclick="addPlayer()">إضافة لاعب</button>
+    </div>
 </section>
 
-<!-- ========== PLAYER MODAL ========== -->
+<!-- MODAL -->
 <div id="modal" class="modal">
-<div id="modalContent" class="modalBox"></div>
+    <div id="modalContent" class="modalBox"></div>
 </div>
 
-<!-- ========== SPONSORS ========== -->
+<!-- SPONSORS -->
 <footer class="sponsors">
-<img src="sponsor1.png">
-<img src="sponsor2.png">
+    <img src="sponsor1.png">
+    <img src="sponsor2.png">
 </footer>
 
-<!-- ===================== JS داخلي ===================== -->
 <script>
-// ========= SPA =========
+// SPA
 function show(id){
-document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
-document.getElementById(id).classList.add("active");
+    document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
 }
 
-// ========= PLAYERS =========
+// PLAYERS
 let players=[
-{name:"Basabeso2",photo:"basabeso2.png",pos:"Defender"}
-{name:"M---_11_11",photo:"m1111.png",pos:"Midfield"},
-{name:"H7modi77",photo:"h7modi77.png",pos:"Midfield/Attack"},
-{name:"Almousa3M",photo:"almousa3m.png",pos:"Attack"},
-{name:"H2ssain_28",photo:"h2ssain28.png",pos:"Attack"},
-{name:"Yo0ousef25",photo:"yo0ousef25.png",pos:"Attack"},
+    {name:"Basabeso2",photo:"basabeso2.png",pos:"Defender"},
+    {name:"M---_11_11",photo:"m1111.png",pos:"Midfield"},
+    {name:"H7modi77",photo:"h7modi77.png",pos:"Midfield/Attack"},
+    {name:"Almousa3M",photo:"almousa3m.png",pos:"Attack"},
+    {name:"H2ssain_28",photo:"h2ssain28.png",pos:"Attack"},
+    {name:"Yo0ousef25",photo:"yo0ousef25.png",pos:"Attack"}
 ];
 
-// ========= ALL STATS =========
+// ALL STATS
 const stats={
 Basabeso2:{October:{m:48,g:36,a:17,p:84,s:40,w:62},November:{m:75,g:54,a:22,p:86,s:39,w:57},January:{m:91,g:84,a:43,p:85,s:41,w:49}},
-"M-_-_-_11_11":{October:{m:68,g:38,a:43,p:81,s:27,w:57},November:{m:86,g:48,a:58,p:74,s:29,w:54},January:{m:158,g:112,a:113,p:75,s:34,w:46}},
+"M---_11_11":{October:{m:68,g:38,a:43,p:81,s:27,w:57},November:{m:86,g:48,a:58,p:74,s:29,w:54},January:{m:158,g:112,a:113,p:75,s:34,w:46}},
 H7modi77:{October:{m:45,g:14,a:36,p:79,s:33,w:62},November:{m:77,g:52,a:54,p:76,s:43,w:51},January:{m:116,g:44,a:85,p:75,s:38,w:47}},
 Almousa3M:{October:{m:58,g:65,a:61,p:78,s:33,w:60},November:{m:57,g:67,a:72,p:77,s:33,w:53},January:{m:126,g:161,a:146,p:77,s:40,w:49}},
 H2ssain_28:{October:{m:44,g:36,a:15,p:76,s:23,w:56},November:{m:64,g:59,a:48,p:77,s:25,w:51},January:{m:146,g:144,a:72,p:73,s:28,w:44}},
 Yo0ousef25:{October:{m:28,g:23,a:5,p:78,s:46,w:67},November:{m:26,g:21,a:8,p:78,s:52,w:58},January:{m:99,g:57,a:17,p:74,s:47,w:43}}
 };
 
-// ========= AI =========
+// AI
 function calcAI(d){return Math.round((d.g*2.1)+(d.a*2.1)+(d.p*1.5)+(d.s*2.5)+(d.w*1.5));}
 
-// ========= TOTAL =========
+// TOTAL STATS
 function totalStats(name){
-let months=stats[name];
-let t={m:0,g:0,a:0,p:0,s:0,w:0}; let c=0;
-for(let m in months){let d=months[m]; t.m+=d.m; t.g+=d.g; t.a+=d.a; t.p+=d.p; t.s+=d.s; t.w+=d.w; c++;}
-t.p=Math.round(t.p/c); t.s=Math.round(t.s/c); t.w=Math.round(t.w/c); return t;
+    let months=stats[name];
+    let t={m:0,g:0,a:0,p:0,s:0,w:0}; let c=0;
+    for(let m in months){let d=months[m]; t.m+=d.m; t.g+=d.g; t.a+=d.a; t.p+=d.p; t.s+=d.s; t.w+=d.w; c++;}
+    t.p=Math.round(t.p/c); t.s=Math.round(t.s/c); t.w=Math.round(t.w/c); 
+    return t;
 }
 
-// ========= TEAM =========
+// RENDER TEAM
 function renderTeam(){
-playersContainer.innerHTML="";
-players.forEach(p=>{
-let ai=calcAI(totalStats(p.name));
-playersContainer.innerHTML+=`<div class="card" onclick="openPlayer('${p.name}')"><img src="${p.photo}"><h3>${p.name}</h3><p>${p.pos}</p><h2>AI ${ai}</h2></div>`;
-});
+    playersContainer.innerHTML="";
+    players.forEach(p=>{
+        let ai=calcAI(totalStats(p.name));
+        playersContainer.innerHTML+=
+        `<div class="card" onclick="openPlayer('${p.name}')">
+            <img src="${p.photo}">
+            <h3>${p.name}</h3>
+            <p>${p.pos}</p>
+            <h2>AI ${ai}</h2>
+        </div>`;
+    });
 }
 renderTeam();
 
-// ========= PLAYER MODAL =========
+// PLAYER MODAL
 function openPlayer(name){
-let t=totalStats(name); let ai=calcAI(t);
-modal.style.display="block";
-modalContent.innerHTML=`<h2>${name}</h2><p>Goals ${t.g}</p><p>Assist ${t.a}</p><p>Pass ${t.p}%</p><p>Shot ${t.s}%</p><p>Win ${t.w}%</p><h1>AI ${ai}</h1>`;
+    let t=totalStats(name); 
+    let ai=calcAI(t);
+    modal.style.display="block";
+    modalContent.innerHTML=
+    `<h2>${name}</h2>
+    <p>Goals ${t.g}</p>
+    <p>Assist ${t.a}</p>
+    <p>Pass ${t.p}%</p>
+    <p>Shot ${t.s}%</p>
+    <p>Win ${t.w}%</p>
+    <h1>AI ${ai}</h1>`;
 }
 modal.onclick=e=>{if(e.target.id==="modal") modal.style.display="none";};
 
-// ========= AWARDS =========
-const awards={player:{name:"Almousa3M",img:"award-player.png",month:"January"},goal:{player:"Yo0ousef25",img:"award-goal.png",video:"goal.mp4"}};
-awardsBox.innerHTML=`<div class="card"><h3>🏆 لاعب الشهر</h3><img src="${awards.player.img}"><h2>${awards.player.name}</h2><p>${awards.player.month}</p></div>
-<div class="card"><h3>⚽ هدف الشهر</h3><img src="${awards.goal.img}"><p>${awards.goal.player}</p><video controls><source src="${awards.goal.video}"></video></div>`;
+// AWARDS
+const awards={
+    player:{name:"Almousa3M",img:"award-player.png",month:"January"},
+    goal:{player:"Yo0ousef25",img:"award-goal.png",video:"goal.mp4"}
+};
+awardsBox.innerHTML=
+`<div class="card">
+    <h3>🏆 لاعب الشهر</h3>
+    <img src="${awards.player.img}">
+    <h2>${awards.player.name}</h2>
+    <p>${awards.player.month}</p>
+</div>
+<div class="card">
+    <h3>⚽ هدف الشهر</h3>
+    <img src="${awards.goal.img}">
+    <p>${awards.goal.player}</p>
+    <video controls><source src="${awards.goal.video}"></video>
+</div>`;
 
-// ========= NEWS =========
-const news=[{title:"اجتماع لأعضاء النادي حول ، قضية عدم اللعب بسبب غياب لاعب ",img:"news1.png",date:"2026-02-25"},{title:"مقابلة اللاعب yo0ousef25 مع قناة skysports ",img:"news2.png",date:"2026-02-27"}];
-news.forEach(n=>{newsBox.innerHTML+=`<div class="card newsCard"><img src="${n.img}"><h3>${n.title}</h3><p class="newsDate">${n.date}</p></div>`;});
+// NEWS
+const news=[
+    {title:"اجتماع لأعضاء النادي حول قضية عدم اللعب بسبب غياب لاعب",img:"news1.png",date:"2026-02-25"},
+    {title:"مقابلة اللاعب yo0ousef25 مع قناة skysports",img:"news2.png",date:"2026-02-27"}
+];
+news.forEach(n=>{
+    newsBox.innerHTML+=
+    `<div class="card newsCard">
+        <img src="${n.img}">
+        <h3>${n.title}</h3>
+        <p class="newsDate">${n.date}</p>
+    </div>`;
+});
 
-// ========= STATS TABLE =========
+// STATS TABLE
 for(let name in stats){
-let months=stats[name]; 
-let html=`<div class="card"><h3>${name}</h3><table><tr><th>Month</th><th>M</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>W%</th></tr>`;
-for(let m in months){
-let d=months[m];
-html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.s}</td><td>${d.w}</td></tr>`;
-}
-let t=totalStats(name);
-html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.s}</th><th>${t.w}</th></tr></table></div>`;
-statsBox.innerHTML+=html;
+    let months=stats[name]; 
+    let html=`<div class="card"><h3>${name}</h3><table>
+    <tr><th>Month</th><th>M</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>W%</th></tr>`;
+    for(let m in months){
+        let d=months[m];
+        html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.s}</td><td>${d.w}</td></tr>`;
+    }
+    let t=totalStats(name);
+    html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.s}</th><th>${t.w}</th></tr></table></div>`;
+    statsBox.innerHTML+=html;
 }
 
-// ========= ADMIN =========
+// ADMIN
 function login(){
-if(user.value==="TAWHID" && pass.value==="2"){panel.style.display="block";alert("تم تسجيل الدخول");}
-else alert("بيانات خاطئة");
+    if(user.value==="TAWHID" && pass.value==="2"){
+        panel.style.display="block";
+        alert("تم تسجيل الدخول");
+    } else alert("بيانات خاطئة");
 }
 
 function addPlayer(){
-players.push({name:pname.value,photo:pphoto.value,pos:ppos.value});
-renderTeam();
-pname.value="";pphoto.value="";ppos.value="";
-alert("تمت إضافة اللاعب");
+    players.push({name:pname.value,photo:pphoto.value,pos:ppos.value});
+    renderTeam();
+    pname.value="";pphoto.value="";ppos.value="";
+    alert("تمت إضافة اللاعب");
 }
 </script>
 
