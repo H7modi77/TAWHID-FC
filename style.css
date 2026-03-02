@@ -1,68 +1,52 @@
 body{
-font-family:sans-serif;
 margin:0;
+font-family:sans-serif;
 background:#0b0f1a;
 color:white;
 text-align:center;
-overflow-x:hidden;
+padding-bottom:70px;
 }
 
-/* خلفية متحركة */
 body::before{
 content:"";
 position:fixed;
 width:200%;
 height:200%;
-background:linear-gradient(45deg,#001,#113,#001);
-animation:moveBg 20s linear infinite;
+background:linear-gradient(45deg,#001,#112,#001);
+animation:bg 20s linear infinite;
 z-index:-1;
 }
 
-@keyframes moveBg{
-0%{transform:translate(0,0)}
+@keyframes bg{
 100%{transform:translate(-50%,-50%)}
 }
 
-/* Hero */
 .hero{
-padding:40px 10px;
+padding:40px;
 background:linear-gradient(90deg,#0ea5ff,#7c3aed);
 }
 
-.logo{
-width:80px;
-}
+.logo{width:80px;}
 
-/* Navigation */
 nav{
 display:flex;
-justify-content:space-around;
+flex-wrap:wrap;
+justify-content:center;
+gap:8px;
 padding:10px;
 }
 
 nav button{
 background:#ffffff22;
 border:none;
-padding:10px;
 color:white;
+padding:10px;
 border-radius:10px;
 }
 
-nav button:hover{
-transform:translateY(-3px);
-}
+.section{display:none;padding:15px;}
+.active{display:block;}
 
-/* Sections */
-.section{
-display:none;
-padding:20px;
-}
-
-.active{
-display:block;
-}
-
-/* Glass cards */
 .grid{
 display:grid;
 grid-template-columns:repeat(2,1fr);
@@ -76,20 +60,51 @@ border-radius:15px;
 padding:10px;
 }
 
-/* Modal */
+.card img{
+width:100%;
+border-radius:12px;
+}
+
 .modal{
 display:none;
 position:fixed;
+top:0;
 width:100%;
 height:100%;
 background:#000a;
-top:0;
 }
 
 .modalBox{
 background:#111;
 margin:20% auto;
-padding:20px;
 width:90%;
+padding:20px;
 border-radius:15px;
 }
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+td,th{
+border:1px solid #ffffff22;
+padding:6px;
+font-size:12px;
+}
+
+.sponsors{
+position:fixed;
+bottom:0;
+width:100%;
+background:#000c;
+display:flex;
+justify-content:center;
+gap:20px;
+padding:8px;
+}
+
+.sponsors img{height:40px;}
+
+video{width:100%;border-radius:10px;}
