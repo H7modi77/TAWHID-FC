@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نادي التوحيد</title>
+<title>TAWHID CLUB</title>
+
+<!-- Chart.js for AI graphs -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
 body{
     margin:0;
@@ -56,7 +60,7 @@ nav button{
     border-radius:15px;
     padding:10px;
     cursor:pointer;
-    position:relative;
+    text-align:center;
 }
 .card img{
     width:100%;
@@ -69,10 +73,12 @@ nav button{
     width:100%;
     height:100%;
     background:#000a;
+    overflow:auto;
+    padding-top:50px;
 }
 .modalBox{
     background:#111;
-    margin:10% auto;
+    margin:20px auto;
     width:90%;
     padding:20px;
     border-radius:15px;
@@ -101,72 +107,84 @@ td,th{
 video{width:100%;border-radius:10px;}
 .newsCard img{width:100%;border-radius:10px;}
 .newsDate{font-size:12px;opacity:.7;}
-.likeBtn{cursor:pointer;color:#fff;margin-right:10px;}
-.commentsBox{margin-top:5px;text-align:right;font-size:12px;}
-.commentInput{width:80%;padding:5px;margin-top:5px;}
-.rankingGold{border:2px solid gold;}
-.rankingSilver{border:2px solid silver;}
-.rankingBronze{border:2px solid #cd7f32;}
+.commentBox{margin-top:10px;text-align:left;}
+.commentBox input{width:70%;padding:5px;margin-right:5px;}
+.commentBox button{padding:5px;}
 </style>
 </head>
 <body>
 
+<!-- HERO -->
 <header class="hero">
     <img src="logo.png" class="logo">
-    <h1>نادي التوحيد</h1>
-    <p>نظام الفريق الشامل</p>
+    <h1>TAWHID CLUB</h1>
+    <p>Ultimate Team System</p>
 </header>
 
+<!-- NAV -->
 <nav>
     <button onclick="show('home')">الرئيسية</button>
     <button onclick="show('team')">اللاعبين</button>
     <button onclick="show('awards')">الجوائز</button>
     <button onclick="show('stats')">الإحصائيات</button>
-    <button onclick="show('ranking')">الترتيب</button>
     <button onclick="show('admin')">Admin</button>
 </nav>
 
+<!-- HOME -->
 <section id="home" class="section active">
     <h2>آخر الأخبار</h2>
     <div id="newsBox" class="grid"></div>
 </section>
 
+<!-- TEAM -->
 <section id="team" class="section">
     <h2>الفريق</h2>
+    <div style="margin-bottom:10px;">
+        <label>فلترة حسب المركز:</label>
+        <select id="filterPos" onchange="renderTeam()">
+            <option value="All">الكل</option>
+            <option value="Defender">Defender</option>
+            <option value="Midfield">Midfield</option>
+            <option value="Attack">Attack</option>
+        </select>
+        <button onclick="sortPlayers('ai')">ترتيب حسب AI</button>
+        <button onclick="sortPlayers('g')">ترتيب حسب Goals</button>
+        <button onclick="sortPlayers('best')">ترتيب حسب Best</button>
+    </div>
     <div id="playersContainer" class="grid"></div>
 </section>
 
+<!-- AWARDS -->
 <section id="awards" class="section">
     <h2>جوائز الشهر</h2>
     <div id="awardsBox" class="grid"></div>
 </section>
 
+<!-- STATS -->
 <section id="stats" class="section">
     <h2>إحصائيات اللاعبين</h2>
     <div id="statsBox"></div>
 </section>
 
-<section id="ranking" class="section">
-    <h2>ترتيب اللاعبين</h2>
-    <div id="rankingBox" class="grid"></div>
-</section>
-
+<!-- ADMIN -->
 <section id="admin" class="section">
     <input id="user" placeholder="User">
     <input id="pass" type="password" placeholder="Password">
     <button onclick="login()">Login</button>
     <div id="panel" style="display:none">
         <input id="pname" placeholder="اسم اللاعب">
-        <input id="pphoto" placeholder="رابط الصورة">
+        <input id="pphoto" placeholder="الصورة">
         <input id="ppos" placeholder="المركز">
         <button onclick="addPlayer()">إضافة لاعب</button>
     </div>
 </section>
 
+<!-- MODAL -->
 <div id="modal" class="modal">
     <div id="modalContent" class="modalBox"></div>
 </div>
 
+<!-- SPONSORS -->
 <footer class="sponsors">
     <img src="sponsor1.png">
     <img src="sponsor2.png">
@@ -179,21 +197,27 @@ function show(id){
     document.getElementById(id).classList.add("active");
 }
 
-// DATA
+// PLAYERS
 let players=[
-    {name:"Basabeso2",photo:"basabeso2.png",pos:"Defender",likes:0,comments:[]},
-    {name:"M---_11_11",photo:"m1111.png",pos:"Midfield",likes:0,comments:[]},
-    {name:"H7modi77",photo:"h7modi77.png",pos:"Midfield/Attack",likes:0,comments:[]},
-    {name:"Almousa3M",photo:"almousa3m.png",pos:"Attack",likes:0,comments:[]},
-    {name:"H2ssain_28",photo:"h2ssain28.png",pos:"Attack",likes:0,comments:[]},
-    {name:"Yo0ousef25",photo:"yo0ousef25.png",pos:"Attack",likes:0,comments:[]}
+    {name:"Basabeso2",photo:"basabeso2.png",pos:"Defender"},
+    {name:"M---_11_11",photo:"m1111.png",pos:"Midfield"},
+    {name:"H7modi77",photo:"h7modi77.png",pos:"Midfield/Attack"},
+    {name:"Almousa3M",photo:"almousa3m.png",pos:"Attack"},
+    {name:"H2ssain_28",photo:"h2ssain28.png",pos:"Attack"},
+    {name:"Yo0ousef25",photo:"yo0ousef25.png",pos:"Attack"}
 ];
 
+// STATS
 const stats={
-// ... (نفس البيانات كما هي) 
+Basabeso2:{February:{m:24,g:2,a:3,cs:4,p:85,best:3,w:50}},
+"M---_11_11":{October:{m:68,g:38,a:43,p:81,best:9,w:57},November:{m:86,g:48,a:58,p:74,best:10,w:54},January:{m:158,g:112,a:113,p:75,best:11,w:46},February:{m:40,g:24,a:19,p:75,best:8,w:46}},
+H7modi77:{October:{m:45,g:14,a:36,p:79,s:37,best:2,w:62},November:{m:77,g:52,a:54,p:76,s:40,best:9,w:51},January:{m:116,g:44,a:85,p:75,s:39,best:19,w:47},February:{m:44,g:20,a:26,p:75,s:37,best:9,w:47}},
+Almousa3M:{October:{m:58,g:65,a:61,p:78,s:33,best:18,w:60},November:{m:57,g:67,a:72,p:77,s:33,best:15,w:53},January:{m:126,g:161,a:146,p:77,s:40,best:24,w:49},February:{m:42,g:48,a:41,p:77,s:39,best:9,w:49}},
+H2ssain_28:{October:{m:44,g:36,a:15,p:76,s:23,best:1,w:56},November:{m:64,g:59,a:48,p:77,s:25,best:8,w:51},January:{m:146,g:144,a:72,p:73,s:28,best:9,w:44},February:{m:31,g:31,a:55,p:73,s:28,best:1,w:44}},
+Yo0ousef25:{October:{m:28,g:23,a:5,p:78,s:46,best:0,w:67},November:{m:26,g:21,a:8,p:78,s:52,best:3,w:58},January:{m:99,g:57,a:17,p:74,s:47,best:0,w:43},February:{m:18,g:11,a:2,p:74,s:47,best:1,w:43}}
 };
 
-// AI CALCULATION
+// AI CALC
 function calcAI(d,pos){
     let ai=(d.g*2.1)+(d.a*2.1)+(d.p*1.5)+(d.w*1.5);
     if(pos=="Attack") ai+=d.s*2.5;
@@ -201,75 +225,151 @@ function calcAI(d,pos){
     return Math.round(ai);
 }
 
+// TOTAL STATS BY POSITION
 function totalStatsByPosition(name,pos){
     let months=stats[name];
     let t={m:0,g:0,a:0,p:0,s:0,w:0,cs:0,best:0};
-    let c=0;
     for(let m in months){
         let d=months[m];
-        t.m+=d.m; t.g+=d.g; t.a+=d.a; t.p+=d.p; t.s+=d.s||0; t.w+=d.w; t.cs+=d.cs||0; t.best+=d.best||0; c++;
+        t.m+=d.m;t.g+=d.g;t.a+=d.a;t.p+=d.p;t.s+=d.s||0;t.w+=d.w;t.cs+=d.cs||0;t.best+=d.best||0;
     }
-    t.p=Math.round(t.p/c); t.s=Math.round(t.s/c); t.w=Math.round(t.w/c); t.cs=Math.round(t.cs/c);
     return t;
 }
 
-// RENDER TEAM
+// RENDER TEAM with FILTER & SORT
+let currentSort="none";
+function sortPlayers(by){
+    currentSort=by;
+    renderTeam();
+}
 function renderTeam(){
-    playersContainer.innerHTML="";
-    players.forEach(p=>{
+    let container=document.getElementById("playersContainer");
+    let filter=document.getElementById("filterPos").value;
+    let filtered=players.filter(p=>{
+        if(filter=="All") return true;
+        if(p.pos.includes(filter)) return true;
+        return false;
+    });
+    // sort
+    if(currentSort!="none"){
+        filtered.sort((a,b)=>{
+            let posA=a.pos.includes("Defender")?"Defender":a.pos.includes("Midfield")?"Midfield":"Attack";
+            let posB=b.pos.includes("Defender")?"Defender":b.pos.includes("Midfield")?"Midfield":"Attack";
+            let statsA=totalStatsByPosition(a.name,posA);
+            let statsB=totalStatsByPosition(b.name,posB);
+            if(currentSort=="ai") return calcAI(statsB,posB)-calcAI(statsA,posA);
+            if(currentSort=="g") return statsB.g-statsA.g;
+            if(currentSort=="best") return statsB.best-statsA.best;
+        });
+    }
+    container.innerHTML="";
+    filtered.forEach(p=>{
         let pos = p.pos.includes("Defender")?"Defender":p.pos.includes("Midfield")?"Midfield":"Attack";
         let ai = calcAI(totalStatsByPosition(p.name,pos),pos);
-        playersContainer.innerHTML+=`
-        <div class="card" onclick="openPlayer('${p.name}')">
-            <img src="${p.photo}">
+        container.innerHTML+=
+        `<div class="card" onclick="openPlayer('${p.name}')">
+            <img src="${p.photo}" width="50">
             <h3>${p.name}</h3>
             <p>${p.pos}</p>
             <h2>AI ${ai}</h2>
-            <div>
-                <span class="likeBtn" onclick="likePlayer(event,'${p.name}')">❤️ ${p.likes}</span>
-            </div>
-            <div class="commentsBox">
-                ${p.comments.map(c=>`<p>• ${c}</p>`).join('')}
-                <input class="commentInput" placeholder="أضف تعليق" onkeydown="addComment(event,'${p.name}')">
-            </div>
         </div>`;
     });
 }
 renderTeam();
 
-// LIKE + COMMENT
-function likePlayer(e,name){
-    e.stopPropagation();
-    let p = players.find(pl=>pl.name===name);
-    p.likes++;
-    renderTeam();
-}
-function addComment(e,name){
-    if(e.key==='Enter'){
-        let p = players.find(pl=>pl.name===name);
-        p.comments.push(e.target.value);
-        e.target.value='';
-        renderTeam();
-    }
-}
-
-// PLAYER MODAL
+// PLAYER MODAL with Chart & Comments
+let playerComments={};
 function openPlayer(name){
     let player = players.find(p=>p.name===name);
     let pos = player.pos.includes("Defender")?"Defender":player.pos.includes("Midfield")?"Midfield":"Attack";
-    let t = totalStatsByPosition(name,pos);
-    let ai = calcAI(t,pos);
+    let months=stats[name];
+    let labels=Object.keys(months);
+    let aiValues=labels.map(m=>calcAI(months[m],pos));
     modal.style.display="block";
     let html=`<h2>${name}</h2>`;
-    html+=`<p>Matches: ${t.m}</p><p>Goals: ${t.g}</p><p>Assists: ${t.a}</p>`;
+    let t=totalStatsByPosition(name,pos);
+    html+=`<p>Matches: ${t.m} | Goals: ${t.g} | Assists: ${t.a}</p>`;
     if(pos=="Defender") html+=`<p>Clean Sheet: ${t.cs}</p>`;
     html+=`<p>Pass: ${t.p}%</p>`;
     if(pos=="Attack") html+=`<p>Shot: ${t.s}%</p>`;
-    html+=`<p>Best: ${t.best}</p><p>Win: ${t.w}%</p>`;
-    html+=`<h1>AI ${ai}</h1>`;
+    html+=`<p>Best: ${t.best} | Win: ${t.w}%</p>`;
+    html+=`<h3>AI: ${calcAI(t,pos)}</h3>`;
+    html+=`<canvas id="aiChart" height="150"></canvas>`;
+    // Comments
+    if(!playerComments[name]) playerComments[name]=[];
+    html+=`<div class="commentBox">
+        ${playerComments[name].map(c=>`<p>💬 ${c}</p>`).join("")}
+        <input id="cInput" placeholder="تعليق...">
+        <button onclick="addComment('${name}')">إضافة</button>
+    </div>`;
     modalContent.innerHTML=html;
+    new Chart(document.getElementById("aiChart").getContext("2d"),{
+        type:'bar',
+        data:{
+            labels:labels,
+            datasets:[{label:'AI',data:aiValues,backgroundColor:'#0ea5ff'}]
+        },
+        options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+    });
+}
+function addComment(name){
+    let val=document.getElementById("cInput").value;
+    if(val.trim()!=""){
+        playerComments[name].push(val);
+        openPlayer(name);
+    }
 }
 modal.onclick=e=>{if(e.target.id==="modal") modal.style.display="none";};
+
+// NEWS with Comments & Likes
+let news=[
+    {title:"اجتماع لأعضاء النادي حول قضية عدم اللعب بسبب غياب لاعب",img:"news1.png",date:"2026-02-25",likes:0,comments:[]},
+    {title:"مقابلة اللاعب yo0ousef25 مع قناة skysports",img:"news2.png",date:"2026-02-27",likes:0,comments:[]}
+];
+function renderNews(){
+    let box=document.getElementById("newsBox");
+    box.innerHTML="";
+    news.forEach((n,i)=>{
+        box.innerHTML+=
+        `<div class="card newsCard">
+            <img src="${n.img}">
+            <h3>${n.title}</h3>
+            <p class="newsDate">${n.date}</p>
+            <p>👍 ${n.likes}</p>
+            <div class="commentBox">
+                ${n.comments.map(c=>`<p>💬 ${c}</p>`).join("")}
+                <input id="newsInput${i}" placeholder="تعليق...">
+                <button onclick="addNewsComment(${i})">إضافة</button>
+            </div>
+            <button onclick="newsLike(${i})">Like</button>
+        </div>`;
+    });
+}
+function addNewsComment(i){
+    let val=document.getElementById(`newsInput${i}`).value;
+    if(val.trim()!=""){
+        news[i].comments.push(val);
+        renderNews();
+    }
+}
+function newsLike(i){news[i].likes++;renderNews();}
+renderNews();
+
+// AWARDS
+const awards={player:{name:"Almousa3M",img:"award-player.png",month:"Feb"},goal:{player:"H7modi77",img:"award-goal.png",video:"goal.mp4"}};
+awardsBox.innerHTML=
+`<div class="card">
+    <h3> لاعب الشهر</h3>
+    <img src="${awards.player.img}">
+    <h2>${awards.player.name}</h2>
+    <p>${awards.player.month}</p>
+</div>
+<div class="card">
+    <h3> هدف الشهر</h3>
+    <img src="${awards.goal.img}">
+    <p>${awards.goal.player}</p>
+    <video controls><source src="${awards.goal.video}"></video>
+</div>`;
 
 // ADMIN
 function login(){
@@ -279,37 +379,11 @@ function login(){
     } else alert("بيانات خاطئة");
 }
 function addPlayer(){
-    players.push({name:pname.value,photo:pphoto.value,pos:ppos.value,likes:0,comments:[]});
+    players.push({name:pname.value,photo:pphoto.value,pos:ppos.value});
     renderTeam();
     pname.value="";pphoto.value="";ppos.value="";
     alert("تمت إضافة اللاعب");
 }
-
-// RANKING
-function renderRanking(){
-    players.forEach(p=>{
-        let pos = p.pos.includes("Defender")?"Defender":p.pos.includes("Midfield")?"Midfield":"Attack";
-        p.ai = calcAI(totalStatsByPosition(p.name,pos), pos);
-    });
-    let sorted = [...players].sort((a,b)=>b.ai - a.ai);
-    rankingBox.innerHTML="";
-    sorted.forEach((p,index)=>{
-        let className="", icon="";
-        if(index===0){className="rankingGold"; icon="🥇";}
-        else if(index===1){className="rankingSilver"; icon="🥈";}
-        else if(index===2){className="rankingBronze"; icon="🥉";}
-        rankingBox.innerHTML+=`
-        <div class="card ${className}" style="display:flex; align-items:center; gap:10px;">
-            <img src="${p.photo}" style="width:40px; height:40px; border-radius:50%;">
-            <div>
-                <h3>${icon} ${index+1} - ${p.name}</h3>
-                <p>${p.pos}</p>
-                <h2>AI ${p.ai}</h2>
-            </div>
-        </div>`;
-    });
-}
-renderRanking();
 </script>
 
 </body>
