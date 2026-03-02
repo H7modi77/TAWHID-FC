@@ -138,17 +138,22 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function totalStatsByPosition(name,pos){
-        let months=stats[name];
-        let t={m:0,g:0,a:0,p:0,s:0,w:0,cs:0,best:0};
-        let c=0;
-        for(let m in months){
-            let d=months[m];
-            t.m+=d.m;t.g+=d.g;t.a+=d.a;t.p+=d.p;t.s+=d.s||0;t.w+=d.w;t.cs+=d.cs||0;t.best+=d.best||0;
-            c++;
-        }
-        t.p=Math.round(t.p/c); t.s=Math.round(t.s/c); t.w=Math.round(t.w/c); t.cs=Math.round(t.cs/c); t.best=Math.round(t.best/c);
-        return t;
+    let months=stats[name];
+    let t={m:0,g:0,a:0,p:0,s:0,w:0,cs:0,best:0};
+    let c=0;
+    for(let m in months){
+        let d=months[m];
+        t.m+=d.m; t.g+=d.g; t.a+=d.a; t.p+=d.p; t.s+=d.s||0; t.w+=d.w; t.cs+=d.cs||0;
+        t.best += d.best || 0; // جمع بدل المتوسط
+        c++;
     }
+    t.p = Math.round(t.p/c); // Pass يبقى معدل
+    t.s = Math.round(t.s/c); // Shot يبقى معدل
+    t.w = Math.round(t.w/c); // Win يبقى معدل
+    t.cs = Math.round(t.cs/c); // CS يبقى معدل
+    // t.best لا نقسمه، يبقى مجموع
+    return t;
+}
 
     function renderTeam(){
         const container = document.getElementById("playersContainer");
