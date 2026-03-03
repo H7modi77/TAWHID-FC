@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAWHID CLUB | ULTIMATE STATS V6</title>
+    <title>TAWHID CLUB | ELITE STATS V7</title>
     
-    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -26,7 +25,6 @@
             overflow-x: hidden; padding-bottom: 100px;
         }
 
-        /* Controls */
         .top-bar { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; z-index: 1001; }
         .btn-ctrl { background: var(--card); border: 1px solid var(--primary); color: var(--text); padding: 5px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; backdrop-filter: blur(10px); }
 
@@ -61,6 +59,7 @@
         .stat-table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 15px; overflow: hidden; font-size: 13px; margin-top: 15px; }
         .stat-table th, .stat-table td { padding: 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .stat-table th { background: var(--primary); color: #000; }
+        .cs-col { color: #4ade80; font-weight: bold; } /* Color for Clean Sheets */
 
         .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; }
         .rank-gold { border: 2px solid var(--gold) !important; box-shadow: 0 0 20px rgba(255,215,0,0.3); }
@@ -121,7 +120,7 @@
 
         <!-- STATS -->
         <section id="stats" class="section">
-            <h2 class="lang-ar">إحصائيات الموسم كاملة</h2><h2 class="lang-en">Full Season Stats</h2>
+            <h2 class="lang-ar">إحصائيات الموسم مع الكلين شيت</h2><h2 class="lang-en">Season Stats with Clean Sheets</h2>
             <div id="fullStats"></div>
         </section>
 
@@ -171,13 +170,12 @@
         </section>
     </div>
 
-    <!-- PLAYER PROFILE MODAL -->
     <div id="pModal" class="modal" onclick="if(event.target==this)this.style.display='none'">
         <div class="modal-content" id="modalData"></div>
     </div>
 
     <script>
-        // --- DATA ---
+        // --- DATA (Added CS - Clean Sheets) ---
         const players = [
             {name:"Basabeso2", photo:"basabeso2.png", pos:"CB"},
             {name:"M---_11_11", photo:"m1111.png", pos:"CM"},
@@ -188,8 +186,13 @@
         ];
 
         const stats = {
-            Basabeso2:{February:{m:24,g:2,a:3,p:85,w:50}},
-            "M---_11_11":{October:{m:68,g:38,a:43,p:81,w:57},November:{m:86,g:48,a:58,p:74,w:54},January:{m:158,g:112,a:113,p:75,w:46},February:{m:40,g:24,a:19,p:75,w:46}},
+            Basabeso2:{February:{m:24,g:2,a:3,p:85,w:50,cs:4}}, // Added CS: 4
+            "M---_11_11":{
+                October:{m:68,g:38,a:43,p:81,w:57,cs:2}, 
+                November:{m:86,g:48,a:58,p:74,w:54,cs:3}, 
+                January:{m:158,g:112,a:113,p:75,w:46,cs:5}, 
+                February:{m:40,g:24,a:19,p:75,w:46,cs:2}
+            },
             H7modi77:{October:{m:45,g:14,a:36,p:79,w:62},November:{m:77,g:52,a:54,p:76,w:51},January:{m:116,g:44,a:85,p:75,w:47},February:{m:44,g:20,a:26,p:75,w:47}},
             Almousa3M:{October:{m:58,g:65,a:61,p:78,w:60},November:{m:57,g:67,a:72,p:77,w:53},January:{m:126,g:161,a:146,p:77,w:49},February:{m:42,g:48,a:41,p:77,w:49}},
             H2ssain_28:{October:{m:44,g:36,a:15,p:76,w:56},November:{m:64,g:59,a:48,p:77,w:51},January:{m:146,g:144,a:72,p:73,w:44},February:{m:31,g:31,a:55,p:73,w:44}},
@@ -197,9 +200,15 @@
         };
 
         // --- LOGIC ---
-        function calcAI(d) {
+        function calcAI(d, pos) {
             if(!d) return 0;
-            return ((d.g*2.2 + d.a*1.8 + d.p*0.4 + d.w*0.6) / 10 + 45).toFixed(1);
+            let base = (d.g*2.2 + d.a*1.8 + d.p*0.4 + d.w*0.6);
+            let csBonus = 0;
+            // High bonus for Defenders, Medium for Midfielders
+            if(pos === "CB") csBonus = (d.cs || 0) * 5.0; 
+            if(pos === "CM") csBonus = (d.cs || 0) * 2.5;
+            
+            return ((base + csBonus) / 10 + 45).toFixed(1);
         }
 
         function toggleLang() { document.body.classList.toggle('en-mode'); }
@@ -218,20 +227,20 @@
             
             teamGrid.innerHTML = ''; statsDiv.innerHTML = ''; rankGrid.innerHTML = '';
 
-            // Calc Total for Ranking
             let rankedPlayers = players.map(p => {
                 let months = stats[p.name];
-                let t = {m:0, g:0, a:0, p:0, w:0, count:0};
+                let t = {m:0, g:0, a:0, p:0, w:0, cs:0, count:0};
                 for(let m in months) {
                     t.m += months[m].m; t.g += months[m].g; t.a += months[m].a;
-                    t.p += months[m].p; t.w += months[m].w; t.count++;
+                    t.p += months[m].p; t.w += months[m].w; 
+                    t.cs += (months[m].cs || 0);
+                    t.count++;
                 }
-                let avg = {g:t.g, a:t.a, p:t.p/t.count, w:t.w/t.count};
-                return { ...p, ai: calcAI(avg), total: t };
+                let avg = {g:t.g, a:t.a, p:t.p/t.count, w:t.w/t.count, cs:t.cs};
+                return { ...p, ai: calcAI(avg, p.pos), total: t };
             }).sort((a,b) => b.ai - a.ai);
 
             rankedPlayers.forEach((p, i) => {
-                // Team Page
                 teamGrid.innerHTML += `
                     <div class="card" onclick="openProfile('${p.name}')">
                         <img src="${p.photo}" style="width:80px; border-radius:50%;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'">
@@ -239,16 +248,21 @@
                         <div class="market-val">€ ${(p.ai * 2.5).toFixed(1)}M</div>
                     </div>`;
 
-                // Stats Page
-                let tableHtml = `<h3>${p.name}</h3><table class="stat-table"><tr><th>Month</th><th>M</th><th>G</th><th>A</th><th>P%</th><th>W%</th><th>AI</th></tr>`;
+                let showCS = (p.pos === "CB" || p.pos === "CM");
+                let tableHtml = `<h3>${p.name} (${p.pos})</h3><table class="stat-table">
+                    <tr><th>Month</th><th>M</th><th>G</th><th>A</th>${showCS?'<th>CS</th>':''}<th>P%</th><th>W%</th><th>AI</th></tr>`;
+                
                 for(let m in stats[p.name]) {
                     let d = stats[p.name][m];
-                    tableHtml += `<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}%</td><td>${d.w}%</td><td>${calcAI(d)}</td></tr>`;
+                    tableHtml += `<tr>
+                        <td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td>
+                        ${showCS?`<td class="cs-col">${d.cs||0}</td>`:''}
+                        <td>${d.p}%</td><td>${d.w}%</td><td>${calcAI(d, p.pos)}</td>
+                    </tr>`;
                 }
                 tableHtml += `</table>`;
                 statsDiv.innerHTML += tableHtml;
 
-                // Ranking Page
                 let glow = i===0?'rank-gold':i===1?'rank-silver':i===2?'rank-bronze':'';
                 rankGrid.innerHTML += `
                     <div class="card ${glow}">
@@ -262,10 +276,19 @@
         function openProfile(name) {
             const p = players.find(x => x.name === name);
             const months = stats[name];
-            let html = `<div style="text-align:center"><img src="${p.photo}" style="width:100px; border-radius:50%; border:3px solid var(--primary)" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'"><h2>${name}</h2></div>`;
-            html += `<table class="stat-table"><tr><th>Month</th><th>Goals</th><th>Assists</th><th>AI</th></tr>`;
+            let showCS = (p.pos === "CB" || p.pos === "CM");
+
+            let html = `<div style="text-align:center">
+                <img src="${p.photo}" style="width:100px; border-radius:50%; border:3px solid var(--primary)" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'">
+                <h2>${name}</h2><p style="color:var(--primary)">${p.pos}</p></div>`;
+            
+            html += `<table class="stat-table"><tr><th>Month</th><th>G</th><th>A</th>${showCS?'<th>CS</th>':''}<th>AI</th></tr>`;
             for(let m in months) {
-                html += `<tr><td>${m}</td><td>${months[m].g}</td><td>${months[m].a}</td><td>${calcAI(months[m])}</td></tr>`;
+                html += `<tr>
+                    <td>${m}</td><td>${months[m].g}</td><td>${months[m].a}</td>
+                    ${showCS?`<td class="cs-col">${months[m].cs||0}</td>`:''}
+                    <td>${calcAI(months[m], p.pos)}</td>
+                </tr>`;
             }
             html += `</table><button onclick="document.getElementById('pModal').style.display='none'" style="width:100%; padding:10px; margin-top:15px; background:var(--primary); border:none; border-radius:10px; font-weight:bold;">Close</button>`;
             document.getElementById('modalData').innerHTML = html;
