@@ -3,261 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAWHID CLUB | ELITE PRO V5</title>
+    <title>TAWHID CLUB | ULTIMATE STATS V6</title>
     
-    <!-- Fonts & Libraries -->
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         :root {
-            --primary: #00d2ff;
-            --secondary: #7c3aed;
-            --accent: #ffae00;
-            --bg: #05070a;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --text: #ffffff;
-            --pitch-green: #1a472a;
-            --gold: #ffd700;
-            --silver: #c0c0c0;
-            --bronze: #cd7f32;
+            --primary: #00d2ff; --secondary: #7c3aed; --accent: #ffae00;
+            --bg: #05070a; --card: rgba(255, 255, 255, 0.03); --text: #ffffff;
+            --pitch: #1a472a; --gold: #ffd700; --silver: #c0c0c0; --bronze: #cd7f32;
         }
 
         .light-mode {
-            --bg: #f0f2f5;
-            --card-bg: #ffffff;
-            --text: #05070a;
-            --pitch-green: #2e7d32;
+            --bg: #f0f2f5; --card: #ffffff; --text: #05070a; --pitch: #2e7d32;
         }
 
-        * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        * { box-sizing: border-box; transition: 0.3s ease; }
         body {
             margin: 0; font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text);
             overflow-x: hidden; padding-bottom: 100px;
         }
 
-        /* Header */
-        header { padding: 40px 20px; text-align: center; position: relative; }
-        .logo-main { width: 130px; filter: drop-shadow(0 0 15px var(--primary)); background: transparent; }
-        
-        /* Fixed Buttons */
-        .top-controls { position: absolute; top: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 1001; }
-        .control-btn { background: var(--card-bg); border: 1px solid var(--primary); color: var(--text); padding: 8px 15px; border-radius: 10px; cursor: pointer; backdrop-filter: blur(10px); }
+        /* Controls */
+        .top-bar { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; z-index: 1001; }
+        .btn-ctrl { background: var(--card); border: 1px solid var(--primary); color: var(--text); padding: 5px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; backdrop-filter: blur(10px); }
 
-        /* Navigation */
+        header { padding: 40px 20px; text-align: center; }
+        .logo { width: 110px; filter: drop-shadow(0 0 15px var(--primary)); background: transparent; }
+
         nav {
-            display: flex; justify-content: center; gap: 10px; padding: 15px;
+            display: flex; justify-content: center; gap: 8px; padding: 12px;
             position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(20px); background: rgba(0,0,0,0.6);
             border-bottom: 1px solid rgba(255,255,255,0.1); overflow-x: auto;
         }
-        nav button {
-            background: transparent; border: none; color: var(--text); padding: 10px 20px;
-            font-weight: 900; cursor: pointer; position: relative; white-space: nowrap;
-        }
-        nav button.active { color: var(--primary); }
-        nav button.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--primary); box-shadow: 0 0 10px var(--primary); }
+        nav button { background: transparent; border: none; color: var(--text); padding: 10px 15px; font-weight: 900; cursor: pointer; white-space: nowrap; }
+        nav button.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
 
         .container { max-width: 1100px; margin: auto; padding: 15px; }
-        .section { display: none; animation: slideIn 0.5s ease; }
+        .section { display: none; animation: fadeIn 0.5s ease; }
         .active-section { display: block; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Pitch Design */
-        .pitch-stadium {
-            width: 100%; max-width: 600px; height: 800px; background: var(--pitch-green);
-            margin: 30px auto; border: 5px solid rgba(255,255,255,0.5); border-radius: 20px;
-            position: relative; overflow: hidden;
-            background-image: repeating-linear-gradient(0deg, transparent, transparent 80px, rgba(255,255,255,0.03) 80px, rgba(255,255,255,0.03) 160px);
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        /* Pitch */
+        .pitch {
+            width: 100%; max-width: 550px; height: 750px; background: var(--pitch);
+            margin: 20px auto; border: 4px solid rgba(255,255,255,0.4); border-radius: 20px;
+            position: relative; background-image: repeating-linear-gradient(0deg, transparent, transparent 70px, rgba(255,255,255,0.02) 70px, rgba(255,255,255,0.02) 140px);
         }
-        .pitch-stadium::before { content: ''; position: absolute; top: 50%; width: 100%; height: 2px; background: rgba(255,255,255,0.5); }
-        .pitch-center-circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; border: 2px solid rgba(255,255,255,0.5); border-radius: 50%; }
+        .pitch-circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; border: 2px solid rgba(255,255,255,0.4); border-radius: 50%; }
+        .player-spot { position: absolute; width: 80px; text-align: center; transform: translate(-50%, -50%); cursor: pointer; }
+        .player-spot img { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--accent); background: #000; }
+        .player-spot b { display: block; font-size: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 2px; border-radius: 4px; margin-top: 3px; }
 
-        .player-spot { position: absolute; width: 90px; text-align: center; transform: translate(-50%, -50%); z-index: 2; }
-        .player-spot img { width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--accent); background: #000; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
-        .player-spot .p-name { display: block; background: rgba(0,0,0,0.8); color: white; padding: 2px 5px; border-radius: 5px; font-size: 11px; margin-top: 5px; font-weight: bold; }
-        .player-spot .p-role { font-size: 10px; color: var(--primary); font-weight: 900; display: block; }
+        /* Tables & Cards */
+        .stat-table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 15px; overflow: hidden; font-size: 13px; margin-top: 15px; }
+        .stat-table th, .stat-table td { padding: 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .stat-table th { background: var(--primary); color: #000; }
 
-        /* Ranking Glow Effects */
-        .rank-card { background: var(--card-bg); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; overflow: hidden; }
-        .rank-gold { border: 2px solid var(--gold) !important; box-shadow: 0 0 25px rgba(255, 215, 0, 0.4); }
-        .rank-silver { border: 2px solid var(--silver) !important; box-shadow: 0 0 25px rgba(192, 192, 192, 0.3); }
-        .rank-bronze { border: 2px solid var(--bronze) !important; box-shadow: 0 0 25px rgba(205, 127, 50, 0.3); }
+        .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; }
+        .rank-gold { border: 2px solid var(--gold) !important; box-shadow: 0 0 20px rgba(255,215,0,0.3); }
+        .rank-silver { border: 2px solid var(--silver) !important; box-shadow: 0 0 20px rgba(192,192,192,0.2); }
+        .rank-bronze { border: 2px solid var(--bronze) !important; box-shadow: 0 0 20px rgba(205,127,50,0.2); }
 
-        /* Awards Page */
-        .award-banner { background: var(--card-bg); padding: 30px; border-radius: 30px; text-align: center; margin-bottom: 20px; border: 1px solid var(--accent); }
-        .goal-video { width: 100%; border-radius: 20px; border: 2px solid var(--primary); margin-top: 15px; max-width: 500px; }
+        /* Modal */
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index: 2000; padding: 20px; overflow-y: auto; }
+        .modal-content { background: var(--bg); max-width: 700px; margin: auto; border-radius: 25px; padding: 25px; border: 1px solid var(--primary); }
 
-        /* Market Value Tag */
-        .market-tag { background: linear-gradient(90deg, #1e293b, #0f172a); color: var(--accent); padding: 5px 15px; border-radius: 20px; font-family: 'Orbitron'; font-weight: 900; font-size: 14px; display: inline-block; border: 1px solid var(--accent); margin-top: 10px; }
-
-        /* Grid */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            .pitch-stadium { height: 600px; }
-            .player-spot img { width: 45px; height: 45px; }
-            .grid { grid-template-columns: repeat(2, 1fr); }
-        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+        .market-val { color: var(--accent); font-family: 'Orbitron'; font-weight: 900; margin-top: 10px; font-size: 14px; }
 
         .lang-en { display: none; }
         body.en-mode .lang-ar { display: none; }
         body.en-mode .lang-en { display: inline; }
+        body.en-mode { direction: ltr; }
     </style>
 </head>
-<body>
+<body class="dark-mode">
 
-    <!-- Controls -->
-    <div class="top-controls">
-        <button class="control-btn" onclick="toggleLang()">
-            <span class="lang-ar">English</span>
-            <span class="lang-en">عربي</span>
+    <div class="top-bar">
+        <button class="btn-ctrl" onclick="toggleLang()">
+            <span class="lang-ar">English</span><span class="lang-en">عربي</span>
         </button>
-        <button class="control-btn" onclick="toggleTheme()">
-            <i class="fas fa-moon"></i> / <i class="fas fa-sun"></i>
-        </button>
+        <button class="btn-ctrl" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
     </div>
 
-    <!-- Header -->
     <header>
-        <img src="logo.png" class="logo-main" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1165/1165187.png'">
-        <h1 style="font-family: 'Orbitron'; margin: 10px 0;">TAWHID CLUB</h1>
-        <div style="font-family: 'Orbitron'; color: var(--primary); font-size: 18px;">
-            <span class="lang-ar">الدرجة: 2</span>
-            <span class="lang-en">LEAGUE TIER: 2</span>
-        </div>
+        <img src="logo.png" class="logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1165/1165187.png'">
+        <h1 style="font-family: 'Orbitron'; margin: 5px 0;">TAWHID CLUB</h1>
+        <div style="font-family:'Orbitron'; color:var(--primary)">TIER: 2</div>
     </header>
 
-    <!-- Navigation -->
     <nav>
-        <button onclick="showSec('home', this)" class="active">
-            <span class="lang-ar">الرئيسية</span><span class="lang-en">Home</span>
-        </button>
-        <button onclick="showSec('team', this)">
-            <span class="lang-ar">اللاعبين</span><span class="lang-en">Players</span>
-        </button>
-        <button onclick="showSec('pitch', this)">
-            <span class="lang-ar">التشكيلة</span><span class="lang-en">Formation</span>
-        </button>
-        <button onclick="showSec('ranking', this)">
-            <span class="lang-ar">الترتيب</span><span class="lang-en">Ranking</span>
-        </button>
-        <button onclick="showSec('awards', this)">
-            <span class="lang-ar">الجوائز</span><span class="lang-en">Awards</span>
-        </button>
+        <button onclick="showSec('home', this)" class="active"><span class="lang-ar">الرئيسية</span><span class="lang-en">Home</span></button>
+        <button onclick="showSec('team', this)"><span class="lang-ar">اللاعبين</span><span class="lang-en">Players</span></button>
+        <button onclick="showSec('stats', this)"><span class="lang-ar">الإحصائيات</span><span class="lang-en">Stats</span></button>
+        <button onclick="showSec('pitch', this)"><span class="lang-ar">التشكيلة</span><span class="lang-en">Formation</span></button>
+        <button onclick="showSec('ranking', this)"><span class="lang-ar">الترتيب</span><span class="lang-en">Ranking</span></button>
+        <button onclick="showSec('awards', this)"><span class="lang-ar">الجوائز</span><span class="lang-en">Awards</span></button>
     </nav>
 
     <div class="container">
-        
-        <!-- HOME SECTION -->
+        <!-- HOME -->
         <section id="home" class="section active-section">
-            <h2 class="lang-ar">آخر الأخبار</h2><h2 class="lang-en">Latest News</h2>
-            <div class="award-banner" style="text-align: right;">
-                <p class="lang-ar">اجتماع لأعضاء النادي حول قضية عدم اللعب بسبب غياب لاعب (25 فبراير)</p>
-                <p class="lang-en">Club meeting regarding player absence (Feb 25)</p>
-                <hr style="opacity: 0.1;">
-                <p class="lang-ar">مقابلة اللاعب Yo0ousef25 مع قناة SkySports (27 فبراير)</p>
-                <p class="lang-en">Yo0ousef25 interview with SkySports (Feb 27)</p>
+            <h2 class="lang-ar">الأخبار والفعاليات</h2><h2 class="lang-en">News & Events</h2>
+            <div class="card" style="text-align: right;">
+                <p>• اجتماع لأعضاء النادي حول قضية الغيابات (25 فبراير)</p>
+                <p>• مقابلة اللاعب Yo0ousef25 مع SkySports (27 فبراير)</p>
             </div>
         </section>
 
-        <!-- TEAM SECTION -->
+        <!-- TEAM -->
         <section id="team" class="section">
             <div id="teamGrid" class="grid"></div>
         </section>
 
-        <!-- PITCH SECTION -->
+        <!-- STATS -->
+        <section id="stats" class="section">
+            <h2 class="lang-ar">إحصائيات الموسم كاملة</h2><h2 class="lang-en">Full Season Stats</h2>
+            <div id="fullStats"></div>
+        </section>
+
+        <!-- PITCH -->
         <section id="pitch" class="section">
-            <div class="pitch-stadium" id="pitchBody">
-                <div class="pitch-center-circle"></div>
-                <!-- STs -->
-                <div class="player-spot" style="top: 15%; left: 35%;" onclick="openP('Almousa3M')">
-                    <img src="almousa3m.png" onerror="this.src='p.png'"><span class="p-role">ST</span><span class="p-name">Almousa3M</span>
+            <div class="pitch">
+                <div class="pitch-circle"></div>
+                <div class="player-spot" style="top: 15%; left: 35%;" onclick="openProfile('Almousa3M')">
+                    <img src="almousa3m.png" onerror="this.src='p.png'"><b class="lang-ar">هجوم</b><b class="lang-en">ST</b><b>Almousa3M</b>
                 </div>
-                <div class="player-spot" style="top: 15%; left: 65%;" onclick="openP('H2ssain_28')">
-                    <img src="h2ssain28.png" onerror="this.src='p.png'"><span class="p-role">ST</span><span class="p-name">H2ssain_28</span>
+                <div class="player-spot" style="top: 15%; left: 65%;" onclick="openProfile('H2ssain_28')">
+                    <img src="h2ssain28.png" onerror="this.src='p.png'"><b class="lang-ar">هجوم</b><b class="lang-en">ST</b><b>H2ssain_28</b>
                 </div>
-                <!-- Wings -->
-                <div class="player-spot" style="top: 35%; left: 20%;" onclick="openP('H7modi77')">
-                    <img src="h7modi77.png" onerror="this.src='p.png'"><span class="p-role">LW</span><span class="p-name">H7modi77</span>
+                <div class="player-spot" style="top: 35%; left: 20%;" onclick="openProfile('H7modi77')">
+                    <img src="h7modi77.png" onerror="this.src='p.png'"><b class="lang-ar">جناح</b><b class="lang-en">LW</b><b>H7modi77</b>
                 </div>
-                <div class="player-spot" style="top: 35%; left: 80%;" onclick="openP('Yo0ousef25')">
-                    <img src="yo0ousef25.png" onerror="this.src='p.png'"><span class="p-role">RW</span><span class="p-name">Yo0ousef25</span>
+                <div class="player-spot" style="top: 35%; left: 80%;" onclick="openProfile('Yo0ousef25')">
+                    <img src="yo0ousef25.png" onerror="this.src='p.png'"><b class="lang-ar">جناح</b><b class="lang-en">RW</b><b>Yo0ousef25</b>
                 </div>
-                <!-- CM -->
-                <div class="player-spot" style="top: 60%; left: 50%;" onclick="openP('M---_11_11')">
-                    <img src="m1111.png" onerror="this.src='p.png'"><span class="p-role">CM</span><span class="p-name">M---_11_11</span>
+                <div class="player-spot" style="top: 60%; left: 50%;" onclick="openProfile('M---_11_11')">
+                    <img src="m1111.png" onerror="this.src='p.png'"><b class="lang-ar">وسط</b><b class="lang-en">CM</b><b>M---_11_11</b>
                 </div>
-                <!-- CB -->
-                <div class="player-spot" style="top: 85%; left: 50%;" onclick="openP('Basabeso2')">
-                    <img src="basabeso2.png" onerror="this.src='p.png'"><span class="p-role">CB</span><span class="p-name">Basabeso2</span>
+                <div class="player-spot" style="top: 85%; left: 50%;" onclick="openProfile('Basabeso2')">
+                    <img src="basabeso2.png" onerror="this.src='p.png'"><b class="lang-ar">دفاع</b><b class="lang-en">CB</b><b>Basabeso2</b>
                 </div>
             </div>
         </section>
 
-        <!-- RANKING SECTION -->
+        <!-- RANKING -->
         <section id="ranking" class="section">
             <div id="rankGrid" class="grid"></div>
         </section>
 
-        <!-- AWARDS SECTION -->
+        <!-- AWARDS -->
         <section id="awards" class="section">
-            <div class="award-banner">
-                <h2 style="color: var(--gold);"><i class="fas fa-trophy"></i> لاعب الشهر - فبراير</h2>
+            <div class="card rank-gold">
+                <h2>🏆 لاعب الشهر (فبراير)</h2>
                 <h3>Almousa3M</h3>
-                <div class="market-tag">Rating: 94</div>
+                <p>AI Rating: 94.2</p>
             </div>
-            
-            <div class="grid">
-                <div class="rank-card">
-                    <i class="fas fa-clock" style="font-size: 30px; color: var(--primary);"></i>
-                    <h4 class="lang-ar">أكثر من لعب (دقائق)</h4><h4 class="lang-en">Most Minutes</h4>
-                    <p>M---_11_11</p>
-                </div>
-                <div class="rank-card">
-                    <i class="fas fa-hands-helping" style="font-size: 30px; color: var(--accent);"></i>
-                    <h4 class="lang-ar">الأكثر صناعة</h4><h4 class="lang-en">Top Assists</h4>
-                    <p>H7modi77</p>
-                </div>
-            </div>
-
-            <div class="award-banner" style="margin-top: 20px;">
-                <h2 style="color: var(--primary);"><i class="fas fa-video"></i> هدف الشهر</h2>
-                <p>H7modi77 vs Giants</p>
-                <video controls class="goal-video">
-                    <source src="https://raw.githubusercontent.com/H7modi77/TAWHID-FC/main/19c9ebcbc1934-master_playlist.mov" type="video/mp4">
-                    Your browser does not support the video tag.
+            <div class="card" style="margin-top:20px;">
+                <h2 class="lang-ar">هدف الشهر</h2><h2 class="lang-en">Goal of the Month</h2>
+                <video controls style="width:100%; border-radius:15px; margin-top:10px;">
+                    <source src="https://raw.githubusercontent.com/H7modi77/TAWHID-FC/main/19c9ebcbc1934-master_playlist.mov">
                 </video>
             </div>
         </section>
+    </div>
 
+    <!-- PLAYER PROFILE MODAL -->
+    <div id="pModal" class="modal" onclick="if(event.target==this)this.style.display='none'">
+        <div class="modal-content" id="modalData"></div>
     </div>
 
     <script>
-        // Data
+        // --- DATA ---
         const players = [
-            {name:"Basabeso2", photo:"basabeso2.png", pos:"CB", ai: 82},
-            {name:"M---_11_11", photo:"m1111.png", pos:"CM", ai: 89},
-            {name:"H7modi77", photo:"h7modi77.png", pos:"LW", ai: 91},
-            {name:"Almousa3M", photo:"almousa3m.png", pos:"ST", ai: 94},
-            {name:"H2ssain_28", photo:"h2ssain28.png", pos:"ST", ai: 88},
-            {name:"Yo0ousef25", photo:"yo0ousef25.png", pos:"RW", ai: 85}
+            {name:"Basabeso2", photo:"basabeso2.png", pos:"CB"},
+            {name:"M---_11_11", photo:"m1111.png", pos:"CM"},
+            {name:"H7modi77", photo:"h7modi77.png", pos:"LW"},
+            {name:"Almousa3M", photo:"almousa3m.png", pos:"ST"},
+            {name:"H2ssain_28", photo:"h2ssain28.png", pos:"ST"},
+            {name:"Yo0ousef25", photo:"yo0ousef25.png", pos:"RW"}
         ];
 
-        // Controls
-        function toggleLang() {
-            document.body.classList.toggle('en-mode');
-            const isEn = document.body.classList.contains('en-mode');
-            document.documentElement.lang = isEn ? 'en' : 'ar';
-            document.documentElement.dir = isEn ? 'ltr' : 'rtl';
+        const stats = {
+            Basabeso2:{February:{m:24,g:2,a:3,p:85,w:50}},
+            "M---_11_11":{October:{m:68,g:38,a:43,p:81,w:57},November:{m:86,g:48,a:58,p:74,w:54},January:{m:158,g:112,a:113,p:75,w:46},February:{m:40,g:24,a:19,p:75,w:46}},
+            H7modi77:{October:{m:45,g:14,a:36,p:79,w:62},November:{m:77,g:52,a:54,p:76,w:51},January:{m:116,g:44,a:85,p:75,w:47},February:{m:44,g:20,a:26,p:75,w:47}},
+            Almousa3M:{October:{m:58,g:65,a:61,p:78,w:60},November:{m:57,g:67,a:72,p:77,w:53},January:{m:126,g:161,a:146,p:77,w:49},February:{m:42,g:48,a:41,p:77,w:49}},
+            H2ssain_28:{October:{m:44,g:36,a:15,p:76,w:56},November:{m:64,g:59,a:48,p:77,w:51},January:{m:146,g:144,a:72,p:73,w:44},February:{m:31,g:31,a:55,p:73,w:44}},
+            Yo0ousef25:{October:{m:28,g:23,a:5,p:78,w:67},November:{m:26,g:21,a:8,p:78,w:58},January:{m:99,g:57,a:17,p:74,w:43},February:{m:18,g:11,a:2,p:74,w:43}}
+        };
+
+        // --- LOGIC ---
+        function calcAI(d) {
+            if(!d) return 0;
+            return ((d.g*2.2 + d.a*1.8 + d.p*0.4 + d.w*0.6) / 10 + 45).toFixed(1);
         }
 
-        function toggleTheme() {
-            document.body.classList.toggle('light-mode');
-        }
-
+        function toggleLang() { document.body.classList.toggle('en-mode'); }
+        function toggleTheme() { document.body.classList.toggle('light-mode'); }
         function showSec(id, btn) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
             document.getElementById(id).classList.add('active-section');
@@ -265,47 +211,68 @@
             btn.classList.add('active');
         }
 
-        // Render Team & Market Value
-        function renderTeam() {
-            const grid = document.getElementById('teamGrid');
-            grid.innerHTML = '';
-            players.forEach(p => {
-                const value = (p.ai * 1.2 * 2).toFixed(1); // Equation: AI * tier_mult * base
-                grid.innerHTML += `
-                    <div class="rank-card">
-                        <img src="${p.photo}" style="width:100px; height:100px; border-radius:50%; border:2px solid var(--primary);" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'">
-                        <h3>${p.name}</h3>
-                        <p style="color:var(--primary); font-weight:bold;">${p.pos}</p>
-                        <div class="market-tag">€ ${value}M</div>
-                    </div>`;
-            });
-        }
+        function renderAll() {
+            const teamGrid = document.getElementById('teamGrid');
+            const statsDiv = document.getElementById('fullStats');
+            const rankGrid = document.getElementById('rankGrid');
+            
+            teamGrid.innerHTML = ''; statsDiv.innerHTML = ''; rankGrid.innerHTML = '';
 
-        // Render Ranking with Glow
-        function renderRanking() {
-            const grid = document.getElementById('rankGrid');
-            const sorted = [...players].sort((a,b) => b.ai - a.ai);
-            grid.innerHTML = '';
-            sorted.forEach((p, i) => {
-                let glowClass = '';
-                if(i === 0) glowClass = 'rank-gold';
-                if(i === 1) glowClass = 'rank-silver';
-                if(i === 2) glowClass = 'rank-bronze';
+            // Calc Total for Ranking
+            let rankedPlayers = players.map(p => {
+                let months = stats[p.name];
+                let t = {m:0, g:0, a:0, p:0, w:0, count:0};
+                for(let m in months) {
+                    t.m += months[m].m; t.g += months[m].g; t.a += months[m].a;
+                    t.p += months[m].p; t.w += months[m].w; t.count++;
+                }
+                let avg = {g:t.g, a:t.a, p:t.p/t.count, w:t.w/t.count};
+                return { ...p, ai: calcAI(avg), total: t };
+            }).sort((a,b) => b.ai - a.ai);
 
-                grid.innerHTML += `
-                    <div class="rank-card ${glowClass}">
-                        <div style="font-size:24px; font-weight:900;">#${i+1}</div>
-                        <img src="${p.photo}" style="width:60px; height:60px; border-radius:50%;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'">
+            rankedPlayers.forEach((p, i) => {
+                // Team Page
+                teamGrid.innerHTML += `
+                    <div class="card" onclick="openProfile('${p.name}')">
+                        <img src="${p.photo}" style="width:80px; border-radius:50%;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'">
                         <h4>${p.name}</h4>
-                        <div style="font-family:'Orbitron'; color:var(--primary);">AI: ${p.ai}</div>
+                        <div class="market-val">€ ${(p.ai * 2.5).toFixed(1)}M</div>
+                    </div>`;
+
+                // Stats Page
+                let tableHtml = `<h3>${p.name}</h3><table class="stat-table"><tr><th>Month</th><th>M</th><th>G</th><th>A</th><th>P%</th><th>W%</th><th>AI</th></tr>`;
+                for(let m in stats[p.name]) {
+                    let d = stats[p.name][m];
+                    tableHtml += `<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}%</td><td>${d.w}%</td><td>${calcAI(d)}</td></tr>`;
+                }
+                tableHtml += `</table>`;
+                statsDiv.innerHTML += tableHtml;
+
+                // Ranking Page
+                let glow = i===0?'rank-gold':i===1?'rank-silver':i===2?'rank-bronze':'';
+                rankGrid.innerHTML += `
+                    <div class="card ${glow}">
+                        <h2>#${i+1}</h2>
+                        <h4>${p.name}</h4>
+                        <div style="font-family:Orbitron; color:var(--primary)">Rating: ${p.ai}</div>
                     </div>`;
             });
         }
 
-        window.onload = () => {
-            renderTeam();
-            renderRanking();
-        };
+        function openProfile(name) {
+            const p = players.find(x => x.name === name);
+            const months = stats[name];
+            let html = `<div style="text-align:center"><img src="${p.photo}" style="width:100px; border-radius:50%; border:3px solid var(--primary)" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'"><h2>${name}</h2></div>`;
+            html += `<table class="stat-table"><tr><th>Month</th><th>Goals</th><th>Assists</th><th>AI</th></tr>`;
+            for(let m in months) {
+                html += `<tr><td>${m}</td><td>${months[m].g}</td><td>${months[m].a}</td><td>${calcAI(months[m])}</td></tr>`;
+            }
+            html += `</table><button onclick="document.getElementById('pModal').style.display='none'" style="width:100%; padding:10px; margin-top:15px; background:var(--primary); border:none; border-radius:10px; font-weight:bold;">Close</button>`;
+            document.getElementById('modalData').innerHTML = html;
+            document.getElementById('pModal').style.display = 'block';
+        }
+
+        window.onload = renderAll;
     </script>
 </body>
 </html>
