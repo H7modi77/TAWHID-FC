@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAWHID CLUB | ULTIMATE LUXURY V8</title>
+    <title>TAWHID CLUB | ULTIMATE LUXURY V9</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -25,108 +25,33 @@
             overflow-x: hidden; padding-bottom: 140px; 
         }
 
-        /* --- LUXURY SPONSOR BAR (PREMIUM VERSION) --- */
+        /* --- LUXURY SPONSOR BAR --- */
         .sponsor-luxury-bar {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 95%;
-            max-width: 700px;
-            background: rgba(10, 15, 26, 0.8);
-            backdrop-filter: blur(20px);
-            border-radius: 100px;
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
-            border: 1px solid rgba(255, 215, 0, 0.3); /* إطار ذهبي خفيف */
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 
-                        inset 0 0 20px rgba(0, 210, 255, 0.1);
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: 95%; max-width: 700px; background: rgba(10, 15, 26, 0.8);
+            backdrop-filter: blur(20px); border-radius: 100px; padding: 12px 20px;
+            display: flex; justify-content: space-evenly; align-items: center;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(0, 210, 255, 0.1);
             z-index: 9999;
         }
 
-        /* تأثير اللمعة المتحركة على الشريط */
         .sponsor-luxury-bar::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 50%; height: 100%;
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: skewX(-25deg);
-            animation: shineBar 6s infinite;
+            transform: skewX(-25deg); animation: shineBar 6s infinite;
         }
 
-        @keyframes shineBar {
-            0% { left: -100%; }
-            20% { left: 150%; }
-            100% { left: 150%; }
-        }
+        @keyframes shineBar { 0% { left: -100%; } 20% { left: 150%; } 100% { left: 150%; } }
 
-        .sponsor-item {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-        }
+        .sponsor-item { position: relative; display: flex; align-items: center; justify-content: center; flex: 1; }
+        .sponsor-item img { height: 45px; max-width: 140px; object-fit: contain; filter: grayscale(1) brightness(0.8); opacity: 0.6; }
+        .sponsor-item:hover img { filter: grayscale(0) brightness(1.2) drop-shadow(0 0 10px var(--primary)); opacity: 1; transform: scale(1.15) translateY(-5px); }
+        .sponsor-glow { position: absolute; width: 80px; height: 30px; background: var(--primary); filter: blur(35px); opacity: 0; z-index: -1; }
+        .sponsor-item:hover .sponsor-glow { opacity: 0.4; }
+        .sponsor-divider { width: 1px; height: 35px; background: linear-gradient(to bottom, transparent, rgba(255,215,0,0.5), transparent); }
 
-        .sponsor-item img {
-            height: 45px;
-            max-width: 140px;
-            object-fit: contain;
-            filter: grayscale(1) brightness(0.8);
-            opacity: 0.6;
-            transition: 0.6s all cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .sponsor-item:hover img {
-            filter: grayscale(0) brightness(1.2) drop-shadow(0 0 10px var(--primary));
-            opacity: 1;
-            transform: scale(1.15) translateY(-5px);
-        }
-
-        /* توهج خلف كل شعار */
-        .sponsor-glow {
-            position: absolute;
-            width: 80px; height: 30px;
-            background: var(--primary);
-            filter: blur(35px);
-            opacity: 0;
-            transition: 0.5s;
-            z-index: -1;
-        }
-
-        .sponsor-item:hover .sponsor-glow {
-            opacity: 0.4;
-        }
-
-        /* نص "الراعي الرسمي" يظهر بفخامة */
-        .sponsor-item::after {
-            content: 'OFFICIAL PARTNER';
-            position: absolute;
-            bottom: -22px;
-            font-size: 7px;
-            font-family: 'Orbitron';
-            color: var(--accent);
-            letter-spacing: 2px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: 0.4s;
-        }
-
-        .sponsor-item:hover::after {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .sponsor-divider {
-            width: 1px;
-            height: 35px;
-            background: linear-gradient(to bottom, transparent, rgba(255,215,0,0.5), transparent);
-        }
-
-        /* --- باقي التنسيقات --- */
+        /* --- UI COMPONENTS --- */
         .top-bar { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; z-index: 1001; }
         .btn-ctrl { background: var(--card); border: 1px solid var(--primary); color: var(--text); padding: 5px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; backdrop-filter: blur(10px); }
         header { padding: 40px 20px; text-align: center; }
@@ -146,17 +71,20 @@
         .player-spot img { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--accent); background: #000; }
         .player-spot b { display: block; font-size: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 2px; border-radius: 4px; margin-top: 3px; }
 
-        /* Tables & Cards */
+        /* Tables & Ranking */
         .stat-table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 15px; overflow: hidden; font-size: 13px; margin-top: 15px; }
-        .stat-table th, .stat-table td { padding: 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .stat-table th { background: var(--primary); color: #000; }
+        .stat-table th, .stat-table td { padding: 10px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .stat-table th { background: var(--primary); color: #000; font-weight: 900; }
+        .s-col { color: var(--accent); font-weight: bold; } /* Shot accuracy color */
+        .cs-col { color: #4ade80; font-weight: bold; } /* Clean sheet color */
+
         .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; }
         .rank-gold { border: 2px solid var(--gold) !important; box-shadow: 0 0 20px rgba(255,215,0,0.3); }
         .rank-silver { border: 2px solid var(--silver) !important; box-shadow: 0 0 20px rgba(192,192,192,0.2); }
         .rank-bronze { border: 2px solid var(--bronze) !important; box-shadow: 0 0 20px rgba(205,127,50,0.2); }
 
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index: 2000; padding: 20px; overflow-y: auto; }
-        .modal-content { background: var(--bg); max-width: 700px; margin: auto; border-radius: 25px; padding: 25px; border: 1px solid var(--primary); }
+        .modal-content { background: var(--bg); max-width: 750px; margin: auto; border-radius: 25px; padding: 25px; border: 1px solid var(--primary); }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
         .market-val { color: var(--accent); font-family: 'Orbitron'; font-weight: 900; margin-top: 10px; font-size: 14px; }
 
@@ -200,7 +128,11 @@
         </section>
 
         <section id="team" class="section"> <div id="teamGrid" class="grid"></div> </section>
-        <section id="stats" class="section"> <div id="fullStats"></div> </section>
+        
+        <section id="stats" class="section">
+            <h2 class="lang-ar">إحصائيات الأداء الهجومي والدفاعي</h2><h2 class="lang-en">Offensive & Defensive Stats</h2>
+            <div id="fullStats"></div>
+        </section>
 
         <section id="pitch" class="section">
             <div class="pitch">
@@ -227,11 +159,12 @@
         </section>
 
         <section id="ranking" class="section"> <div id="rankGrid" class="grid"></div> </section>
+        
         <section id="awards" class="section">
             <div class="card rank-gold">
                 <h2>🏆 لاعب الشهر (فبراير)</h2>
                 <h3>Almousa3M</h3>
-                <p>AI Rating: 94.2</p>
+                <p>AI Rating: 95.8</p>
             </div>
             <div class="card" style="margin-top:20px;">
                 <h2 class="lang-ar">هدف الشهر</h2><h2 class="lang-en">Goal of the Month</h2>
@@ -242,15 +175,13 @@
         </section>
     </div>
 
-    <!-- LUXURY SPONSORS BAR -->
+    <!-- SPONSOR BAR -->
     <div class="sponsor-luxury-bar">
         <div class="sponsor-item">
             <div class="sponsor-glow"></div>
             <img src="sponsor1.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/en/thumb/4/43/EA_Sports_FC_logo.svg/1200px-EA_Sports_FC_logo.svg.png'">
         </div>
-        
         <div class="sponsor-divider"></div>
-        
         <div class="sponsor-item">
             <div class="sponsor-glow"></div>
             <img src="sponsor2.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Adidas_Logo.svg/1200px-Adidas_Logo.svg.png'">
@@ -272,26 +203,55 @@
         ];
 
         const stats = {
-            Basabeso2:{February:{m:24,g:2,a:3,p:85,w:50,cs:4}},
+            Basabeso2:{February:{m:24,g:2,a:3,p:85,w:50,cs:4,s:0}},
             "M---_11_11":{
-                October:{m:68,g:38,a:43,p:81,w:57,cs:2}, 
-                November:{m:86,g:48,a:58,p:74,w:54,cs:3}, 
-                January:{m:158,g:112,a:113,p:75,w:46,cs:5}, 
-                February:{m:40,g:24,a:19,p:75,w:46,cs:2}
+                October:{m:68,g:38,a:43,p:81,w:57,cs:2,s:75}, 
+                November:{m:86,g:48,a:58,p:74,w:54,cs:3,s:70}, 
+                January:{m:158,g:112,a:113,p:75,w:46,cs:5,s:78}, 
+                February:{m:40,g:24,a:19,p:75,w:46,cs:2,s:72}
             },
-            H7modi77:{October:{m:45,g:14,a:36,p:79,w:62},November:{m:77,g:52,a:54,p:76,w:51},January:{m:116,g:44,a:85,p:75,w:47},February:{m:44,g:20,a:26,p:75,w:47}},
-            Almousa3M:{October:{m:58,g:65,a:61,p:78,w:60},November:{m:57,g:67,a:72,p:77,w:53},January:{m:126,g:161,a:146,p:77,w:49},February:{m:42,g:48,a:41,p:77,w:49}},
-            H2ssain_28:{October:{m:44,g:36,a:15,p:76,w:56},November:{m:64,g:59,a:48,p:77,w:51},January:{m:146,g:144,a:72,p:73,w:44},February:{m:31,g:31,a:55,p:73,w:44}},
-            Yo0ousef25:{October:{m:28,g:23,a:5,p:78,w:67},November:{m:26,g:21,a:8,p:78,w:58},January:{m:99,g:57,a:17,p:74,w:43},February:{m:18,g:11,a:2,p:74,w:43}}
+            H7modi77:{
+                October:{m:45,g:14,a:36,p:79,w:62,s:37},
+                November:{m:77,g:52,a:54,p:76,w:51,s:40},
+                January:{m:116,g:44,a:85,p:75,w:47,s:39},
+                February:{m:44,g:20,a:26,p:75,w:47,s:37}
+            },
+            Almousa3M:{
+                October:{m:58,g:65,a:61,p:78,w:60,s:33},
+                November:{m:57,g:67,a:72,p:77,w:53,s:33},
+                January:{m:126,g:161,a:146,p:77,w:49,s:40},
+                February:{m:42,g:48,a:41,p:77,w:49,s:39}
+            },
+            H2ssain_28:{
+                October:{m:44,g:36,a:15,p:76,w:56,s:23},
+                November:{m:64,g:59,a:48,p:77,w:51,s:25},
+                January:{m:146,g:144,a:72,p:73,w:44,s:28},
+                February:{m:31,g:31,a:55,p:73,w:44,s:28}
+            },
+            Yo0ousef25:{
+                October:{m:28,g:23,a:5,p:78,w:67,s:46},
+                November:{m:26,g:21,a:8,p:78,w:58,s:52},
+                January:{m:99,g:57,a:17,p:74,w:43,s:47},
+                February:{m:18,g:11,a:2,p:74,w:43,s:47}
+            }
         };
 
         function calcAI(d, pos) {
             if(!d) return 0;
-            let base = (d.g*2.2 + d.a*1.8 + d.p*0.4 + d.w*0.6);
+            let base = (d.g*2.3 + d.a*2.0 + d.p*0.5 + d.w*0.8);
             let csBonus = 0;
-            if(pos === "CB") csBonus = (d.cs || 0) * 5.0; 
-            if(pos === "CM") csBonus = (d.cs || 0) * 2.5;
-            return ((base + csBonus) / 10 + 45).toFixed(1);
+            let shotBonus = 0;
+
+            if(pos === "CB") csBonus = (d.cs || 0) * 6.0; 
+            if(pos === "CM") {
+                csBonus = (d.cs || 0) * 3.0;
+                shotBonus = (d.s || 0) * 0.15;
+            }
+            if(["ST", "RW", "LW"].includes(pos)) {
+                shotBonus = (d.s || 0) * 0.25;
+            }
+            
+            return ((base + csBonus + shotBonus) / 10 + 40).toFixed(1);
         }
 
         function toggleLang() { document.body.classList.toggle('en-mode'); }
@@ -311,26 +271,32 @@
 
             let rankedPlayers = players.map(p => {
                 let months = stats[p.name];
-                let t = {m:0, g:0, a:0, p:0, w:0, cs:0, count:0};
+                let t = {m:0, g:0, a:0, p:0, w:0, cs:0, s:0, count:0};
                 for(let m in months) {
                     t.m += months[m].m; t.g += months[m].g; t.a += months[m].a;
                     t.p += months[m].p; t.w += months[m].w; t.cs += (months[m].cs || 0);
-                    t.count++;
+                    t.s += (months[m].s || 0); t.count++;
                 }
-                let avg = {g:t.g, a:t.a, p:t.p/t.count, w:t.w/t.count, cs:t.cs};
+                let avg = {g:t.g, a:t.a, p:t.p/t.count, w:t.w/t.count, cs:t.cs, s:t.s/t.count};
                 return { ...p, ai: calcAI(avg, p.pos), total: t };
             }).sort((a,b) => b.ai - a.ai);
 
             rankedPlayers.forEach((p, i) => {
-                teamGrid.innerHTML += `<div class="card" onclick="openProfile('${p.name}')"><img src="${p.photo}" style="width:80px; border-radius:50%;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'"><h4>${p.name}</h4><div class="market-val">€ ${(p.ai * 2.5).toFixed(1)}M</div></div>`;
-                let showCS = (p.pos === "CB" || p.pos === "CM");
-                let tableHtml = `<h3>${p.name} (${p.pos})</h3><table class="stat-table"><tr><th>Month</th><th>M</th><th>G</th><th>A</th>${showCS?'<th>CS</th>':''}<th>P%</th><th>W%</th><th>AI</th></tr>`;
+                teamGrid.innerHTML += `<div class="card" onclick="openProfile('${p.name}')"><img src="${p.photo}" style="width:80px; border-radius:50%;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'"><h4>${p.name}</h4><div class="market-val">€ ${(p.ai * 2.8).toFixed(1)}M</div></div>`;
+                
+                let isDefender = p.pos === "CB";
+                let isMidfielder = p.pos === "CM";
+                let isAttacker = ["ST", "RW", "LW"].includes(p.pos);
+
+                let tableHtml = `<h3>${p.name} (${p.pos})</h3><table class="stat-table"><tr><th>Month</th><th>M</th><th>G</th><th>A</th>${(isDefender || isMidfielder)?'<th>CS</th>':''}${(isAttacker || isMidfielder)?'<th>S%</th>':''}<th>P%</th><th>W%</th><th>AI</th></tr>`;
+                
                 for(let m in stats[p.name]) {
                     let d = stats[p.name][m];
-                    tableHtml += `<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td>${showCS?`<td style="color:#4ade80; font-weight:bold;">${d.cs||0}</td>`:''}<td>${d.p}%</td><td>${d.w}%</td><td>${calcAI(d, p.pos)}</td></tr>`;
+                    tableHtml += `<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td>${(isDefender || isMidfielder)?`<td class="cs-col">${d.cs||0}</td>`:''}${(isAttacker || isMidfielder)?`<td class="s-col">${d.s||0}%</td>`:''}<td>${d.p}%</td><td>${d.w}%</td><td>${calcAI(d, p.pos)}</td></tr>`;
                 }
                 tableHtml += `</table>`;
                 statsDiv.innerHTML += tableHtml;
+
                 let glow = i===0?'rank-gold':i===1?'rank-silver':i===2?'rank-bronze':'';
                 rankGrid.innerHTML += `<div class="card ${glow}"><h2>#${i+1}</h2><h4>${p.name}</h4><div style="font-family:Orbitron; color:var(--primary)">Rating: ${p.ai}</div></div>`;
             });
@@ -339,11 +305,13 @@
         function openProfile(name) {
             const p = players.find(x => x.name === name);
             const months = stats[name];
-            let showCS = (p.pos === "CB" || p.pos === "CM");
+            let isDef = p.pos === "CB" || p.pos === "CM";
+            let isAtk = ["ST", "RW", "LW", "CM"].includes(p.pos);
+
             let html = `<div style="text-align:center"><img src="${p.photo}" style="width:100px; border-radius:50%; border:3px solid var(--primary)" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'"><h2>${name}</h2><p style="color:var(--primary)">${p.pos}</p></div>`;
-            html += `<table class="stat-table"><tr><th>Month</th><th>G</th><th>A</th>${showCS?'<th>CS</th>':''}<th>AI</th></tr>`;
+            html += `<table class="stat-table"><tr><th>Month</th><th>G</th><th>A</th>${isDef?'<th>CS</th>':''}${isAtk?'<th>S%</th>':''}<th>AI</th></tr>`;
             for(let m in months) {
-                html += `<tr><td>${m}</td><td>${months[m].g}</td><td>${months[m].a}</td>${showCS?`<td style="color:#4ade80; font-weight:bold;">${months[m].cs||0}</td>`:''}<td>${calcAI(months[m], p.pos)}</td></tr>`;
+                html += `<tr><td>${m}</td><td>${months[m].g}</td><td>${months[m].a}</td>${isDef?`<td class="cs-col">${months[m].cs||0}</td>`:''}${isAtk?`<td class="s-col">${months[m].s||0}%</td>`:''}<td>${calcAI(months[m], p.pos)}</td></tr>`;
             }
             html += `</table><button onclick="document.getElementById('pModal').style.display='none'" style="width:100%; padding:10px; margin-top:15px; background:var(--primary); border:none; border-radius:10px; font-weight:bold;">Close</button>`;
             document.getElementById('modalData').innerHTML = html;
