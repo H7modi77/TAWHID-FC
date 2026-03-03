@@ -1,363 +1,435 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TAWHID CLUB</title>
-<style>
-body{
-    margin:0;
-    font-family:sans-serif;
-    background:#0b0f1a;
-    color:white;
-    text-align:center;
-    padding-bottom:70px;
-}
-body::before{
-    content:"";
-    position:fixed;
-    width:200%;
-    height:200%;
-    background:linear-gradient(45deg,#001,#112,#001);
-    animation:bg 20s linear infinite;
-    z-index:-1;
-}
-@keyframes bg{100%{transform:translate(-50%,-50%)}} 
-.hero{
-    padding:40px;
-    background:linear-gradient(90deg,#0ea5ff,#7c3aed);
-}
-.logo{width:80px;}
-nav{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:8px;
-    padding:10px;
-}
-nav button{
-    background:#ffffff22;
-    border:none;
-    color:white;
-    padding:10px;
-    border-radius:10px;
-    cursor:pointer;
-}
-.section{display:none;padding:15px;}
-.active{display:block;}
-.grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
-}
-.card{
-    background:#ffffff11;
-    backdrop-filter:blur(12px);
-    border-radius:15px;
-    padding:10px;
-    cursor:pointer;
-}
-.card img{
-    width:100%;
-    border-radius:12px;
-}
-.modal{
-    display:none;
-    position:fixed;
-    top:0;
-    width:100%;
-    height:100%;
-    background:#000a;
-}
-.modalBox{
-    background:#111;
-    margin:20% auto;
-    width:90%;
-    padding:20px;
-    border-radius:15px;
-}
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:10px;
-}
-td,th{
-    border:1px solid #ffffff22;
-    padding:6px;
-    font-size:12px;
-}
-.sponsors{
-    position:fixed;
-    bottom:0;
-    width:100%;
-    background:#000c;
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    padding:8px;
-}
-.sponsors img{height:40px;}
-video{width:100%;border-radius:10px;}
-.newsCard img{width:100%;border-radius:10px;}
-.newsDate{font-size:12px;opacity:.7;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAWHID CLUB | Pro System</title>
+    
+    <!-- Libraries -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #0ea5ff;
+            --secondary: #7c3aed;
+            --accent: #ffae00;
+            --bg: #05070a;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; transition: 0.3s; }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: white;
+            overflow-x: hidden;
+            background: radial-gradient(circle at top right, #1a103d, #05070a);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            text-align: center;
+            position: relative;
+        }
+
+        .hero img { width: 100px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.5)); }
+        
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.5);
+        }
+
+        nav button {
+            background: var(--glass);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav button:hover, nav button.active-nav {
+            background: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(14, 165, 255, 0.4);
+        }
+
+        .container { max-width: 1200px; margin: auto; padding: 20px; }
+
+        /* Fut Cards Styling */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .player-card {
+            background: linear-gradient(145deg, #1e222d, #0b0f1a);
+            border-radius: 20px;
+            padding: 20px;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .player-card::before {
+            content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, var(--primary), transparent, transparent);
+            animation: rotate 4s linear infinite; z-index: 0; opacity: 0.3;
+        }
+
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+
+        .player-card-inner { position: relative; z-index: 1; background: #0b0f1a; border-radius: 15px; padding: 15px; }
+
+        .player-img {
+            width: 120px; height: 120px; border-radius: 50%;
+            object-fit: cover; border: 4px solid var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .ai-badge {
+            position: absolute; top: 10px; right: 10px;
+            background: var(--accent); color: black;
+            padding: 5px 15px; border-radius: 20px; font-weight: 900; font-size: 1.2rem;
+        }
+
+        /* Stats Table */
+        .stats-wrapper { overflow-x: auto; background: var(--glass); border-radius: 15px; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; color: white; }
+        th, td { padding: 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        th { background: var(--secondary); color: white; }
+
+        /* Admin Panel */
+        .admin-box {
+            background: rgba(255,255,255,0.05);
+            padding: 30px; border-radius: 20px; border: 1px dashed var(--primary);
+            max-width: 500px; margin: auto;
+        }
+
+        input, select {
+            width: 100%; padding: 12px; margin: 10px 0;
+            background: rgba(0,0,0,0.3); border: 1px solid var(--glass);
+            color: white; border-radius: 10px;
+        }
+
+        /* Charts Section */
+        .chart-container { background: var(--glass); padding: 20px; border-radius: 20px; margin-top: 20px; }
+
+        /* Modal Customization */
+        .modal {
+            display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.9); z-index: 1000; backdrop-filter: blur(8px);
+        }
+        .modal-content {
+            background:#161b22; width:90%; max-width:600px; margin:5% auto;
+            padding:30px; border-radius:25px; border: 1px solid var(--primary);
+        }
+
+        /* Sponsors Footer */
+        .sponsors {
+            position: fixed; bottom: 0; width: 100%; background: rgba(0,0,0,0.8);
+            display: flex; justify-content: center; gap: 40px; padding: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .sponsors img { height: 45px; opacity: 0.7; filter: grayscale(1); }
+        .sponsors img:hover { opacity: 1; filter: grayscale(0); }
+
+        .section { display: none; animation: fadeIn 0.5s ease; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
 </head>
 <body>
 
-<!-- HERO -->
-<header class="hero">
-    <img src="logo.png" class="logo">
-    <h1>TAWHID CLUB</h1>
-    <p>Ultimate Team System</p>
-</header>
+    <!-- Hero -->
+    <header class="hero">
+        <img src="logo.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1165/1165187.png'">
+        <h1 style="font-size: 3rem; margin: 10px 0;">TAWHID CLUB</h1>
+        <p><i class="fas fa-shield-halved"></i> نظام الإدارة المتطور للفريق</p>
+    </header>
 
-<!-- NAV -->
-<nav>
-    <button onclick="show('home')">الرئيسية</button>
-    <button onclick="show('team')">اللاعبين</button>
-    <button onclick="show('awards')">الجوائز</button>
-    <button onclick="show('stats')">الإحصائيات</button>
-    <button onclick="show('ranking')">الترتيب</button>
-    <button onclick="show('admin')">Admin</button>
-</nav>
+    <!-- Navigation -->
+    <nav id="mainNav">
+        <button onclick="show('home')" class="active-nav"><i class="fas fa-home"></i> الرئيسية</button>
+        <button onclick="show('team')"><i class="fas fa-users"></i> اللاعبين</button>
+        <button onclick="show('stats')"><i class="fas fa-chart-line"></i> الإحصائيات</button>
+        <button onclick="show('ranking')"><i class="fas fa-trophy"></i> الترتيب</button>
+        <button onclick="show('admin')"><i class="fas fa-user-shield"></i> الإدارة</button>
+    </nav>
 
-<!-- HOME -->
-<section id="home" class="section active">
-    <h2>آخر الأخبار</h2>
-    <div id="newsBox" class="grid"></div>
-</section>
+    <div class="container">
+        
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <h2 class="title"><i class="fas fa-newspaper text-primary"></i> آخر الأخبار</h2>
+            <div id="newsBox" class="grid"></div>
+            
+            <h2 class="title" style="margin-top:40px;"><i class="fas fa-medal text-accent"></i> جوائز الشهر</h2>
+            <div id="awardsBox" class="grid"></div>
+        </section>
 
-<!-- TEAM -->
-<section id="team" class="section">
-    <h2>الفريق</h2>
-    <div id="playersContainer" class="grid"></div>
-</section>
-
-<!-- AWARDS -->
-<section id="awards" class="section">
-    <h2>جوائز الشهر</h2>
-    <div id="awardsBox" class="grid"></div>
-</section>
-
-<!-- STATS -->
-<section id="stats" class="section">
-    <h2>إحصائيات اللاعبين</h2>
-    <div id="statsBox"></div>
-</section>
-
-<!-- RANKING -->
-<section id="ranking" class="section">
-    <h2>ترتيب اللاعبين</h2>
-    <div id="rankingBox" class="grid"></div>
-</section>
-
-<!-- ADMIN -->
-<section id="admin" class="section">
-    <input id="user" placeholder="User">
-    <input id="pass" type="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <div id="panel" style="display:none">
-        <input id="pname" placeholder="اسم اللاعب">
-        <input id="pphoto" placeholder="الصورة">
-        <input id="ppos" placeholder="المركز">
-        <button onclick="addPlayer()">إضافة لاعب</button>
-    </div>
-</section>
-
-<!-- MODAL -->
-<div id="modal" class="modal">
-    <div id="modalContent" class="modalBox"></div>
-</div>
-
-<!-- SPONSORS -->
-<footer class="sponsors">
-    <img src="sponsor1.png">
-    <img src="sponsor2.png">
-</footer>
-
-<script>
-// SPA
-function show(id){
-    document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-}
-
-// PLAYERS
-let players=[
-    {name:"Basabeso2",photo:"basabeso2.png",pos:"Defender"},
-    {name:"M---_11_11",photo:"m1111.png",pos:"Midfield"},
-    {name:"H7modi77",photo:"h7modi77.png",pos:"Midfield/Attack"},
-    {name:"Almousa3M",photo:"almousa3m.png",pos:"Attack"},
-    {name:"H2ssain_28",photo:"h2ssain28.png",pos:"Attack"},
-    {name:"Yo0ousef25",photo:"yo0ousef25.png",pos:"Attack"}
-];
-
-// STATS
-const stats={
-Basabeso2:{February:{m:24,g:2,a:3,cs:4,p:85,best:3,w:50}},
-"M---_11_11":{October:{m:68,g:38,a:43,p:81,best:9,w:57},November:{m:86,g:48,a:58,p:74,best:10,w:54},January:{m:158,g:112,a:113,p:75,best:11,w:46},February:{m:40,g:24,a:19,p:75,best:8,w:46}},
-H7modi77:{October:{m:45,g:14,a:36,p:79,s:37,best:2,w:62},November:{m:77,g:52,a:54,p:76,s:40,best:9,w:51},January:{m:116,g:44,a:85,p:75,s:39,best:19,w:47},February:{m:44,g:20,a:26,p:75,s:37,best:9,w:47}},
-Almousa3M:{October:{m:58,g:65,a:61,p:78,s:33,best:18,w:60},November:{m:57,g:67,a:72,p:77,s:33,best:15,w:53},January:{m:126,g:161,a:146,p:77,s:40,best:24,w:49},February:{m:42,g:48,a:41,p:77,s:39,best:9,w:49}},
-H2ssain_28:{October:{m:44,g:36,a:15,p:76,s:23,best:1,w:56},November:{m:64,g:59,a:48,p:77,s:25,best:8,w:51},January:{m:146,g:144,a:72,p:73,s:28,best:9,w:44},February:{m:31,g:31,a:55,p:73,s:28,best:1,w:44}},
-Yo0ousef25:{October:{m:28,g:23,a:5,p:78,s:46,best:0,w:67},November:{m:26,g:21,a:8,p:78,s:52,best:3,w:58},January:{m:99,g:57,a:17,p:74,s:47,best:0,w:43},February:{m:18,g:11,a:2,p:74,s:47,best:1,w:43}}
-};
-
-// CALC AI
-function calcAI(d,pos){
-    let ai=(d.g*2.1)+(d.a*2.1)+(d.p*1.5)+(d.w*1.5);
-    if(pos=="Attack") ai+=d.s*2.5;
-    if(pos=="Defender") ai+= (d.cs||0)*2.0;
-    return Math.round(ai);
-}
-
-// TOTAL STATS BY POSITION (Best مجموع)
-function totalStatsByPosition(name,pos){
-    let months=stats[name];
-    let t={m:0,g:0,a:0,p:0,s:0,w:0,cs:0,best:0};
-    let c=0;
-    for(let m in months){
-        let d=months[m];
-        t.m+=d.m; t.g+=d.g; t.a+=d.a; t.p+=d.p; t.s+=d.s||0; t.w+=d.w; t.cs+=d.cs||0; t.best += d.best || 0;
-        c++;
-    }
-    t.p = Math.round(t.p/c); t.s = Math.round(t.s/c); t.w = Math.round(t.w/c); t.cs = Math.round(t.cs/c);
-    return t;
-}
-
-// RENDER TEAM
-function renderTeam(){
-    playersContainer.innerHTML="";
-    players.forEach(p=>{
-        let pos = p.pos.includes("Defender")?"Defender":p.pos.includes("Midfield")?"Midfield":"Attack";
-        let ai = calcAI(totalStatsByPosition(p.name,pos),pos);
-        playersContainer.innerHTML+=
-        `<div class="card" onclick="openPlayer('${p.name}')">
-            <img src="${p.photo}">
-            <h3>${p.name}</h3>
-            <p>${p.pos}</p>
-            <h2>AI ${ai}</h2>
-        </div>`;
-    });
-}
-renderTeam();
-
-// PLAYER MODAL
-function openPlayer(name){
-    let player = players.find(p=>p.name===name);
-    let pos = player.pos.includes("Defender")?"Defender":player.pos.includes("Midfield")?"Midfield":"Attack";
-    let t = totalStatsByPosition(name,pos);
-    let ai = calcAI(t,pos);
-    modal.style.display="block";
-    let html=`<h2>${name}</h2>`;
-    html+=`<p>Matches: ${t.m}</p><p>Goals: ${t.g}</p><p>Assists: ${t.a}</p>`;
-    if(pos=="Defender") html+=`<p>Clean Sheet: ${t.cs}</p>`;
-    html+=`<p>Pass: ${t.p}%</p>`;
-    if(pos=="Attack") html+=`<p>Shot: ${t.s}%</p>`;
-    html+=`<p>Best: ${t.best}</p><p>Win: ${t.w}%</p>`;
-    html+=`<h1>AI ${ai}</h1>`;
-    modalContent.innerHTML=html;
-}
-modal.onclick=e=>{if(e.target.id==="modal") modal.style.display="none";};
-
-// AWARDS
-const awards={player:{name:"Almousa3M",img:"award-player.png",month:"Feb"},goal:{player:"H7modi77",img:"award-goal.png",video:"https://raw.githubusercontent.com/H7modi77/TAWHID-FC/main/19c9ebcbc1934-master_playlist.mov"}};
-awardsBox.innerHTML=
-`<div class="card">
-    <h3> لاعب الشهر</h3>
-    <img src="${awards.player.img}">
-    <h2>${awards.player.name}</h2>
-    <p>${awards.player.month}</p>
-</div>
-<div class="card">
-    <h3> هدف الشهر</h3>
-    <img src="${awards.goal.img}">
-    <p>${awards.goal.player}</p>
-    <video controls><source src="${awards.goal.video}"></video>
-</div>`;
-
-// NEWS
-const news=[
-    {title:"اجتماع لأعضاء النادي حول قضية عدم اللعب بسبب غياب لاعب",img:"news1.png",date:"2026-02-25"},
-    {title:"مقابلة اللاعب yo0ousef25 مع قناة skysports",img:"news2.png",date:"2026-02-27"}
-];
-news.forEach(n=>{
-    newsBox.innerHTML+=
-    `<div class="card newsCard">
-        <img src="${n.img}">
-        <h3>${n.title}</h3>
-        <p class="newsDate">${n.date}</p>
-    </div>`;
-});
-
-// STATS TABLE
-for(let player of players){
-    let name = player.name;
-    let pos = player.pos.includes("Defender")?"Defender":player.pos.includes("Midfield")?"Midfield":"Attack";
-    let months=stats[name]; 
-    let html=`<div class="card"><h3>${name} (${pos})</h3><table><tr><th>Month</th>`;
-    
-    if(pos=="Defender") html+=`<th>M</th><th>G</th><th>A</th><th>CS</th><th>P%</th><th>Best</th><th>W%</th><th>Final AI</th></tr>`;
-    else if(pos=="Midfield") html+=`<th>M</th><th>G</th><th>A</th><th>P%</th><th>Best</th><th>W%</th><th>Final AI</th></tr>`;
-    else html+=`<th>M</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>Best</th><th>W%</th><th>Final AI</th></tr>`;
-
-    for(let m in months){
-        let d=months[m];
-        let ai = calcAI(d,pos);
-        if(pos=="Defender") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.cs||0}</td><td>${d.best||0}</td><td>${d.w}</td><td>${ai}</td></tr>`;
-        else if(pos=="Midfield") html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.best||0}</td><td>${d.w}</td><td>${ai}</td></tr>`;
-        else html+=`<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}</td><td>${d.s||0}</td><td>${d.best||0}</td><td>${d.w}</td><td>${ai}</td></tr>`;
-    }
-
-    let t=totalStatsByPosition(name,pos);
-    let totalAI = calcAI(t,pos);
-    if(pos=="Defender") html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.cs}</th><th>${t.best}</th><th>${t.w}</th><th>${totalAI}</th></tr>`;
-    else if(pos=="Midfield") html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.best}</th><th>${t.w}</th><th>${totalAI}</th></tr>`;
-    else html+=`<tr><th>Total</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.p}</th><th>${t.s}</th><th>${t.best}</th><th>${t.w}</th><th>${totalAI}</th></tr>`;
-    html+=`</table></div>`;
-    statsBox.innerHTML+=html;
-}
-
-// ADMIN
-function login(){
-    if(user.value==="TAWHID" && pass.value==="2"){
-        panel.style.display="block";
-        alert("تم تسجيل الدخول");
-    } else alert("بيانات خاطئة");
-}
-
-function addPlayer(){
-    players.push({name:pname.value,photo:pphoto.value,pos:ppos.value});
-    renderTeam();
-    pname.value="";pphoto.value="";ppos.value="";
-    alert("تمت إضافة اللاعب");
-}
-
-// RANKING
-function renderRanking(){
-    players.forEach(p=>{
-        let pos = p.pos.includes("Defender") ? "Defender" : p.pos.includes("Midfield") ? "Midfield" : "Attack";
-        p.ai = calcAI(totalStatsByPosition(p.name,pos), pos);
-    });
-    let sorted = [...players].sort((a,b)=>b.ai - a.ai);
-    rankingBox.innerHTML = "";
-    sorted.forEach((p,index)=>{
-        let className="", icon="";
-        if(index===0){className="rankingGold"; icon="🥇";}
-        else if(index===1){className="rankingSilver"; icon="🥈";}
-        else if(index===2){className="rankingBronze"; icon="🥉";}
-        rankingBox.innerHTML += `
-        <div class="card ${className}" style="display:flex; align-items:center; gap:10px;">
-            <img src="${p.photo}" style="width:40px; height:40px; border-radius:50%;">
-            <div>
-                <h3>${icon} ${index+1} - ${p.name}</h3>
-                <p>${p.pos}</p>
-                <h2>AI ${p.ai}</h2>
+        <!-- Team Section -->
+        <section id="team" class="section">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h2>قائمة المحاربين</h2>
+                <input type="text" id="playerSearch" placeholder="ابحث عن لاعب..." style="width:250px;" onkeyup="searchPlayer()">
             </div>
-        </div>`;
-    });
-}
-renderRanking();
-</script>
+            <div id="playersContainer" class="grid"></div>
+        </section>
 
+        <!-- Stats Section -->
+        <section id="stats" class="section">
+            <h2>لوحة تحليل البيانات</h2>
+            <div id="statsBox"></div>
+        </section>
+
+        <!-- Ranking Section -->
+        <section id="ranking" class="section">
+            <h2>تصنيف الأساطير (Top AI)</h2>
+            <div id="rankingBox" class="grid"></div>
+            <div class="chart-container">
+                <canvas id="rankingChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Admin Section -->
+        <section id="admin" class="section">
+            <div id="loginForm" class="admin-box">
+                <h3>تسجيل دخول الإدارة</h3>
+                <input id="user" placeholder="اسم المستخدم">
+                <input id="pass" type="password" placeholder="كلمة المرور">
+                <button onclick="login()" class="hero" style="width:100%; border:none; padding:12px; border-radius:10px; cursor:pointer;">دخول</button>
+            </div>
+
+            <div id="panel" class="admin-box" style="display:none">
+                <h3>لوحة التحكم</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <input id="pname" placeholder="اسم اللاعب">
+                    <input id="pphoto" placeholder="رابط الصورة">
+                    <select id="ppos">
+                        <option value="Attack">هجوم</option>
+                        <option value="Midfield">وسط</option>
+                        <option value="Defender">دفاع</option>
+                        <option value="GK">حارس</option>
+                    </select>
+                    <button onclick="addPlayer()" style="background:var(--primary); color:white; border:none; border-radius:10px;">إضافة لاعب</button>
+                </div>
+                <hr style="margin:20px 0; opacity:0.1;">
+                <button onclick="logout()" style="background:red; color:white; border:none; width:100%; padding:10px; border-radius:10px;">تسجيل خروج</button>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+
+    <!-- Sponsors -->
+    <footer class="sponsors">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Adidas_Logo.svg/1200px-Adidas_Logo.svg.png">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/1200px-Logo_NIKE.svg.png">
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/43/EA_Sports_FC_logo.svg/1200px-EA_Sports_FC_logo.svg.png">
+    </footer>
+
+    <script>
+        // Data Handling with LocalStorage
+        let players = JSON.parse(localStorage.getItem('players')) || [
+            {name:"Basabeso2", photo:"basabeso2.png", pos:"Defender"},
+            {name:"M---_11_11", photo:"m1111.png", pos:"Midfield"},
+            {name:"H7modi77", photo:"h7modi77.png", pos:"Midfield/Attack"},
+            {name:"Almousa3M", photo:"almousa3m.png", pos:"Attack"},
+            {name:"H2ssain_28", photo:"h2ssain28.png", pos:"Attack"},
+            {name:"Yo0ousef25", photo:"yo0ousef25.png", pos:"Attack"}
+        ];
+
+        const stats = {
+            Basabeso2:{February:{m:24,g:2,a:3,cs:4,p:85,best:3,w:50}},
+            "M---_11_11":{October:{m:68,g:38,a:43,p:81,best:9,w:57},November:{m:86,g:48,a:58,p:74,best:10,w:54},January:{m:158,g:112,a:113,p:75,best:11,w:46},February:{m:40,g:24,a:19,p:75,best:8,w:46}},
+            H7modi77:{October:{m:45,g:14,a:36,p:79,s:37,best:2,w:62},November:{m:77,g:52,a:54,p:76,s:40,best:9,w:51},January:{m:116,g:44,a:85,p:75,s:39,best:19,w:47},February:{m:44,g:20,a:26,p:75,s:37,best:9,w:47}},
+            Almousa3M:{October:{m:58,g:65,a:61,p:78,s:33,best:18,w:60},November:{m:57,g:67,a:72,p:77,s:33,best:15,w:53},January:{m:126,g:161,a:146,p:77,s:40,best:24,w:49},February:{m:42,g:48,a:41,p:77,s:39,best:9,w:49}},
+            H2ssain_28:{October:{m:44,g:36,a:15,p:76,s:23,best:1,w:56},November:{m:64,g:59,a:48,p:77,s:25,best:8,w:51},January:{m:146,g:144,a:72,p:73,s:28,best:9,w:44},February:{m:31,g:31,a:55,p:73,s:28,best:1,w:44}},
+            Yo0ousef25:{October:{m:28,g:23,a:5,p:78,s:46,best:0,w:67},November:{m:26,g:21,a:8,p:78,s:52,best:3,w:58},January:{m:99,g:57,a:17,p:74,s:47,best:0,w:43},February:{m:18,g:11,a:2,p:74,s:47,best:1,w:43}}
+        };
+
+        // UI Logic
+        function show(id) {
+            document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+            document.getElementById(id).classList.add("active");
+            
+            document.querySelectorAll("nav button").forEach(b => b.classList.remove("active-nav"));
+            event.currentTarget.classList.add("active-nav");
+
+            if(id === 'ranking') renderCharts();
+        }
+
+        function calcAI(d, pos) {
+            let ai = (d.g * 2.5) + (d.a * 2.0) + (d.p * 1.2) + (d.w * 1.8);
+            if (pos.includes("Attack")) ai += (d.s || 0) * 1.5;
+            if (pos.includes("Defender")) ai += (d.cs || 0) * 5.0;
+            return Math.round(ai / 10) + 50; // Balanced Score
+        }
+
+        function getPlayerData(name, pos) {
+            let months = stats[name] || {};
+            let t = {m:0, g:0, a:0, p:0, s:0, w:0, cs:0, best:0, count:0};
+            for (let m in months) {
+                let d = months[m];
+                t.m += d.m; t.g += d.g; t.a += d.a; t.p += d.p; t.s += d.s || 0;
+                t.w += d.w; t.cs += d.cs || 0; t.best += d.best || 0; t.count++;
+            }
+            if (t.count > 0) {
+                t.p = Math.round(t.p / t.count);
+                t.w = Math.round(t.w / t.count);
+                t.s = Math.round(t.s / t.count);
+            }
+            return t;
+        }
+
+        function renderTeam() {
+            const container = document.getElementById("playersContainer");
+            container.innerHTML = "";
+            players.forEach(p => {
+                let data = getPlayerData(p.name, p.pos);
+                let ai = calcAI(data, p.pos);
+                container.innerHTML += `
+                    <div class="player-card" onclick="openPlayer('${p.name}')">
+                        <div class="ai-badge">${ai}</div>
+                        <div class="player-card-inner">
+                            <img src="${p.photo}" class="player-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'">
+                            <h3>${p.name}</h3>
+                            <p style="color:var(--primary)">${p.pos}</p>
+                            <div style="display:flex; justify-content:space-around; margin-top:10px; font-size:0.8rem; opacity:0.8;">
+                                <span>G: ${data.g}</span>
+                                <span>A: ${data.a}</span>
+                                <span>M: ${data.m}</span>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function openPlayer(name) {
+            let p = players.find(x => x.name === name);
+            let data = getPlayerData(name, p.pos);
+            let ai = calcAI(data, p.pos);
+            
+            document.getElementById("modal").style.display = "block";
+            document.getElementById("modalContent").innerHTML = `
+                <div style="text-align:center">
+                    <img src="${p.photo}" style="width:150px; border-radius:50%; border:5px solid var(--primary)">
+                    <h2 style="margin:10px 0;">${name} <span style="color:var(--accent)">AI ${ai}</span></h2>
+                    <div class="stats-wrapper">
+                        <table>
+                            <tr><td>المباريات</td><td>${data.m}</td></tr>
+                            <tr><td>الأهداف</td><td>${data.g}</td></tr>
+                            <tr><td>الأسيست</td><td>${data.a}</td></tr>
+                            <tr><td>دقة التمرير</td><td>${data.p}%</td></tr>
+                            <tr><td>نسبة الفوز</td><td>${data.w}%</td></tr>
+                        </table>
+                    </div>
+                    <button onclick="closeModal(null)" style="margin-top:20px; background:var(--primary); border:none; color:white; padding:10px 30px; border-radius:10px;">إغلاق</button>
+                </div>
+            `;
+        }
+
+        function closeModal(e) {
+            if (!e || e.target.id === "modal") document.getElementById("modal").style.display = "none";
+        }
+
+        // Charts
+        function renderCharts() {
+            const ctx = document.getElementById('rankingChart').getContext('2d');
+            let sorted = [...players].map(p => ({
+                name: p.name,
+                ai: calcAI(getPlayerData(p.name, p.pos), p.pos)
+            })).sort((a,b) => b.ai - a.ai);
+
+            if(window.myChart) window.myChart.destroy();
+            
+            window.myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sorted.map(s => s.name),
+                    datasets: [{
+                        label: 'مستوى اللاعب (AI)',
+                        data: sorted.map(s => s.ai),
+                        backgroundColor: '#0ea5ff'
+                    }]
+                },
+                options: { 
+                    responsive: true,
+                    scales: { y: { beginAtZero: false, min: 40, ticks: {color: '#fff'} }, x: { ticks: {color: '#fff'} } }
+                }
+            });
+        }
+
+        // Admin Auth
+        function login() {
+            if(user.value === "TAWHID" && pass.value === "2") {
+                document.getElementById("loginForm").style.display = "none";
+                document.getElementById("panel").style.display = "block";
+                swal("مرحباً بك", "تم تسجيل دخول الإدارة بنجاح", "success");
+            } else {
+                swal("خطأ", "بيانات الدخول غير صحيحة", "error");
+            }
+        }
+
+        function addPlayer() {
+            let newP = { name: pname.value, photo: pphoto.value, pos: ppos.value };
+            players.push(newP);
+            localStorage.setItem('players', JSON.stringify(players));
+            renderTeam();
+            swal("تم!", "تم إضافة اللاعب بنجاح", "success");
+        }
+
+        // Search
+        function searchPlayer() {
+            let val = document.getElementById("playerSearch").value.toLowerCase();
+            document.querySelectorAll(".player-card").forEach(card => {
+                let name = card.querySelector("h3").innerText.toLowerCase();
+                card.style.display = name.includes(val) ? "block" : "none";
+            });
+        }
+
+        // Initial Load
+        window.onload = () => {
+            renderTeam();
+            // Load some news...
+            document.getElementById("newsBox").innerHTML = `
+                <div class="player-card-inner">
+                    <h4>تحديث النظام الجديد</h4>
+                    <p>تم إطلاق لوحة التحكم المتطورة v2.0</p>
+                    <small>منذ ساعتين</small>
+                </div>
+            `;
+        };
+    </script>
 </body>
 </html>
