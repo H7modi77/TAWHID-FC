@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAWHID CLUB | ELITE PRO V8</title>
+    <title>TAWHID CLUB | ULTIMATE LUXURY V8</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,83 +22,111 @@
         * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         body {
             margin: 0; font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text);
-            overflow-x: hidden; padding-bottom: 120px; /* زيادة المساحة للرعاة */
+            overflow-x: hidden; padding-bottom: 140px; 
         }
 
-        /* --- Luxury Sponsor Bar --- */
+        /* --- LUXURY SPONSOR BAR (PREMIUM VERSION) --- */
         .sponsor-luxury-bar {
             position: fixed;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            width: 90%;
-            max-width: 600px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border-radius: 50px;
-            padding: 15px 40px;
+            width: 95%;
+            max-width: 700px;
+            background: rgba(10, 15, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 100px;
+            padding: 12px 20px;
             display: flex;
-            justify-content: space-around;
+            justify-content: space-evenly;
             align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3); /* إطار ذهبي خفيف */
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 
+                        inset 0 0 20px rgba(0, 210, 255, 0.1);
             z-index: 9999;
+        }
+
+        /* تأثير اللمعة المتحركة على الشريط */
+        .sponsor-luxury-bar::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: skewX(-25deg);
+            animation: shineBar 6s infinite;
+        }
+
+        @keyframes shineBar {
+            0% { left: -100%; }
+            20% { left: 150%; }
+            100% { left: 150%; }
         }
 
         .sponsor-item {
             position: relative;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            cursor: pointer;
+            justify-content: center;
+            flex: 1;
         }
 
         .sponsor-item img {
-            height: 40px;
-            filter: grayscale(1) brightness(1.5); /* تبدأ رمادية */
-            opacity: 0.7;
-            transition: 0.5s ease;
+            height: 45px;
+            max-width: 140px;
+            object-fit: contain;
+            filter: grayscale(1) brightness(0.8);
+            opacity: 0.6;
+            transition: 0.6s all cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .sponsor-item:hover img {
-            filter: grayscale(0) brightness(1); /* تتحول للألوان */
+            filter: grayscale(0) brightness(1.2) drop-shadow(0 0 10px var(--primary));
             opacity: 1;
-            transform: scale(1.1);
+            transform: scale(1.15) translateY(-5px);
         }
 
-        .sponsor-item::after {
-            content: 'OFFICIAL SPONSOR';
-            position: absolute;
-            bottom: -15px;
-            font-size: 8px;
-            font-family: 'Orbitron';
-            color: var(--primary);
-            letter-spacing: 1px;
-            opacity: 0;
-            transition: 0.5s;
-        }
-
-        .sponsor-item:hover::after {
-            opacity: 1;
-            bottom: -20px;
-        }
-
+        /* توهج خلف كل شعار */
         .sponsor-glow {
             position: absolute;
-            width: 60px;
-            height: 60px;
+            width: 80px; height: 30px;
             background: var(--primary);
-            filter: blur(40px);
+            filter: blur(35px);
             opacity: 0;
             transition: 0.5s;
             z-index: -1;
         }
 
         .sponsor-item:hover .sponsor-glow {
-            opacity: 0.3;
+            opacity: 0.4;
         }
 
-        /* --- باقي التنسيقات السابقة --- */
+        /* نص "الراعي الرسمي" يظهر بفخامة */
+        .sponsor-item::after {
+            content: 'OFFICIAL PARTNER';
+            position: absolute;
+            bottom: -22px;
+            font-size: 7px;
+            font-family: 'Orbitron';
+            color: var(--accent);
+            letter-spacing: 2px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: 0.4s;
+        }
+
+        .sponsor-item:hover::after {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .sponsor-divider {
+            width: 1px;
+            height: 35px;
+            background: linear-gradient(to bottom, transparent, rgba(255,215,0,0.5), transparent);
+        }
+
+        /* --- باقي التنسيقات --- */
         .top-bar { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; z-index: 1001; }
         .btn-ctrl { background: var(--card); border: 1px solid var(--primary); color: var(--text); padding: 5px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; backdrop-filter: blur(10px); }
         header { padding: 40px 20px; text-align: center; }
@@ -163,7 +191,6 @@
     </nav>
 
     <div class="container">
-        <!-- الأقسام (Home, Team, Stats, Pitch, Ranking, Awards) نفس الكود السابق -->
         <section id="home" class="section active-section">
             <h2 class="lang-ar">الأخبار والفعاليات</h2><h2 class="lang-en">News & Events</h2>
             <div class="card" style="text-align: right;">
@@ -179,22 +206,22 @@
             <div class="pitch">
                 <div class="pitch-circle"></div>
                 <div class="player-spot" style="top: 15%; left: 35%;" onclick="openProfile('Almousa3M')">
-                    <img src="almousa3m.png" onerror="this.src='p.png'"><b class="lang-ar">هجوم</b><b class="lang-en">ST</b><b>Almousa3M</b>
+                    <img src="almousa3m.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102121.png'"><b class="lang-ar">هجوم</b><b class="lang-en">ST</b><b>Almousa3M</b>
                 </div>
                 <div class="player-spot" style="top: 15%; left: 65%;" onclick="openProfile('H2ssain_28')">
-                    <img src="h2ssain28.png" onerror="this.src='p.png'"><b class="lang-ar">هجوم</b><b class="lang-en">ST</b><b>H2ssain_28</b>
+                    <img src="h2ssain28.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102365.png'"><b class="lang-ar">هجوم</b><b class="lang-en">ST</b><b>H2ssain_28</b>
                 </div>
                 <div class="player-spot" style="top: 35%; left: 20%;" onclick="openProfile('H7modi77')">
-                    <img src="h7modi77.png" onerror="this.src='p.png'"><b class="lang-ar">جناح</b><b class="lang-en">LW</b><b>H7modi77</b>
+                    <img src="h7modi77.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102145.png'"><b class="lang-ar">جناح</b><b class="lang-en">LW</b><b>H7modi77</b>
                 </div>
                 <div class="player-spot" style="top: 35%; left: 80%;" onclick="openProfile('Yo0ousef25')">
-                    <img src="yo0ousef25.png" onerror="this.src='p.png'"><b class="lang-ar">جناح</b><b class="lang-en">RW</b><b>Yo0ousef25</b>
+                    <img src="yo0ousef25.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102432.png'"><b class="lang-ar">جناح</b><b class="lang-en">RW</b><b>Yo0ousef25</b>
                 </div>
                 <div class="player-spot" style="top: 60%; left: 50%;" onclick="openProfile('M---_11_11')">
-                    <img src="m1111.png" onerror="this.src='p.png'"><b class="lang-ar">وسط</b><b class="lang-en">CM</b><b>M---_11_11</b>
+                    <img src="m1111.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102633.png'"><b class="lang-ar">وسط</b><b class="lang-en">CM</b><b>M---_11_11</b>
                 </div>
                 <div class="player-spot" style="top: 85%; left: 50%;" onclick="openProfile('Basabeso2')">
-                    <img src="basabeso2.png" onerror="this.src='p.png'"><b class="lang-ar">دفاع</b><b class="lang-en">CB</b><b>Basabeso2</b>
+                    <img src="basabeso2.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'"><b class="lang-ar">دفاع</b><b class="lang-en">CB</b><b>Basabeso2</b>
                 </div>
             </div>
         </section>
@@ -215,13 +242,15 @@
         </section>
     </div>
 
-    <!-- LUXURY SPONSORS FOOTER -->
+    <!-- LUXURY SPONSORS BAR -->
     <div class="sponsor-luxury-bar">
         <div class="sponsor-item">
             <div class="sponsor-glow"></div>
             <img src="sponsor1.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/en/thumb/4/43/EA_Sports_FC_logo.svg/1200px-EA_Sports_FC_logo.svg.png'">
         </div>
-        <div style="width: 1px; height: 30px; background: rgba(255,255,255,0.1);"></div>
+        
+        <div class="sponsor-divider"></div>
+        
         <div class="sponsor-item">
             <div class="sponsor-glow"></div>
             <img src="sponsor2.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Adidas_Logo.svg/1200px-Adidas_Logo.svg.png'">
@@ -233,7 +262,6 @@
     </div>
 
     <script>
-        // --- DATA & LOGIC (نفس الكود السابق V7) ---
         const players = [
             {name:"Basabeso2", photo:"basabeso2.png", pos:"CB"},
             {name:"M---_11_11", photo:"m1111.png", pos:"CM"},
