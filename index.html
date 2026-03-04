@@ -3,332 +3,453 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAWHID CLUB | ULTIMATE LUXURY V9</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#00d2ff">
-    
+    <title>TAWHID CLUB | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
-            --primary: #00d2ff; --secondary: #7c3aed; --accent: #ffae00;
-            --bg: #05070a; --card: rgba(255, 255, 255, 0.03); --text: #ffffff;
-            --pitch: #1a472a; --gold: #ffd700; --silver: #c0c0c0; --bronze: #cd7f32;
+            --bg-dark: #05080a;
+            --sidebar-bg: #090e14;
+            --accent-blue: #00d2ff;
+            --card-bg: #0d121a;
         }
-
-        .light-mode {
-            --bg: #f0f2f5; --card: #ffffff; --text: #05070a; --pitch: #2e7d32;
-        }
-
-        * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         body {
-            margin: 0; font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text);
-            overflow-x: hidden; padding-bottom: 140px; 
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            border-left: 1px solid #1a222c;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            flex-shrink: 0;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .nav-item:hover, .nav-item.active {
+            background: rgba(0, 210, 255, 0.1);
+            color: var(--accent-blue);
+            box-shadow: inset 0 0 10px rgba(0, 210, 255, 0.05);
+        }
+        .nav-item i { margin-left: 12px; }
+
+        /* Main Content */
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+            background: radial-gradient(circle at top left, #0d121a 0%, #05080a 100%);
         }
 
-        /* --- LUXURY SPONSOR BAR --- */
-        .sponsor-luxury-bar {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 95%; max-width: 700px; background: rgba(10, 15, 26, 0.8);
-            backdrop-filter: blur(20px); border-radius: 100px; padding: 12px 20px;
-            display: flex; justify-content: space-evenly; align-items: center;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(0, 210, 255, 0.1);
-            z-index: 9999;
+        /* Player Card */
+        .player-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid #1a222c;
+            padding: 20px;
+            position: relative;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        .player-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-blue);
+        }
+        .ai-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--accent-blue);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            background: rgba(0,0,0,0.5);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
         }
 
-        .sponsor-luxury-bar::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: skewX(-25deg); animation: shineBar 6s infinite;
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #0d121a;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 24px;
+            border: 1px solid #1a222c;
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
         }
 
-        @keyframes shineBar { 0% { left: -100%; } 20% { left: 150%; } 100% { left: 150%; } }
+        /* Tables */
+        .db-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .db-table th {
+            text-align: right;
+            color: #475569;
+            font-size: 12px;
+            text-transform: uppercase;
+            padding: 15px;
+            border-bottom: 1px solid #1a222c;
+        }
+        .db-table td {
+            padding: 20px 15px;
+            border-bottom: 1px solid #090e14;
+        }
 
-        .sponsor-item { position: relative; display: flex; align-items: center; justify-content: center; flex: 1; }
-        .sponsor-item img { height: 45px; max-width: 140px; object-fit: contain; filter: grayscale(1) brightness(0.8); opacity: 0.6; }
-        .sponsor-item:hover img { filter: grayscale(0) brightness(1.2) drop-shadow(0 0 10px var(--primary)); opacity: 1; transform: scale(1.15) translateY(-5px); }
-        .sponsor-glow { position: absolute; width: 80px; height: 30px; background: var(--primary); filter: blur(35px); opacity: 0; z-index: -1; }
-        .sponsor-item:hover .sponsor-glow { opacity: 0.4; }
-        .sponsor-divider { width: 1px; height: 35px; background: linear-gradient(to bottom, transparent, rgba(255,215,0,0.5), transparent); }
-
-        /* --- UI COMPONENTS --- */
-        .top-bar { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; z-index: 1001; }
-        .btn-ctrl { background: var(--card); border: 1px solid var(--primary); color: var(--text); padding: 5px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; backdrop-filter: blur(10px); }
-        header { padding: 40px 20px; text-align: center; }
-        .logo { width: 110px; filter: drop-shadow(0 0 15px var(--primary)); background: transparent; }
-        nav { display: flex; justify-content: center; gap: 8px; padding: 12px; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(20px); background: rgba(0,0,0,0.6); border-bottom: 1px solid rgba(255,255,255,0.1); overflow-x: auto; }
-        nav button { background: transparent; border: none; color: var(--text); padding: 10px 15px; font-weight: 900; cursor: pointer; white-space: nowrap; }
-        nav button.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
-        .container { max-width: 1100px; margin: auto; padding: 15px; }
-        .section { display: none; animation: fadeIn 0.5s ease; }
-        .active-section { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Pitch */
-        .pitch { width: 100%; max-width: 550px; height: 750px; background: var(--pitch); margin: 20px auto; border: 4px solid rgba(255,255,255,0.4); border-radius: 20px; position: relative; background-image: repeating-linear-gradient(0deg, transparent, transparent 70px, rgba(255,255,255,0.02) 70px, rgba(255,255,255,0.02) 140px); }
-        .pitch-circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; border: 2px solid rgba(255,255,255,0.4); border-radius: 50%; }
-        .player-spot { position: absolute; width: 80px; text-align: center; transform: translate(-50%, -50%); cursor: pointer; }
-        .player-spot img { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--accent); background: #000; }
-        .player-spot b { display: block; font-size: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 2px; border-radius: 4px; margin-top: 3px; }
-
-        /* Tables & Ranking */
-        .stat-table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 15px; overflow: hidden; font-size: 13px; margin-top: 15px; }
-        .stat-table th, .stat-table td { padding: 10px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .stat-table th { background: var(--primary); color: #000; font-weight: 900; }
-        .s-col { color: var(--accent); font-weight: bold; } /* Shot accuracy color */
-        .cs-col { color: #4ade80; font-weight: bold; } /* Clean sheet color */
-
-        .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; }
-        .rank-gold { border: 2px solid var(--gold) !important; box-shadow: 0 0 20px rgba(255,215,0,0.3); }
-        .rank-silver { border: 2px solid var(--silver) !important; box-shadow: 0 0 20px rgba(192,192,192,0.2); }
-        .rank-bronze { border: 2px solid var(--bronze) !important; box-shadow: 0 0 20px rgba(205,127,50,0.2); }
-
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index: 2000; padding: 20px; overflow-y: auto; }
-        .modal-content { background: var(--bg); max-width: 750px; margin: auto; border-radius: 25px; padding: 25px; border: 1px solid var(--primary); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
-        .market-val { color: var(--accent); font-family: 'Orbitron'; font-weight: 900; margin-top: 10px; font-size: 14px; }
-
-        .lang-en { display: none; }
-        body.en-mode .lang-ar { display: none; }
-        body.en-mode .lang-en { display: inline; }
-        body.en-mode { direction: ltr; }
+        /* Leaderboard Glow */
+        .rank-glow-gold { border: 1px solid #ffd700; box-shadow: 0 0 20px rgba(255, 215, 0, 0.1); }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #1a222c; border-radius: 10px; }
     </style>
 </head>
-<body class="dark-mode">
+<body>
 
-    <div class="top-bar">
-        <button class="btn-ctrl" onclick="toggleLang()">
-            <span class="lang-ar">English</span><span class="lang-en">عربي</span>
-        </button>
-        <button class="btn-ctrl" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
-    </div>
-
-    <header>
-        <img src="logo.png" class="logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1165/1165187.png'">
-        <h1 style="font-family: 'Orbitron'; margin: 5px 0;">TAWHID CLUB</h1>
-        <div style="font-family:'Orbitron'; color:var(--primary)">TIER: 2</div>
-    </header>
-
-    <nav>
-        <button onclick="showSec('home', this)" class="active"><span class="lang-ar">الرئيسية</span><span class="lang-en">Home</span></button>
-        <button onclick="showSec('team', this)"><span class="lang-ar">اللاعبين</span><span class="lang-en">Players</span></button>
-        <button onclick="showSec('stats', this)"><span class="lang-ar">الإحصائيات</span><span class="lang-en">Stats</span></button>
-        <button onclick="showSec('pitch', this)"><span class="lang-ar">التشكيلة</span><span class="lang-en">Formation</span></button>
-        <button onclick="showSec('ranking', this)"><span class="lang-ar">الترتيب</span><span class="lang-en">Ranking</span></button>
-        <button onclick="showSec('awards', this)"><span class="lang-ar">الجوائز</span><span class="lang-en">Awards</span></button>
-    </nav>
-
-    <div class="container">
-        <section id="home" class="section active-section">
-            <h2 class="lang-ar">الأخبار والفعاليات</h2><h2 class="lang-en">News & Events</h2>
-            <div class="card" style="text-align: right;">
-                <p>• اجتماع لأعضاء النادي حول قضية الغيابات (25 فبراير)</p>
-                <p>• مقابلة اللاعب Yo0ousef25 مع SkySports (27 فبراير)</p>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="flex items-center gap-3 mb-10 px-2">
+            <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center orbitron font-bold text-xl shadow-lg shadow-blue-500/20">TC</div>
+            <div>
+                <h1 class="orbitron font-black text-lg leading-tight tracking-tighter">TAWHID</h1>
+                <p class="text-[10px] text-blue-500 font-bold tracking-[0.2em]">CLUB</p>
             </div>
-        </section>
-
-        <section id="team" class="section"> <div id="teamGrid" class="grid"></div> </section>
-        
-        <section id="stats" class="section">
-            <h2 class="lang-ar">إحصائيات الأداء </h2><h2 class="lang-en">Offensive & Defensive Stats</h2>
-            <div id="fullStats"></div>
-        </section>
-
-        <section id="pitch" class="section">
-            <div class="pitch">
-                <div class="pitch-circle"></div>
-                <div class="player-spot" style="top: 15%; left: 35%;" onclick="openProfile('Almousa3M')">
-                    <img src="almousa3m.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102121.png'"><b class="lang-ar">هجوم</b><b class="lang-en">ST</b><b>Almousa3M</b>
-                </div>
-                <div class="player-spot" style="top: 15%; left: 65%;" onclick="openProfile('H2ssain_28')">
-                    <img src="h2ssain28.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102365.png'"><b class="lang-ar">هجوم</b><b class="lang-en">ST</b><b>H2ssain_28</b>
-                </div>
-                <div class="player-spot" style="top: 35%; left: 20%;" onclick="openProfile('H7modi77')">
-                    <img src="h7modi77.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102145.png'"><b class="lang-ar">جناح</b><b class="lang-en">LW</b><b>H7modi77</b>
-                </div>
-                <div class="player-spot" style="top: 35%; left: 80%;" onclick="openProfile('Yo0ousef25')">
-                    <img src="yo0ousef25.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102432.png'"><b class="lang-ar">جناح</b><b class="lang-en">RW</b><b>Yo0ousef25</b>
-                </div>
-                <div class="player-spot" style="top: 60%; left: 50%;" onclick="openProfile('M---_11_11')">
-                    <img src="m1111.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102633.png'"><b class="lang-ar">وسط</b><b class="lang-en">CM</b><b>M---_11_11</b>
-                </div>
-                <div class="player-spot" style="top: 85%; left: 50%;" onclick="openProfile('Basabeso2')">
-                    <img src="basabeso2.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'"><b class="lang-ar">دفاع</b><b class="lang-en">CB</b><b>Basabeso2</b>
-                </div>
-            </div>
-        </section>
-
-        <section id="ranking" class="section"> <div id="rankGrid" class="grid"></div> </section>
-        
-        <section id="awards" class="section">
-            <div class="card rank-gold">
-                <h2> لاعب الشهر (فبراير)</h2>
-                <h3>Almousa3M</h3>
-                <p>AI Rating: 95.8</p>
-            </div>
-            <div class="card" style="margin-top:20px;">
-                <h2 class="lang-ar">هدف الشهر</h2><h2 class="lang-en">Goal of the Month</h2>
-                <video controls style="width:100%; border-radius:15px; margin-top:10px;">
-                    <source src="https://raw.githubusercontent.com/H7modi77/TAWHID-FC/main/19c9ebcbc1934-master_playlist.mov">
-                </video>
-            </div>
-        </section>
-    </div>
-
-    <!-- SPONSOR BAR -->
-    <div class="sponsor-luxury-bar">
-        <div class="sponsor-item">
-            <div class="sponsor-glow"></div>
-            <img src="sponsor1.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/en/thumb/4/43/EA_Sports_FC_logo.svg/1200px-EA_Sports_FC_logo.svg.png'">
         </div>
-        <div class="sponsor-divider"></div>
-        <div class="sponsor-item">
-            <div class="sponsor-glow"></div>
-            <img src="sponsor2.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Adidas_Logo.svg/1200px-Adidas_Logo.svg.png'">
+
+        <div class="nav-item active" onclick="showSection('news')">
+            <i data-lucide="layout-grid" class="w-5 h-5"></i>
+            <span>News Feed</span>
+        </div>
+        <div class="nav-item" onclick="showSection('team')">
+            <i data-lucide="users" class="w-5 h-5"></i>
+            <span>The Team</span>
+        </div>
+        <div class="nav-item" onclick="showSection('stats')">
+            <i data-lucide="database" class="w-5 h-5"></i>
+            <span>Statistics</span>
+        </div>
+        <div class="nav-item" onclick="showSection('rankings')">
+            <i data-lucide="trophy" class="w-5 h-5"></i>
+            <span>Rankings</span>
+        </div>
+        <div class="nav-item" onclick="showSection('awards')">
+            <i data-lucide="award" class="w-5 h-5"></i>
+            <span>Awards</span>
+        </div>
+        <div class="nav-item mt-4" onclick="showSection('admin')">
+            <i data-lucide="settings" class="w-5 h-5"></i>
+            <span>Admin</span>
+        </div>
+
+        <div class="mt-auto p-4 bg-gray-900/50 rounded-2xl border border-gray-800">
+            <p class="text-[10px] text-gray-500 uppercase font-bold mb-1">Season 2025</p>
+            <div class="flex justify-between items-center">
+                <span class="text-sm font-bold">Pro League</span>
+                <span class="flex items-center gap-1 text-[10px] bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full">
+                    <span class="w-1 h-1 bg-purple-400 rounded-full animate-ping"></span> LIVE
+                </span>
+            </div>
         </div>
     </div>
 
-    <div id="pModal" class="modal" onclick="if(event.target==this)this.style.display='none'">
-        <div class="modal-content" id="modalData"></div>
+    <!-- Main Content -->
+    <div class="main-content">
+        
+        <!-- Section: News Feed -->
+        <div id="section-news" class="content-section">
+            <div class="relative rounded-3xl overflow-hidden mb-10 h-80 flex items-center p-12 bg-gradient-to-r from-blue-900/40 to-transparent border border-blue-500/20">
+                <div class="relative z-10 max-w-xl">
+                    <h2 class="text-6xl font-black orbitron mb-4 leading-none uppercase">Welcome To <span class="text-blue-500">Tawhid</span> Club</h2>
+                    <p class="text-gray-400 mb-8 text-lg">Experience the next generation of esports tracking. Check out player stats, news, and monthly performers.</p>
+                    <button class="bg-blue-500 hover:bg-blue-400 text-black font-black px-8 py-4 rounded-xl flex items-center gap-3 transition-all" onclick="showSection('stats')">
+                        View Latest Stats <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+            </div>
+
+            <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                <span class="w-2 h-8 bg-blue-500 rounded-full"></span> Latest Intel
+            </h3>
+            <div class="grid grid-cols-2 gap-6">
+                <div class="bg-gray-900/40 border border-gray-800 p-4 rounded-3xl">
+                    <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80" class="w-full h-48 object-cover rounded-2xl mb-4 opacity-60">
+                    <span class="text-blue-500 text-xs font-bold orbitron">2026-02-25</span>
+                    <h4 class="text-xl font-bold mt-2">اجتماع لأعضاء النادي حول قضية الغيابات</h4>
+                </div>
+                <div class="bg-gray-900/40 border border-gray-800 p-4 rounded-3xl">
+                    <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80" class="w-full h-48 object-cover rounded-2xl mb-4 opacity-60">
+                    <span class="text-blue-500 text-xs font-bold orbitron">2026-02-27</span>
+                    <h4 class="text-xl font-bold mt-2">مقابلة اللاعب مع قناة رياضية</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: The Team -->
+        <div id="section-team" class="content-section hidden">
+            <h2 class="text-5xl font-black mb-2 orbitron">ACTIVE ROSTER</h2>
+            <p class="text-gray-500 mb-10">Click on a player card to view detailed performance metrics.</p>
+            <div id="team-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Players injected by JS -->
+            </div>
+        </div>
+
+        <!-- Section: Statistics -->
+        <div id="section-stats" class="content-section hidden">
+            <h2 class="text-5xl font-black mb-2 orbitron uppercase">Database</h2>
+            <p class="text-gray-500 mb-10">Comprehensive statistical breakdown of all active roster members.</p>
+            <div class="bg-[#0d121a] rounded-3xl border border-gray-800 overflow-hidden">
+                <table class="db-table">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Pos</th>
+                            <th>Matches</th>
+                            <th>G</th>
+                            <th>A</th>
+                            <th>CS</th>
+                            <th>Pass %</th>
+                            <th>Shot %</th>
+                            <th>Win %</th>
+                            <th class="text-blue-500">AI Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stats-body">
+                        <!-- Stats injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section: Rankings -->
+        <div id="section-rankings" class="content-section hidden">
+            <h2 class="text-5xl font-black mb-2 orbitron text-center uppercase tracking-tighter">Global Leaderboard</h2>
+            <p class="text-gray-500 mb-12 text-center">Players ranked purely by our advanced AI performance algorithm.</p>
+            <div id="leaderboard-list" class="max-w-4xl mx-auto space-y-4">
+                <!-- Ranks injected by JS -->
+            </div>
+        </div>
+
+        <!-- Section: Awards -->
+        <div id="section-awards" class="content-section hidden">
+            <h2 class="text-5xl font-black mb-10 orbitron uppercase">Wall of Fame</h2>
+            <div class="grid grid-cols-2 gap-10">
+                <div>
+                    <h3 class="text-blue-400 orbitron flex items-center gap-2 mb-6"><i data-lucide="star" class="w-5 h-5"></i> POTM - Player of the Month</h3>
+                    <div class="bg-gray-900 border border-blue-500/30 rounded-3xl p-6 text-center">
+                        <img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=400&q=80" class="w-full h-64 object-cover rounded-2xl mb-6">
+                        <h4 class="text-3xl font-black mb-2">لاعب الشهر</h4>
+                        <p class="text-blue-500 font-bold orbitron text-xl">ALMOUSA3M</p>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-cyan-400 orbitron flex items-center gap-2 mb-6"><i data-lucide="play-circle" class="w-5 h-5"></i> GOTM - Goal of the Month</h3>
+                    <div class="bg-gray-900 border border-cyan-500/30 rounded-3xl p-6 text-center">
+                        <div class="w-full h-64 bg-black rounded-2xl mb-6 flex items-center justify-center relative group cursor-pointer">
+                            <i data-lucide="play" class="w-16 h-16 text-cyan-500 fill-cyan-500"></i>
+                            <div class="absolute top-4 left-4 bg-black/50 px-3 py-1 rounded-lg orbitron text-xs">FEB</div>
+                        </div>
+                        <h4 class="text-3xl font-black mb-2">هدف الشهر</h4>
+                        <p class="text-cyan-500 font-bold orbitron text-xl">H7MODI77</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal Player Detail -->
+    <div id="player-modal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <!-- Left Side: Profile -->
+            <div class="w-1/3 p-10 bg-gradient-to-b from-blue-900/20 to-black flex flex-col items-center justify-center border-r border-gray-800">
+                <p class="orbitron text-xs text-gray-500 mb-2 uppercase tracking-widest">AI Rating</p>
+                <h3 id="modal-ai-score" class="text-6xl font-black text-blue-500 orbitron mb-10 tracking-tighter">000</h3>
+                <div class="relative mb-6">
+                    <div class="w-40 h-40 rounded-full bg-blue-500/10 border-2 border-blue-500/50 p-2 shadow-[0_0_30px_rgba(0,210,255,0.2)]">
+                        <img id="modal-img" src="" class="w-full h-full object-cover rounded-full">
+                    </div>
+                </div>
+                <h2 id="modal-name" class="text-3xl font-black mb-1">Name</h2>
+                <p id="modal-pos" class="text-blue-500 font-bold orbitron uppercase tracking-widest">Position</p>
+            </div>
+            <!-- Right Side: Stats -->
+            <div class="w-2/3 p-10 relative">
+                <button onclick="closeModal(null)" class="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors">
+                    <i data-lucide="x-circle" class="w-8 h-8"></i>
+                </button>
+                <div class="flex items-center gap-3 mb-8">
+                    <i data-lucide="activity" class="text-blue-500"></i>
+                    <h3 class="text-2xl font-bold orbitron uppercase tracking-tighter">Latest Performance</h3>
+                </div>
+                <p class="text-gray-500 mb-8 font-bold">Stats for February</p>
+                
+                <div id="modal-stats-grid" class="grid grid-cols-2 gap-4">
+                    <!-- Dynamic stats from JS -->
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        const players = [
-            {name:"Basabeso2", photo:"basabeso2.png", pos:"CB"},
-            {name:"M---_11_11", photo:"m1111.png", pos:"CM"},
-            {name:"H7modi77", photo:"h7modi77.png", pos:"LW"},
-            {name:"Almousa3M", photo:"almousa3m.png", pos:"ST"},
-            {name:"H2ssain_28", photo:"h2ssain28.png", pos:"ST"},
-            {name:"Yo0ousef25", photo:"yo0ousef25.png", pos:"RW"}
+        // Data derived from images and code
+        const playerData = [
+            { id: 1, name: "Basabeso2", pos: "Defender", photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Basabeso2", stats: { matches: 24, goals: 2, assists: 3, cs: 4, pass: 85, shot: 0, win: 50, potm: 3 }, ai: 221 },
+            { id: 2, name: "M---_11_11", pos: "Midfield", photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=M11", stats: { matches: 40, goals: 24, assists: 19, cs: 0, pass: 75, shot: 0, win: 46, potm: 5 }, ai: 272 },
+            { id: 3, name: "H7modi77", pos: "Attack", photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=H77", stats: { matches: 44, goals: 20, assists: 26, cs: 0, pass: 75, shot: 37, win: 47, potm: 8 }, ai: 372 },
+            { id: 4, name: "Almousa3M", pos: "Attack", photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alm", stats: { matches: 42, goals: 48, assists: 41, cs: 0, pass: 77, shot: 39, win: 49, potm: 12 }, ai: 473 }
         ];
 
-        const stats = {
-            Basabeso2:{February:{m:24,g:2,a:3,p:85,w:50,cs:4,s:0}},
-            "M---_11_11":{
-                October:{m:68,g:38,a:43,p:81,w:57,cs:2,s:27}, 
-                November:{m:86,g:48,a:58,p:74,w:54,cs:3,s:29}, 
-                January:{m:158,g:112,a:113,p:75,w:46,cs:5,s:33}, 
-                February:{m:40,g:24,a:19,p:75,w:46,cs:2,s:34}
-            },
-            H7modi77:{
-                October:{m:45,g:14,a:36,p:79,w:62,s:37},
-                November:{m:77,g:52,a:54,p:76,w:51,s:40},
-                January:{m:116,g:44,a:85,p:75,w:47,s:39},
-                February:{m:44,g:20,a:26,p:75,w:47,s:37}
-            },
-            Almousa3M:{
-                October:{m:58,g:65,a:61,p:78,w:60,s:33},
-                November:{m:57,g:67,a:72,p:77,w:53,s:33},
-                January:{m:126,g:161,a:146,p:77,w:49,s:40},
-                February:{m:42,g:48,a:41,p:77,w:49,s:39}
-            },
-            H2ssain_28:{
-                October:{m:44,g:36,a:15,p:76,w:56,s:23},
-                November:{m:64,g:59,a:48,p:77,w:51,s:25},
-                January:{m:146,g:144,a:72,p:73,w:44,s:28},
-                February:{m:31,g:31,a:55,p:73,w:44,s:28}
-            },
-            Yo0ousef25:{
-                October:{m:28,g:23,a:5,p:78,w:67,s:46},
-                November:{m:26,g:21,a:8,p:78,w:58,s:52},
-                January:{m:99,g:57,a:17,p:74,w:43,s:47},
-                February:{m:18,g:11,a:2,p:74,w:43,s:47}
-            }
-        };
-
-        function calcAI(d, pos) {
-            if(!d) return 0;
-            let base = (d.g*2.3 + d.a*2.0 + d.p*0.5 + d.w*0.8);
-            let csBonus = 0;
-            let shotBonus = 0;
-
-            if(pos === "CB") csBonus = (d.cs || 0) * 6.0; 
-            if(pos === "CM") {
-                csBonus = (d.cs || 0) * 3.0;
-                shotBonus = (d.s || 0) * 0.15;
-            }
-            if(["ST", "RW", "LW"].includes(pos)) {
-                shotBonus = (d.s || 0) * 0.25;
-            }
+        function showSection(id) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
+            document.getElementById('section-' + id).classList.remove('hidden');
             
-            return ((base + csBonus + shotBonus) / 10 + 40).toFixed(1);
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            event.currentTarget.classList.add('active');
         }
 
-        function toggleLang() { document.body.classList.toggle('en-mode'); }
-        function toggleTheme() { document.body.classList.toggle('light-mode'); }
-        function showSec(id, btn) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
-            document.getElementById(id).classList.add('active-section');
-            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+        function renderPlayers() {
+            const grid = document.getElementById('team-grid');
+            grid.innerHTML = playerData.map(p => `
+                <div class="player-card" onclick="openProfile(${p.id})">
+                    <div class="ai-badge orbitron">
+                        <span class="text-[8px] opacity-50">AI</span>
+                        <span class="font-bold">${p.ai}</span>
+                    </div>
+                    <div class="bg-gradient-to-b from-gray-800 to-transparent rounded-2xl p-4 mb-6">
+                        <img src="${p.photo}" class="w-full h-40 object-contain">
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-blue-500/10 text-blue-500 font-bold uppercase orbitron flex items-center gap-1">
+                            <i data-lucide="${p.pos === 'Attack' ? 'target' : (p.pos === 'Defender' ? 'shield' : 'zap')}" class="w-3 h-3"></i>
+                            ${p.pos}
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-black orbitron uppercase tracking-tighter">${p.name}</h3>
+                </div>
+            `).join('');
+            lucide.createIcons();
         }
 
-        function renderAll() {
-            const teamGrid = document.getElementById('teamGrid');
-            const statsDiv = document.getElementById('fullStats');
-            const rankGrid = document.getElementById('rankGrid');
-            teamGrid.innerHTML = ''; statsDiv.innerHTML = ''; rankGrid.innerHTML = '';
-
-            let rankedPlayers = players.map(p => {
-                let months = stats[p.name];
-                let t = {m:0, g:0, a:0, p:0, w:0, cs:0, s:0, count:0};
-                for(let m in months) {
-                    t.m += months[m].m; t.g += months[m].g; t.a += months[m].a;
-                    t.p += months[m].p; t.w += months[m].w; t.cs += (months[m].cs || 0);
-                    t.s += (months[m].s || 0); t.count++;
-                }
-                let avg = {g:t.g, a:t.a, p:t.p/t.count, w:t.w/t.count, cs:t.cs, s:t.s/t.count};
-                return { ...p, ai: calcAI(avg, p.pos), total: t };
-            }).sort((a,b) => b.ai - a.ai);
-
-            rankedPlayers.forEach((p, i) => {
-                teamGrid.innerHTML += `<div class="card" onclick="openProfile('${p.name}')"><img src="${p.photo}" style="width:80px; border-radius:50%;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'"><h4>${p.name}</h4><div class="market-val">€ ${(p.ai * 2.8).toFixed(1)}M</div></div>`;
-                
-                let isDefender = p.pos === "CB";
-                let isMidfielder = p.pos === "CM";
-                let isAttacker = ["ST", "RW", "LW"].includes(p.pos);
-
-                let tableHtml = `<h3>${p.name} (${p.pos})</h3><table class="stat-table"><tr><th>Month</th><th>M</th><th>G</th><th>A</th>${(isDefender || isMidfielder)?'<th>CS</th>':''}${(isAttacker || isMidfielder)?'<th>S%</th>':''}<th>P%</th><th>W%</th><th>AI</th></tr>`;
-                
-                for(let m in stats[p.name]) {
-                    let d = stats[p.name][m];
-                    tableHtml += `<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td>${(isDefender || isMidfielder)?`<td class="cs-col">${d.cs||0}</td>`:''}${(isAttacker || isMidfielder)?`<td class="s-col">${d.s||0}%</td>`:''}<td>${d.p}%</td><td>${d.w}%</td><td>${calcAI(d, p.pos)}</td></tr>`;
-                }
-                tableHtml += `</table>`;
-                statsDiv.innerHTML += tableHtml;
-
-                let glow = i===0?'rank-gold':i===1?'rank-silver':i===2?'rank-bronze':'';
-                rankGrid.innerHTML += `<div class="card ${glow}"><h2>#${i+1}</h2><h4>${p.name}</h4><div style="font-family:Orbitron; color:var(--primary)">Rating: ${p.ai}</div></div>`;
-            });
+        function renderStatsTable() {
+            const body = document.getElementById('stats-body');
+            body.innerHTML = playerData.map(p => `
+                <tr class="hover:bg-white/[0.02] transition-colors">
+                    <td class="font-bold font-lg">${p.name}</td>
+                    <td><span class="text-[10px] bg-gray-800 px-2 py-1 rounded orbitron uppercase">${p.pos}</span></td>
+                    <td class="orbitron">${p.stats.matches}</td>
+                    <td class="orbitron">${p.stats.goals}</td>
+                    <td class="orbitron">${p.stats.assists}</td>
+                    <td class="orbitron">${p.stats.cs}</td>
+                    <td class="orbitron">${p.stats.pass}%</td>
+                    <td class="orbitron text-gray-500">${p.stats.shot}%</td>
+                    <td class="orbitron text-gray-500">${p.stats.win}%</td>
+                    <td class="orbitron font-bold text-blue-500 text-lg">${p.ai}</td>
+                </tr>
+            `).join('');
         }
 
-        function openProfile(name) {
-            const p = players.find(x => x.name === name);
-            const months = stats[name];
-            let isDef = p.pos === "CB" || p.pos === "CM";
-            let isAtk = ["ST", "RW", "LW", "CM"].includes(p.pos);
-
-            let html = `<div style="text-align:center"><img src="${p.photo}" style="width:100px; border-radius:50%; border:3px solid var(--primary)" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'"><h2>${name}</h2><p style="color:var(--primary)">${p.pos}</p></div>`;
-            html += `<table class="stat-table"><tr><th>Month</th><th>G</th><th>A</th>${isDef?'<th>CS</th>':''}${isAtk?'<th>S%</th>':''}<th>AI</th></tr>`;
-            for(let m in months) {
-                html += `<tr><td>${m}</td><td>${months[m].g}</td><td>${months[m].a}</td>${isDef?`<td class="cs-col">${months[m].cs||0}</td>`:''}${isAtk?`<td class="s-col">${months[m].s||0}%</td>`:''}<td>${calcAI(months[m], p.pos)}</td></tr>`;
-            }
-            html += `</table><button onclick="document.getElementById('pModal').style.display='none'" style="width:100%; padding:10px; margin-top:15px; background:var(--primary); border:none; border-radius:10px; font-weight:bold;">Close</button>`;
-            document.getElementById('modalData').innerHTML = html;
-            document.getElementById('pModal').style.display = 'block';
+        function renderRankings() {
+            const list = document.getElementById('leaderboard-list');
+            const sorted = [...playerData].sort((a,b) => b.ai - a.ai);
+            list.innerHTML = sorted.map((p, i) => `
+                <div class="bg-[#0d121a] p-4 rounded-2xl flex items-center gap-6 border border-gray-800 ${i === 0 ? 'rank-glow-gold' : ''}">
+                    <div class="w-12 text-center text-2xl font-black orbitron text-gray-600">
+                        ${i === 0 ? '<i data-lucide="trophy" class="text-yellow-500 w-8 h-8"></i>' : '#' + (i+1)}
+                    </div>
+                    <img src="${p.photo}" class="w-14 h-14 rounded-xl bg-gray-800 border border-gray-700">
+                    <div class="flex-grow">
+                        <h4 class="text-xl font-bold orbitron uppercase">${p.name}</h4>
+                        <p class="text-[10px] text-gray-500 orbitron uppercase font-bold">${p.pos}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[10px] text-gray-500 orbitron font-bold uppercase mb-1">AI Score</p>
+                        <div class="flex items-center gap-2">
+                            <span class="text-3xl font-black orbitron ${i === 0 ? 'text-yellow-500' : (i < 3 ? 'text-white' : 'text-blue-500')}">${p.ai}</span>
+                            <i data-lucide="chevron-up" class="w-5 h-5 text-green-500"></i>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
         }
 
-        window.onload = renderAll;
+        function openProfile(id) {
+            const p = playerData.find(x => x.id === id);
+            document.getElementById('modal-ai-score').innerText = p.ai;
+            document.getElementById('modal-img').src = p.photo;
+            document.getElementById('modal-name').innerText = p.name;
+            document.getElementById('modal-pos').innerText = p.pos;
+
+            const grid = document.getElementById('modal-stats-grid');
+            const metrics = [
+                { label: 'Matches', val: p.stats.matches },
+                { label: 'Goals', val: p.stats.goals },
+                { label: 'Assists', val: p.stats.assists },
+                { label: 'Clean Sheets', val: p.stats.cs },
+                { label: 'Pass %', val: p.stats.pass + '%' },
+                { label: 'Shot %', val: p.stats.shot + '%' },
+                { label: 'Win %', val: p.stats.win + '%' },
+                { label: 'POTM / GOTM', val: p.stats.potm }
+            ];
+
+            grid.innerHTML = metrics.map(m => `
+                <div class="bg-[#05080a] p-5 rounded-2xl border border-gray-800/50">
+                    <p class="text-[10px] text-gray-500 uppercase font-black orbitron mb-2 tracking-widest">${m.label}</p>
+                    <p class="text-3xl font-black orbitron text-white">${m.val}</p>
+                </div>
+            `).join('');
+
+            document.getElementById('player-modal').style.display = 'flex';
+            lucide.createIcons();
+        }
+
+        function closeModal(e) {
+            document.getElementById('player-modal').style.display = 'none';
+        }
+
+        // Initialize
+        window.onload = () => {
+            renderPlayers();
+            renderStatsTable();
+            renderRankings();
+            lucide.createIcons();
+        };
     </script>
-    <script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js')
-    .then(() => console.log('Service Worker registered'))
-    .catch(err => console.log('SW registration failed:', err));
-}
-</script>
 </body>
 </html>
