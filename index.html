@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAWHID CLUB | LUXURY PORTAL</title>
+    <title>TAWHID CLUB | LUXURY V15</title>
+    
+    <!-- Scripts & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
         :root {
             --primary: #00d2ff; --gold: #ffd700; --silver: #e2e8f0; --bronze: #cd7f32;
@@ -15,84 +18,94 @@
         .light {
             --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --border: #e2e8f0; --primary: #2563eb;
         }
-        body { background-color: var(--bg); color: var(--text); transition: 0.3s; overflow-x: hidden; font-family: 'Cairo', sans-serif; }
+        body { 
+            background-color: var(--bg); color: var(--text); 
+            transition: background 0.3s, color 0.3s; 
+            font-family: 'Cairo', sans-serif; margin: 0; 
+        }
         .orbitron { font-family: 'Orbitron', sans-serif; }
         
-        /* 3D Pitch - Masterwork */
-        .pitch-container { perspective: 1200px; padding: 20px; margin-top: -40px; }
+        /* 3D Pitch System */
+        .pitch-wrap { perspective: 1200px; padding: 20px; }
         .pitch-3d {
-            width: 100%; max-width: 400px; height: 580px; background: linear-gradient(to bottom, #14532d, #166534);
-            margin: auto; transform: rotateX(30deg); border: 4px solid rgba(255,255,255,0.2);
-            border-radius: 15px; position: relative; box-shadow: 0 50px 100px rgba(0,0,0,0.7);
+            width: 100%; max-width: 400px; height: 500px; background: linear-gradient(to bottom, #14532d, #166534);
+            margin: auto; transform: rotateX(25deg); border: 4px solid rgba(255,255,255,0.2);
+            border-radius: 15px; position: relative; box-shadow: 0 40px 100px rgba(0,0,0,0.6);
             background-image: repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(255,255,255,0.02) 50px, rgba(255,255,255,0.02) 100px);
         }
-        .pitch-line { position: absolute; top: 50%; width: 100%; height: 2px; background: rgba(255,255,255,0.2); }
-        .pitch-circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; border: 2px solid rgba(255,255,255,0.2); border-radius: 50%; }
+        .pitch-line { position: absolute; top: 50%; width: 100%; height: 2px; background: rgba(255,255,255,0.1); }
+        .pitch-circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; border: 2px solid rgba(255,255,255,0.1); border-radius: 50%; }
 
-        /* Luxury Tabs */
-        .month-pill { padding: 8px 18px; border-radius: 99px; cursor: pointer; border: 1px solid var(--border); font-size: 11px; font-weight: bold; white-space: nowrap; transition: 0.3s; background: var(--card); }
-        .month-pill.active { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 20px var(--primary); }
+        /* Navigation Luxury */
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); z-index: 1000; display: flex; justify-content: space-around; padding: 15px; backdrop-filter: blur(10px); }
+        .nav-btn { color: #64748b; transition: 0.3s; }
+        .nav-btn.active { color: var(--primary); transform: translateY(-5px); }
 
-        /* Royal Ranking */
-        .rank-gold { border: 2px solid var(--gold) !important; box-shadow: 0 0 30px rgba(255,215,0,0.2); }
-        .rank-gold h4 { color: var(--gold); }
-        .rank-silver { border: 2px solid var(--silver) !important; box-shadow: 0 0 30px rgba(226,232,240,0.2); }
-        .rank-bronze { border: 2px solid var(--bronze) !important; box-shadow: 0 0 30px rgba(205,127,50,0.2); }
+        /* Ranking Glows */
+        .gold-glow { border: 2px solid var(--gold) !important; box-shadow: 0 0 25px rgba(255,215,0,0.2); }
+        .silver-glow { border: 2px solid var(--silver) !important; box-shadow: 0 0 25px rgba(226,232,240,0.2); }
+        .bronze-glow { border: 2px solid var(--bronze) !important; box-shadow: 0 0 25px rgba(205,127,50,0.2); }
 
-        /* Bottom Nav */
-        .nav-fixed { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); z-index: 1000; backdrop-filter: blur(15px); }
+        /* Utils */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .month-chip { padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border); font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.3s; background: var(--card); white-space: nowrap; }
+        .month-chip.active { background: var(--primary); color: black; box-shadow: 0 0 15px var(--primary); }
+
+        .zoom-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; }
         
         /* Font Sizes */
-        .f-s { font-size: 13px; } .f-m { font-size: 16px; } .f-l { font-size: 20px; }
-
-        .sponsor-box { position: relative; z-index: 1; }
-        .sponsor-box::before { content: ''; position: absolute; inset: -10px; background: var(--primary); filter: blur(30px); opacity: 0.1; z-index: -1; }
-        
-        .zoom-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .text-s { font-size: 14px; } .text-m { font-size: 17px; } .text-l { font-size: 20px; }
     </style>
 </head>
-<body class="f-m">
+<body class="text-m">
 
-    <!-- News Zoom -->
+    <!-- News Zoom Overlay -->
     <div id="zoom-modal" class="zoom-overlay" onclick="this.style.display='none'">
-        <div class="relative max-w-2xl w-full text-center">
-            <button class="absolute -top-12 right-0 text-white orbitron flex items-center gap-2">CLOSE <i data-lucide="x-circle"></i></button>
-            <img id="zoom-img" src="" class="w-full rounded-3xl border border-gray-800">
-            <p id="zoom-text" class="mt-6 text-lg font-bold text-blue-400"></p>
+        <div class="relative max-w-2xl w-full text-center" onclick="event.stopPropagation()">
+            <button class="absolute -top-12 right-0 text-white flex items-center gap-2 orbitron" onclick="document.getElementById('zoom-modal').style.display='none'">BACK <i data-lucide="arrow-left"></i></button>
+            <img id="zoom-img" src="" class="w-full rounded-3xl shadow-2xl border border-white/10">
+            <p id="zoom-desc" class="mt-6 text-lg font-bold text-blue-400"></p>
         </div>
     </div>
 
-    <!-- Main View -->
-    <div class="p-4 pb-28 max-w-4xl mx-auto">
+    <!-- Main Container -->
+    <div class="p-4 pb-32 max-w-3xl mx-auto">
         
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-6">
+        <!-- Luxury Top Bar -->
+        <div class="flex justify-between items-center mb-8">
             <div class="flex items-center gap-3">
-                <img src="logo.png" class="w-10" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1165/1165187.png'">
-                <h1 class="orbitron font-black text-xl tracking-tighter uppercase">Tawhid <span class="text-blue-500">Club</span></h1>
+                <img src="logo.png" class="w-10 h-10" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1165/1165187.png'">
+                <div class="orbitron font-black text-xl tracking-tighter uppercase leading-none">Tawhid <span class="text-blue-500 block text-[10px] tracking-[0.3em]">Club</span></div>
             </div>
-            <button onclick="showSec('settings')" class="p-2.5 bg-gray-900/50 rounded-full border border-gray-800"><i data-lucide="settings" class="w-5 h-5"></i></button>
+            <button onclick="showSection('settings')" class="p-2.5 bg-gray-900/50 rounded-full border border-gray-800"><i data-lucide="settings" class="w-5 h-5 text-gray-400"></i></button>
         </div>
 
-        <!-- Luxury Month Selector -->
-        <div class="flex gap-2 overflow-x-auto pb-4 no-scrollbar mb-6" id="month-tabs"></div>
+        <!-- Luxury Month Slider -->
+        <div class="flex gap-2 overflow-x-auto pb-6 no-scrollbar" id="month-tabs">
+            <!-- Injected by JS -->
+        </div>
 
-        <!-- Sections -->
-        
-        <!-- News Section -->
+        <!-- Content Sections -->
+
+        <!-- 1. Home / News -->
         <div id="sec-home" class="section space-y-4">
-            <div id="news-container" class="grid grid-cols-1 gap-4"></div>
+            <div id="news-list" class="grid grid-cols-1 gap-4"></div>
+            <!-- Sponsors with luxury glow -->
+            <div class="flex justify-center gap-8 mt-10 py-6 relative">
+                <div class="absolute inset-0 bg-blue-500/5 blur-3xl rounded-full"></div>
+                <img src="sponsor1.png" class="h-6 opacity-40 grayscale hover:grayscale-0 transition cursor-pointer" onerror="this.src='https://upload.wikimedia.org/wikipedia/en/thumb/4/43/EA_Sports_FC_logo.svg/1200px-EA_Sports_FC_logo.svg.png'">
+                <img src="sponsor2.png" class="h-6 opacity-40 grayscale hover:grayscale-0 transition cursor-pointer" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Adidas_Logo.svg/1200px-Adidas_Logo.svg.png'">
+            </div>
         </div>
 
-        <!-- All Stats Section -->
+        <!-- 2. Full Stats -->
         <div id="sec-stats" class="section hidden">
-            <div class="bg-[#0d121a] rounded-2xl border border-gray-800 overflow-hidden shadow-2xl">
+            <div class="bg-[#0d121a] rounded-3xl border border-gray-800 overflow-hidden shadow-2xl">
                 <div class="overflow-x-auto">
                     <table class="w-full text-center text-[10px] md:text-xs">
                         <thead class="bg-gray-900/80 text-gray-500 uppercase orbitron">
                             <tr>
-                                <th class="p-3">Player</th><th class="p-3">M</th><th class="p-3">G</th><th class="p-3">A</th><th class="p-3">CS</th><th class="p-3">P%</th><th class="p-3">W%</th><th class="p-3 text-blue-500">AI</th>
+                                <th class="p-4 text-right">Player</th><th class="p-4">M</th><th class="p-4">G</th><th class="p-4">A</th><th class="p-4">CS</th><th class="p-4">P%</th><th class="p-4">W%</th><th class="p-4 text-blue-500">AI</th>
                             </tr>
                         </thead>
                         <tbody id="stats-body" class="divide-y divide-gray-800/30"></tbody>
@@ -101,9 +114,9 @@
             </div>
         </div>
 
-        <!-- 3D Lineup Section -->
+        <!-- 3. Lineup 3D -->
         <div id="sec-pitch" class="section hidden">
-            <div class="pitch-container">
+            <div class="pitch-wrap">
                 <div class="pitch-3d">
                     <div class="pitch-line"></div>
                     <div class="pitch-circle"></div>
@@ -112,50 +125,53 @@
             </div>
         </div>
 
-        <!-- Ranking Section -->
+        <!-- 4. Rankings -->
         <div id="sec-rank" class="section hidden space-y-3" id="rank-list"></div>
 
-        <!-- Awards Section -->
+        <!-- 5. Awards -->
         <div id="sec-awards" class="section hidden space-y-6">
-            <div class="text-center p-6 bg-gradient-to-b from-yellow-500/10 to-transparent rounded-3xl border border-yellow-500/20">
-                <h3 class="orbitron text-yellow-500 text-xs font-bold mb-4 uppercase tracking-widest">Player Of The Month</h3>
-                <img id="potm-img" src="" class="w-32 h-32 mx-auto rounded-full border-4 border-yellow-500 shadow-2xl mb-4 bg-black">
-                <h2 id="potm-name" class="text-2xl font-black orbitron text-white"></h2>
+            <div class="text-center p-8 bg-gradient-to-b from-yellow-500/10 to-transparent rounded-[40px] border border-yellow-500/20">
+                <h4 class="orbitron text-yellow-500 text-[10px] font-black tracking-widest mb-6 uppercase">Player Of The Month</h4>
+                <div class="relative inline-block">
+                    <div class="absolute inset-0 bg-yellow-500 blur-2xl opacity-20 animate-pulse"></div>
+                    <img id="potm-img" src="" class="relative w-36 h-36 rounded-full border-4 border-yellow-500 shadow-2xl bg-black">
+                </div>
+                <h2 id="potm-name" class="text-3xl font-black orbitron mt-4 tracking-tighter uppercase"></h2>
             </div>
-            <div class="p-4 bg-gray-900/50 rounded-3xl border border-blue-500/20">
-                <h3 class="orbitron text-blue-500 text-xs font-bold mb-4 text-center uppercase tracking-widest">Goal Of The Month</h3>
-                <div class="aspect-video bg-black rounded-2xl overflow-hidden border-2 border-gray-800">
-                    <video controls class="w-full h-full">
+            <div class="p-5 bg-gray-900/50 rounded-[40px] border border-blue-500/10">
+                <h4 class="orbitron text-blue-500 text-[10px] font-black tracking-widest mb-4 text-center uppercase">Goal Of The Month</h4>
+                <div class="aspect-video bg-black rounded-3xl overflow-hidden border border-gray-800 shadow-inner relative group">
+                    <video id="gotm-vid" controls class="w-full h-full object-cover">
                         <source src="https://raw.githubusercontent.com/H7modi77/TAWHID-FC/main/19c9ebcbc1934-master_playlist.mov">
                     </video>
                 </div>
             </div>
         </div>
 
-        <!-- Settings Section -->
+        <!-- 6. Settings -->
         <div id="sec-settings" class="section hidden space-y-6">
-            <div class="bg-[#0d121a] p-6 rounded-3xl border border-gray-800 space-y-6">
+            <div class="bg-[#0d121a] p-8 rounded-[40px] border border-gray-800 space-y-8">
                 <div>
-                    <label class="block text-gray-500 mb-3 orbitron uppercase text-[10px]">Select Language</label>
+                    <label class="block text-gray-500 mb-4 orbitron uppercase text-[10px] tracking-widest font-bold">Language / اللغة</label>
                     <div class="grid grid-cols-2 gap-2">
-                        <button onclick="setL('ar')" class="p-3 bg-gray-800 rounded-xl text-xs">العربية</button>
-                        <button onclick="setL('en')" class="p-3 bg-gray-800 rounded-xl text-xs">English</button>
-                        <button onclick="setL('fr')" class="p-3 bg-gray-800 rounded-xl text-xs">Français</button>
-                        <button onclick="setL('cn')" class="p-3 bg-gray-800 rounded-xl text-xs">中文</button>
+                        <button onclick="setLang('ar')" class="p-4 bg-gray-900 rounded-2xl text-sm hover:bg-blue-600 transition">العربية</button>
+                        <button onclick="setLang('en')" class="p-4 bg-gray-900 rounded-2xl text-sm hover:bg-blue-600 transition">English</button>
+                        <button onclick="setLang('fr')" class="p-4 bg-gray-900 rounded-2xl text-sm hover:bg-blue-600 transition">Français</button>
+                        <button onclick="setLang('cn')" class="p-4 bg-gray-900 rounded-2xl text-sm hover:bg-blue-600 transition">中文</button>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-gray-500 mb-3 orbitron uppercase text-[10px]">Display Mode</label>
-                    <button onclick="toggleT()" class="w-full p-4 bg-blue-600 rounded-xl font-bold flex items-center justify-center gap-2 uppercase text-xs">
-                        <i data-lucide="sun" class="w-4 h-4"></i> Switch Theme
+                    <label class="block text-gray-500 mb-4 orbitron uppercase text-[10px] tracking-widest font-bold">Theme / المظهر</label>
+                    <button onclick="toggleTheme()" class="w-full p-4 bg-blue-600 rounded-2xl font-black uppercase text-xs flex items-center justify-center gap-3">
+                        <i data-lucide="sun" class="w-4 h-4"></i> Switch Appearance
                     </button>
                 </div>
                 <div>
-                    <label class="block text-gray-500 mb-3 orbitron uppercase text-[10px]">Font Scale</label>
+                    <label class="block text-gray-500 mb-4 orbitron uppercase text-[10px] tracking-widest font-bold">Font Size / حجم الخط</label>
                     <div class="flex gap-2">
-                        <button onclick="setF('s')" class="flex-1 p-3 bg-gray-800 rounded-xl text-xs">Small</button>
-                        <button onclick="setF('m')" class="flex-1 p-3 bg-gray-800 rounded-xl text-xs">Medium</button>
-                        <button onclick="setF('l')" class="flex-1 p-3 bg-gray-800 rounded-xl text-xs">Large</button>
+                        <button onclick="setFont('s')" class="flex-1 p-3 bg-gray-900 rounded-xl text-xs">Small</button>
+                        <button onclick="setFont('m')" class="flex-1 p-3 bg-gray-900 rounded-xl text-xs">Medium</button>
+                        <button onclick="setFont('l')" class="flex-1 p-3 bg-gray-900 rounded-xl text-xs">Large</button>
                     </div>
                 </div>
             </div>
@@ -164,21 +180,16 @@
     </div>
 
     <!-- Navigation -->
-    <div class="nav-fixed flex justify-around p-4 shadow-2xl">
-        <button onclick="showSec('home')" class="nav-ico text-blue-500"><i data-lucide="home"></i></button>
-        <button onclick="showSec('stats')" class="nav-ico text-gray-500"><i data-lucide="bar-chart-3"></i></button>
-        <button onclick="showSec('pitch')" class="nav-ico text-gray-500"><i data-lucide="layout"></i></button>
-        <button onclick="showSec('rank')" class="nav-ico text-gray-500"><i data-lucide="trophy"></i></button>
-        <button onclick="showSec('awards')" class="nav-ico text-gray-500"><i data-lucide="award"></i></button>
-    </div>
-
-    <!-- Glowing Sponsors -->
-    <div class="fixed bottom-20 left-0 right-0 flex justify-center gap-10 opacity-40 sponsor-box">
-        <img src="sponsor1.png" class="h-6" onerror="this.src='https://upload.wikimedia.org/wikipedia/en/thumb/4/43/EA_Sports_FC_logo.svg/1200px-EA_Sports_FC_logo.svg.png'">
-        <img src="sponsor2.png" class="h-6" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Adidas_Logo.svg/1200px-Adidas_Logo.svg.png'">
+    <div class="nav-bar">
+        <button onclick="showSection('home')" class="nav-btn active"><i data-lucide="home"></i></button>
+        <button onclick="showSection('stats')" class="nav-btn"><i data-lucide="bar-chart-3"></i></button>
+        <button onclick="showSection('pitch')" class="nav-btn"><i data-lucide="layout"></i></button>
+        <button onclick="showSection('rank')" class="nav-btn"><i data-lucide="trophy"></i></button>
+        <button onclick="showSection('awards')" class="nav-btn"><i data-lucide="award"></i></button>
     </div>
 
     <script>
+        // --- Full Database ---
         const players = [
             { name: "Almousa3M", pos: "Attack", photo: "almousa3m.png", coords: { t: '15%', l: '35%' }, stats: {
                 October: { m: 58, g: 65, a: 61, cs: 0, p: 78, w: 60, s: 33 },
@@ -218,89 +229,103 @@
         let curMonth = 'February';
         let curLang = 'ar';
 
+        const UI = {
+            ar: { stats: "إحصائيات", lineup: "التشكيلة", rank: "الترتيب", pots: "الجوائز", news_h: "عاجل النادي" },
+            en: { stats: "Stats", lineup: "Pitch", rank: "Ranking", pots: "Awards", news_h: "Club News" }
+        };
+
+        // --- Logic Engine ---
+        function getD(p, m) {
+            if (m === "TOTAL") {
+                let t = { m: 0, g: 0, a: 0, cs: 0, p: 0, w: 0, s: 0, c: 0 };
+                for (let k in p.stats) {
+                    let d = p.stats[k];
+                    t.m += d.m; t.g += d.g; t.a += d.a; t.cs += d.cs;
+                    t.p += d.p; t.w += d.w; t.s += d.s; t.c++;
+                }
+                return { m: t.m, g: t.g, a: t.a, cs: t.cs, p: Math.round(t.p/t.c), w: Math.round(t.w/t.c), s: Math.round(t.s/t.c) };
+            }
+            return p.stats[m] || { m:0, g:0, a:0, cs:0, p:0, w:0, s:0 };
+        }
+
         function calcAI(d, pos) {
             if (!d || d.m === 0) return 0;
-            let score = 0;
-            if (pos === "Attack") score = (d.g * 4.0) + (d.a * 2.5) + (d.s * 0.6) + (d.p * 0.2);
-            if (pos === "Midfield") score = (d.g * 2.0) + (d.a * 4.0) + (d.p * 1.5) + (d.w * 0.5);
-            if (pos === "Defender") score = (d.cs * 10.0) + (d.w * 2.5) + (d.p * 1.0) + (d.g * 2.0);
-            return (score / 10 + 30).toFixed(1);
+            let s = 0;
+            if (pos === "Attack") s = (d.g * 4.2) + (d.a * 2.8) + (d.s * 0.8) + (d.p * 0.2);
+            if (pos === "Midfield") s = (d.g * 2.2) + (d.a * 4.5) + (d.p * 1.8) + (d.w * 0.6);
+            if (pos === "Defender") s = (d.cs * 12.0) + (d.w * 3.0) + (d.p * 1.2) + (d.g * 2.5);
+            return (s / 10 + 35).toFixed(1);
         }
 
-        function getStats(p, month) {
-            if (month === "TOTAL") {
-                let t = { m: 0, g: 0, a: 0, cs: 0, p: 0, w: 0, s: 0, count: 0 };
-                for (let m in p.stats) {
-                    let d = p.stats[m];
-                    t.m += d.m; t.g += d.g; t.a += d.a; t.cs += d.cs;
-                    t.p += d.p; t.w += d.w; t.s += d.s; t.count++;
-                }
-                return { m: t.m, g: t.g, a: t.a, cs: t.cs, p: Math.round(t.p/t.count), w: Math.round(t.w/t.count), s: Math.round(t.s/t.count) };
-            }
-            return p.stats[month] || { m:0, g:0, a:0, cs:0, p:0, w:0, s:0 };
-        }
-
-        function showSec(id) {
+        function showSection(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
             document.getElementById('sec-' + id).classList.remove('hidden');
-            document.querySelectorAll('.nav-ico').forEach(i => i.classList.replace('text-blue-500', 'text-gray-500'));
-            event.currentTarget.classList.replace('text-gray-500', 'text-blue-500');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            event.currentTarget.classList.add('active');
         }
 
-        function setL(l) { curLang = l; document.documentElement.dir = l==='ar'?'rtl':'ltr'; render(); }
-        function toggleT() { document.getElementById('html-tag').classList.toggle('dark'); }
-        function setF(s) { document.body.className = 'f-' + s; }
-
+        function toggleTheme() { document.getElementById('html-tag').classList.toggle('dark'); }
+        function setFont(sz) { document.body.className = 'text-' + sz; }
+        function setLang(l) { curLang = l; document.documentElement.dir = (l === 'ar') ? 'rtl' : 'ltr'; render(); }
+        
         function zoom(img, text) {
             document.getElementById('zoom-img').src = img;
-            document.getElementById('zoom-text').innerText = text;
+            document.getElementById('zoom-desc').innerText = text;
             document.getElementById('zoom-modal').style.display = 'flex';
         }
 
         function render() {
-            const period = curMonth;
             const statsBody = document.getElementById('stats-body');
             const pitch = document.getElementById('pitch-players');
             const rank = document.getElementById('rank-list');
             const tabs = document.getElementById('month-tabs');
-            const newsCont = document.getElementById('news-container');
+            const news = document.getElementById('news-list');
 
-            statsBody.innerHTML = ''; pitch.innerHTML = ''; rank.innerHTML = ''; tabs.innerHTML = ''; newsCont.innerHTML = '';
+            statsBody.innerHTML = ''; pitch.innerHTML = ''; rank.innerHTML = ''; tabs.innerHTML = ''; news.innerHTML = '';
 
-            // Tabs
+            // Render Tabs
             const mList = ["TOTAL", "February", "January", "November", "October"];
-            tabs.innerHTML = mList.map(m => `<div class="month-pill ${curMonth === m ? 'active' : ''}" onclick="curMonth='${m}'; render()">${m}</div>`).join('');
+            tabs.innerHTML = mList.map(m => `
+                <div class="month-chip ${curMonth === m ? 'active' : ''}" onclick="curMonth='${m}'; render()">${m}</div>
+            `).join('');
 
-            // News
-            const news = [
-                { img: "news1.png", ar: "اجتماع الأعضاء لمناقشة تكتيكات الموسم الجديد.", en: "Board meeting to discuss new season tactics." },
-                { img: "news2.png", ar: "لقاء حصري مع المهاجم Almousa3M حول طموحات الفريق.", en: "Exclusive interview with Almousa3M about ambitions." }
+            // News Content
+            const newsArr = [
+                { i: "news1.png", ar: "اجتماع الأعضاء لمناقشة خطط النادي للموسم الجديد والصفقات المرتقبة.", en: "Board members meeting to discuss new season strategies and upcoming transfers." },
+                { i: "news2.png", ar: "تصريح خاص من نجم النجوم Almousa3M حول طموحه في التتويج بجائزة أفضل لاعب.", en: "Exclusive statement from star Almousa3M about his ambition to win MVP." }
             ];
-            newsCont.innerHTML = news.map(n => `
-                <div class="bg-gray-900/40 p-3 rounded-2xl border border-gray-800 flex items-center gap-4" onclick="zoom('${n.img}', '${n[curLang]}')">
-                    <img src="${n.img}" class="w-20 h-20 object-cover rounded-xl opacity-60" onerror="this.src='https://via.placeholder.com/100'">
-                    <p class="text-sm font-bold">${n[curLang]}</p>
+            news.innerHTML = newsArr.map(n => `
+                <div class="bg-gray-900/40 p-4 rounded-3xl border border-gray-800 flex items-center gap-4 cursor-pointer" onclick="zoom('${n.i}', '${n[curLang]}')">
+                    <img src="${n.i}" class="w-20 h-20 object-cover rounded-2xl opacity-60" onerror="this.src='https://via.placeholder.com/100'">
+                    <p class="text-sm font-bold leading-relaxed">${n[curLang]}</p>
                 </div>
             `).join('');
 
-            // Players
-            let data = players.map(p => {
-                let d = getStats(p, period);
+            // Data Processing
+            let pData = players.map(p => {
+                let d = getD(p, curMonth);
                 return { ...p, cur: d, ai: parseFloat(calcAI(d, p.pos)) };
             }).sort((a,b) => b.ai - a.ai);
 
-            data.forEach((p, i) => {
+            pData.forEach((p, i) => {
                 // Table
-                statsBody.innerHTML += `<tr><td class="p-3 font-bold text-blue-500 uppercase">${p.name}</td><td class="orbitron">${p.cur.m}</td><td class="orbitron">${p.cur.g}</td><td class="orbitron">${p.cur.a}</td><td class="orbitron">${p.cur.cs}</td><td class="orbitron">${p.cur.p}%</td><td class="orbitron">${p.cur.w}%</td><td class="p-3 orbitron font-bold text-blue-500">${p.ai}</td></tr>`;
-                
-                // Rank
-                let glow = i===0?'rank-gold':i===1?'rank-silver':i===2?'rank-bronze':'';
+                statsBody.innerHTML += `
+                    <tr>
+                        <td class="p-4 text-right font-black text-blue-500 uppercase">${p.name}</td>
+                        <td class="orbitron">${p.cur.m}</td><td class="orbitron">${p.cur.g}</td>
+                        <td class="orbitron">${p.cur.a}</td><td class="orbitron">${p.cur.cs}</td>
+                        <td class="orbitron text-gray-500">${p.cur.p}%</td><td class="orbitron text-gray-500">${p.cur.w}%</td>
+                        <td class="p-4 orbitron font-black text-blue-500 text-sm">${p.ai}</td>
+                    </tr>`;
+
+                // Ranking
+                let glow = (i === 0) ? 'gold-glow' : (i === 1) ? 'silver-glow' : (i === 2) ? 'bronze-glow' : '';
                 rank.innerHTML += `
-                    <div class="bg-gray-900/60 p-4 rounded-2xl flex items-center justify-between border border-gray-800 ${glow}">
+                    <div class="bg-[#0d121a] p-4 rounded-3xl border border-gray-800 flex items-center justify-between ${glow}">
                         <div class="flex items-center gap-4">
                             <span class="orbitron font-black text-xl text-gray-700">#${i+1}</span>
-                            <img src="${p.photo}" class="w-12 h-12 rounded-xl bg-black" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'">
-                            <div><h4 class="font-black orbitron uppercase text-sm">${p.name}</h4><p class="text-[9px] text-gray-500 uppercase">${p.pos}</p></div>
+                            <img src="${p.photo}" class="w-12 h-12 rounded-2xl bg-black border border-white/5" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'">
+                            <div><h4 class="font-black orbitron text-xs uppercase ${i<3?'text-blue-400':''}">${p.name}</h4><p class="text-[9px] text-gray-500 uppercase">${p.pos}</p></div>
                         </div>
                         <div class="text-2xl font-black orbitron text-blue-500">${p.ai}</div>
                     </div>`;
@@ -308,13 +333,13 @@
                 // Pitch
                 pitch.innerHTML += `
                     <div class="absolute" style="top:${p.coords.t}; left:${p.coords.l}; transform:translate(-50%, -50%)">
-                        <img src="${p.photo}" class="w-10 h-10 rounded-full border-2 border-white/40 bg-black" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'">
-                        <span class="block text-center text-[8px] orbitron mt-1 bg-black/70 px-1 rounded">${p.name}</span>
+                        <img src="${p.photo}" class="w-11 h-11 rounded-full border-2 border-white/30 bg-black shadow-2xl" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'">
+                        <span class="block text-[8px] orbitron bg-black/80 px-1 rounded mt-1 shadow-lg">${p.name}</span>
                     </div>`;
             });
 
-            // POTM
-            const potm = data[0];
+            // POTM Render
+            const potm = pData[0];
             document.getElementById('potm-img').src = potm.photo;
             document.getElementById('potm-name').innerText = potm.name;
 
