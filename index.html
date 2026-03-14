@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAWHID CLUB | V11 ULTIMATE</title>
+    <title>TAWHID CLUB | V11 PRESTIGE</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,66 +11,125 @@
     <style>
         :root {
             --gold: #ffcf4b;
-            --gold-glow: 0 0 20px rgba(255, 207, 75, 0.5);
+            --gold-glow: 0 0 25px rgba(255, 207, 75, 0.4);
             --primary: #00d2ff;
-            --bg: #020406;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --glass: rgba(255, 255, 255, 0.05);
-            --text: #ffffff;
+            --bg: #000000; /* اسود فخم */
+            --card-bg: rgba(15, 15, 15, 0.95);
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 207, 75, 0.2);
         }
 
         * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        body { margin: 0; font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; padding-bottom: 150px; }
-        body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://www.transparenttextures.com/patterns/stardust.png'); opacity: 0.3; z-index: -1; pointer-events: none; }
-
-        header { padding: 60px 20px 20px; text-align: center; }
-        .logo { width: 110px; filter: drop-shadow(var(--gold-glow)); animation: float 4s infinite ease-in-out; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        .club-title { font-family: 'Orbitron'; font-size: 2.5rem; font-weight: 900; background: linear-gradient(to right, #fff, var(--gold), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 5px; margin: 10px 0; }
-
-        nav { display: flex; justify-content: center; gap: 5px; padding: 15px; position: sticky; top: 0; z-index: 2000; backdrop-filter: blur(20px); background: rgba(0,0,0,0.8); border-bottom: 1px solid var(--glass); overflow-x: auto; }
-        nav button { background: transparent; border: none; color: #aaa; padding: 10px 15px; font-weight: 900; cursor: pointer; white-space: nowrap; font-size: 12px; font-family: 'Cairo'; }
-        nav button.active { color: var(--gold); border-bottom: 3px solid var(--gold); text-shadow: var(--gold-glow); }
-
-        .container { max-width: 1100px; margin: auto; padding: 15px; }
-        .section { display: none; animation: fadeIn 0.6s ease; }
-        .active-section { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .award-card {
-            background: linear-gradient(135deg, rgba(30,30,30,0.9), rgba(10,10,10,1));
-            border: 1px solid var(--gold); border-radius: 20px; padding: 25px; text-align: center;
-            position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px;
+        body {
+            margin: 0; font-family: 'Cairo', sans-serif; background: var(--bg); color: #fff;
+            overflow-x: hidden; padding-bottom: 100px;
         }
 
-        /* VS MODE STYLES */
-        .vs-container { display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: start; background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid var(--glass); }
-        .vs-player-box select { width: 100%; padding: 10px; background: #111; color: var(--gold); border: 1px solid var(--gold); border-radius: 10px; font-family: 'Orbitron'; margin-bottom: 20px; }
-        .vs-stat-row { margin-bottom: 15px; }
-        .vs-stat-labels { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; font-family: 'Orbitron'; }
-        .vs-bar-bg { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden; display: flex; }
-        .vs-bar-fill { height: 100%; transition: width 1s ease; }
+        /* Particles Background Effect */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
+            z-index: -2;
+        }
 
-        /* TROPHY STYLES */
-        .trophy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        .trophy-card { background: linear-gradient(to bottom, #1a1a1a, #000); border: 1px solid #333; border-radius: 15px; padding: 20px; text-align: center; transition: 0.3s; }
-        .trophy-card:hover { border-color: var(--gold); transform: translateY(-5px); }
-        .trophy-card i { font-size: 50px; color: var(--gold); margin-bottom: 15px; filter: drop-shadow(var(--gold-glow)); }
-
-        /* PREDICTION BOX */
-        .predict-box { background: linear-gradient(45deg, #001a33, #000); border: 2px dashed var(--primary); padding: 20px; border-radius: 15px; text-align: center; position: relative; }
-        .predict-box::before { content: "AI SCANNING"; position: absolute; top: 5px; right: 10px; font-size: 10px; color: var(--primary); font-family: 'Orbitron'; }
-
-        /* VIDEO STYLING */
-        .video-wrapper { position: relative; border-radius: 15px; overflow: hidden; border: 1px solid var(--gold); }
+        header { padding: 80px 20px 40px; text-align: center; }
+        .logo { width: 130px; filter: drop-shadow(var(--gold-glow)); animation: float 4s infinite ease-in-out; }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-20px) rotate(2deg); } }
         
+        .club-title { 
+            font-family: 'Orbitron'; font-size: 3rem; font-weight: 900; 
+            background: linear-gradient(to bottom, #fff 30%, var(--gold) 100%); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            letter-spacing: 8px; margin: 15px 0; text-transform: uppercase;
+        }
+
+        /* Nav Modernist */
+        nav { 
+            display: flex; justify-content: center; gap: 10px; padding: 20px; 
+            position: sticky; top: 0; z-index: 2000; backdrop-filter: blur(30px); 
+            background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border);
+        }
+        nav button { 
+            background: transparent; border: 1px solid transparent; color: #666; 
+            padding: 12px 20px; font-weight: 700; cursor: pointer; border-radius: 5px;
+            font-size: 13px; font-family: 'Orbitron', 'Cairo'; text-transform: uppercase;
+        }
+        nav button.active { color: var(--gold); border-color: var(--gold); background: rgba(255,207,75,0.05); text-shadow: var(--gold-glow); }
+
+        .container { max-width: 1200px; margin: auto; padding: 20px; }
+        .section { display: none; animation: slideUp 0.8s ease forwards; }
+        .active-section { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Tactical Pitch (Black Style) */
+        .pitch-container {
+            width: 100%; max-width: 600px; height: 800px; margin: 40px auto;
+            background: #050505; border: 2px solid #222; border-radius: 20px;
+            position: relative; overflow: hidden;
+            box-shadow: 0 0 50px rgba(0,0,0,1), inset 0 0 100px rgba(0,210,255,0.05);
+            transform: rotateX(10deg); perspective: 1000px;
+        }
+        .pitch-line { position: absolute; border: 1px solid rgba(255,255,255,0.05); }
+        .half-line { top: 50%; width: 100%; height: 1px; }
+        .center-circle { top: 50%; left: 50%; width: 120px; height: 120px; border-radius: 50%; transform: translate(-50%, -50%); }
+        
+        .player-node {
+            position: absolute; width: 90px; text-align: center; transform: translate(-50%, -50%);
+            z-index: 10; cursor: pointer;
+        }
+        .player-node .avatar-wrapper {
+            width: 65px; height: 65px; margin: auto; border-radius: 50%;
+            background: #000; border: 2px solid var(--gold); padding: 3px;
+            box-shadow: var(--gold-glow); overflow: hidden;
+        }
+        .player-node img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .player-node .info { 
+            background: rgba(0,0,0,0.8); border: 1px solid var(--gold); 
+            border-radius: 5px; margin-top: 8px; padding: 2px 5px;
+        }
+        .player-node b { display: block; font-size: 10px; color: var(--gold); font-family: 'Orbitron'; }
+        .player-node span { font-size: 9px; color: #fff; display: block; }
+
+        /* Stats Tables Luxury */
+        .stats-card {
+            background: var(--card-bg); border: 1px solid #111; border-radius: 15px;
+            padding: 25px; margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .luxury-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .luxury-table th { color: var(--gold); padding: 15px; font-size: 11px; text-align: center; border-bottom: 1px solid #222; text-transform: uppercase; letter-spacing: 1px; }
+        .luxury-table td { padding: 15px; text-align: center; border-bottom: 1px solid #111; font-family: 'Orbitron'; font-size: 14px; color: #ddd; }
+        .luxury-table tr:hover { background: rgba(255,255,255,0.02); }
+
+        /* VS Mode UI */
+        .vs-wrapper { display: grid; grid-template-columns: 1fr auto 1fr; gap: 30px; align-items: center; }
+        .vs-box { background: #080808; border: 1px solid #151515; border-radius: 20px; padding: 30px; text-align: center; }
+        .vs-select { background: #000; color: var(--gold); border: 1px solid var(--gold); padding: 10px; width: 100%; border-radius: 5px; margin-bottom: 20px; font-family: 'Orbitron'; }
+
+        /* Trophy Room */
+        .trophy-case { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .trophy-item {
+            background: linear-gradient(135deg, #0a0a0a 0%, #000 100%);
+            border: 1px solid #1a1a1a; padding: 40px 20px; text-align: center; border-radius: 20px;
+        }
+        .trophy-item i { font-size: 60px; color: var(--gold); margin-bottom: 20px; filter: drop-shadow(var(--gold-glow)); }
+
+        .ai-prediction-card {
+            background: linear-gradient(45deg, #050505, #111); border: 1px solid var(--primary);
+            padding: 30px; border-radius: 20px; position: relative; overflow: hidden;
+        }
+        .ai-prediction-card::after {
+            content: "ANALYZING..."; position: absolute; top: 10px; left: 10px;
+            font-family: 'Orbitron'; font-size: 10px; color: var(--primary); animation: blink 1s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
         .sponsor-bar {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 80%; max-width: 400px; background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(15px); border-radius: 50px; padding: 15px;
-            display: flex; justify-content: space-evenly; align-items: center; border: 1px solid var(--glass); z-index: 1000;
+            width: 80%; max-width: 450px; background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(20px); border-radius: 100px; padding: 15px 30px;
+            display: flex; justify-content: space-between; border: 1px solid #222; z-index: 3000;
         }
-        .sponsor-bar img { height: 35px; filter: grayscale(1) brightness(2); opacity: 0.8; }
+        .sponsor-bar img { height: 30px; filter: grayscale(1) brightness(3); opacity: 0.7; }
 
     </style>
 </head>
@@ -78,86 +137,87 @@
 
     <header>
         <img src="logo.png" class="logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1165/1165187.png'">
-        <h1 class="club-title">TAWHID CLUB</h1>
-        <div style="font-family:'Orbitron'; color:var(--primary); font-size: 14px; letter-spacing: 2px;">V11 | ROYAL LEGACY</div>
+        <h1 class="club-title">TAWHID FC</h1>
+        <div style="font-family:'Orbitron'; color:var(--primary); font-size: 14px; letter-spacing: 5px;">ULTIMATE LEGACY V11</div>
     </header>
 
     <nav>
         <button onclick="showSec('home', this)" class="active">الرئيسية</button>
-        <button onclick="showSec('vs', this)">مقارنة VS</button>
-        <button onclick="showSec('trophies', this)">البطولات</button>
-        <button onclick="showSec('stats', this)">الإحصائيات</button>
-        <button onclick="showSec('ranking', this)">الترتيب</button>
-        <button onclick="showSec('awards', this)" style="color:var(--gold)"> الجوائز</button>
+        <button onclick="showSec('pitch', this)">التشكيلة التكتيكية</button>
+        <button onclick="showSec('stats', this)">الإحصائيات الكاملة</button>
+        <button onclick="showSec('vs', this)">المقارنة VS</button>
+        <button onclick="showSec('awards', this)">الجوائز</button>
+        <button onclick="showSec('trophies', this)">خزانة البطولات</button>
     </nav>
 
     <div class="container">
         
-        <!-- HOME & AI PREDICTION -->
+        <!-- HOME -->
         <section id="home" class="section active-section">
-            <div class="award-card" style="text-align: right; border-color: var(--primary);">
-                <h2>مرحباً بك في V11</h2>
-                <p>النظام الآن يحلل كل تحركات اللاعبين لتقديم أدق البيانات.</p>
+            <div class="ai-prediction-card">
+                <h2 style="font-family: Orbitron; color: var(--primary);">AI STAR PREDICTION</h2>
+                <div id="aiAnalysis" style="font-size: 18px; margin-top: 15px;"></div>
             </div>
-            
-            <div class="predict-box">
-                <h3 style="font-family: Orbitron; color: var(--primary);">AI PREDICTION: NEXT STAR</h3>
-                <div id="aiContent">جاري تحليل الأداء الأخير...</div>
-            </div>
-        </section>
 
-        <!-- VS MODE SECTION -->
-        <section id="vs" class="section">
-            <h2 style="text-align:center; color:var(--gold); font-family:Orbitron;">PLAYER COMPARISON</h2>
-            <div class="vs-container">
-                <div class="vs-player-box">
-                    <select id="p1Select" onchange="compare()"></select>
-                    <div id="p1Stats"></div>
+            <div style="margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="stats-card">
+                    <h3 style="color:var(--gold)">إجمالي الأهداف</h3>
+                    <div id="totalGoals" style="font-size: 40px; font-family: Orbitron; font-weight: 900;">0</div>
                 </div>
-                <div style="font-family:Orbitron; font-size:40px; color:var(--gold); align-self:center;">VS</div>
-                <div class="vs-player-box">
-                    <select id="p2Select" onchange="compare()"></select>
-                    <div id="p2Stats"></div>
+                <div class="stats-card">
+                    <h3 style="color:var(--primary)">إجمالي التمريرات</h3>
+                    <div id="totalAssists" style="font-size: 40px; font-family: Orbitron; font-weight: 900;">0</div>
                 </div>
             </div>
         </section>
 
-        <!-- TROPHY SECTION -->
-        <section id="trophies" class="section">
-            <h2 style="text-align:center; color:var(--gold); font-family:Orbitron; margin-bottom:30px;">CLUB TROPHY ROOM</h2>
-            <div class="trophy-grid">
-                <div class="trophy-card"><i class="fas fa-trophy"></i><h3>الدوري الممتاز</h3><p>النسخة 9</p></div>
-                <div class="trophy-card"><i class="fas fa-award"></i><h3>كأس النادي</h3><p>النسخة 10</p></div>
-                <div class="trophy-card"><i class="fas fa-crown"></i><h3>درع النخبة</h3><p>النسخة 11</p></div>
+        <!-- PITCH -->
+        <section id="pitch" class="section">
+            <div class="pitch-container">
+                <div class="pitch-line half-line"></div>
+                <div class="pitch-line center-circle"></div>
+                <div id="tactical-spots"></div>
             </div>
         </section>
 
-        <!-- STATS SECTION -->
+        <!-- ALL STATS -->
         <section id="stats" class="section">
-            <div id="fullStats"></div>
+            <div id="playerStatsContainer"></div>
         </section>
 
-        <!-- RANKING SECTION -->
-        <section id="ranking" class="section">
-            <div id="rankGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;"></div>
+        <!-- VS MODE -->
+        <section id="vs" class="section">
+            <div class="vs-wrapper">
+                <div class="vs-box">
+                    <select id="v1" class="vs-select" onchange="runVs()"></select>
+                    <div id="v1Data"></div>
+                </div>
+                <div style="font-family: Orbitron; font-size: 50px; color: var(--gold);">VS</div>
+                <div class="vs-box">
+                    <select id="v2" class="vs-select" onchange="runVs()"></select>
+                    <div id="v2Data"></div>
+                </div>
+            </div>
         </section>
-        
-        <!-- AWARDS SECTION -->
+
+        <!-- AWARDS -->
         <section id="awards" class="section">
-            <h2 style="text-align:center; font-family:Orbitron; color:var(--gold); margin-bottom:30px;">🏆 صالة المشاهير 🏆</h2>
-            <div id="awardsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;"></div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;" id="awardsList"></div>
             
-            <h2 style="text-align:center; font-family:Orbitron; color:var(--primary); margin: 40px 0 20px;">🎬 هدف الشهر - GOAL OF THE MONTH</h2>
-            <div class="award-card" style="padding: 10px; border-color: var(--primary);">
-                <div class="video-wrapper">
-                    <video controls style="width:100%; display:block; border-radius: 10px;">
-                        <source src="https://raw.githubusercontent.com/H7modi77/TAWHID-FC/main/19c9ebcbc1934-master_playlist.mov" type="video/mp4">
-                    </video>
-                </div>
-                <div style="padding:15px;">
-                    <h3 style="margin:5px 0;">صاروخية Almousa3M</h3>
-                    <p style="color:var(--gold); font-size:14px;">تم التصويت له كأفضل هدف في شهر يناير</p>
-                </div>
+            <h2 style="text-align:center; font-family:Orbitron; margin-top: 50px; color:var(--primary)">🎬 GOAL OF THE MONTH</h2>
+            <div class="stats-card" style="max-width: 800px; margin: 20px auto; padding: 10px; border-color: var(--gold);">
+                <video controls style="width:100%; border-radius: 10px; display:block;">
+                    <source src="https://raw.githubusercontent.com/H7modi77/TAWHID-FC/main/19c9ebcbc1934-master_playlist.mov" type="video/mp4">
+                </video>
+            </div>
+        </section>
+
+        <!-- TROPHIES -->
+        <section id="trophies" class="section">
+            <div class="trophy-case">
+                <div class="trophy-item"><i class="fas fa-trophy"></i><h3>PRO LEAGUE 5</h3><p>CHAMPIONS</p></div>
+                <div class="trophy-item"><i class="fas fa-crown"></i><h3>ELITE CUP No found</h3><p>WINNERS</p></div>
+                <div class="trophy-item"><i class="fas fa-medal"></i><h3>FAIR PLAY V11</h3><p>HONORED</p></div>
             </div>
         </section>
 
@@ -170,28 +230,28 @@
 
     <script>
         const players = [
-            {name:"Almousa3M", pos:"ST", photo:"almousa3m.png"},
-            {name:"H2ssain_28", pos:"ST", photo:"h2ssain28.png"},
-            {name:"H7modi77", pos:"LW", photo:"h7modi77.png"},
-            {name:"Yo0ousef25", pos:"RW", photo:"yo0ousef25.png"},
-            {name:"M---_11_11", pos:"CM", photo:"m1111.png"},
-            {name:"Basabeso2", pos:"CB", photo:"basabeso2.png"}
+            {name:"Almousa3M", pos:"ST", photo:"almousa3m.png", t: "15%", l: "35%"},
+            {name:"H2ssain_28", pos:"ST", photo:"h2ssain28.png", t: "15%", l: "65%"},
+            {name:"H7modi77", pos:"LW", photo:"h7modi77.png", t: "35%", l: "20%"},
+            {name:"Yo0ousef25", pos:"RW", photo:"yo0ousef25.png", t: "35%", l: "80%"},
+            {name:"M---_11_11", pos:"CM", photo:"m1111.png", t: "60%", l: "50%"},
+            {name:"Basabeso2", pos:"CB", photo:"basabeso2.png", t: "85%", l: "50%"}
         ];
 
-        const statsData = {
-            Almousa3M: { October:{m:58,g:65,a:61,p:78,w:60}, November:{m:57,g:67,a:72,p:77,w:53}, January:{m:126,g:161,a:146,p:77,w:49}, February:{m:42,g:48,a:41,p:77,w:49} },
-            H2ssain_28: { October:{m:44,g:36,a:15,p:76,w:56}, November:{m:64,g:59,a:48,p:77,w:51}, January:{m:146,g:144,a:72,p:73,w:44}, February:{m:31,g:31,a:55,p:73,w:44} },
-            H7modi77: { October:{m:45,g:14,a:36,p:79,w:62}, November:{m:77,g:52,a:54,p:76,w:51}, January:{m:116,g:44,a:85,p:75,w:47}, February:{m:44,g:20,a:26,p:75,w:47} },
-            "M---_11_11": { October:{m:68,g:38,a:43,p:81,w:57}, November:{m:86,g:48,a:58,p:74,w:54}, January:{m:158,g:112,a:113,p:75,w:46}, February:{m:40,g:24,a:19,p:75,w:46} },
-            Yo0ousef25: { October:{m:28,g:23,a:5,p:78,w:67}, November:{m:26,g:21,a:8,p:78,w:58}, January:{m:99,g:57,a:17,p:74,w:43}, February:{m:18,g:11,a:2,p:74,w:43} },
-            Basabeso2: { February:{m:24,g:2,a:3,p:85,w:50,cs:4} }
+        const stats = {
+            Almousa3M: { October:{m:58,g:65,a:61,p:78,w:60,s:33}, November:{m:57,g:67,a:72,p:77,w:53,s:33}, January:{m:126,g:161,a:146,p:77,w:49,s:40}, February:{m:42,g:48,a:41,p:77,w:49,s:39} },
+            H2ssain_28: { October:{m:44,g:36,a:15,p:76,w:56,s:23}, November:{m:64,g:59,a:48,p:77,w:51,s:25}, January:{m:146,g:144,a:72,p:73,w:44,s:28}, February:{m:31,g:31,a:55,p:73,w:44,s:28} },
+            H7modi77: { October:{m:45,g:14,a:36,p:79,w:62,s:37}, November:{m:77,g:52,a:54,p:76,w:51,s:40}, January:{m:116,g:44,a:85,p:75,w:47,s:39}, February:{m:44,g:20,a:26,p:75,w:47,s:37} },
+            "M---_11_11": { October:{m:68,g:38,a:43,p:81,w:57,cs:2,s:27}, November:{m:86,g:48,a:58,p:74,w:54,cs:3,s:29}, January:{m:158,g:112,a:113,p:75,w:46,cs:5,s:33}, February:{m:40,g:24,a:19,p:75,w:46,cs:2,s:34} },
+            Yo0ousef25: { October:{m:28,g:23,a:5,p:78,w:67,s:46}, November:{m:26,g:21,a:8,p:78,w:58,s:52}, January:{m:99,g:57,a:17,p:74,w:43,s:47}, February:{m:18,g:11,a:2,p:74,w:43,s:47} },
+            Basabeso2: { February:{m:24,g:2,a:3,p:85,w:50,cs:4,s:0} }
         };
 
-        function calculateAIRating(d, pos) {
-            if(!d || d.m === 0) return 0;
-            let score = ( (d.g*1.5 + d.a*1.3) / d.m ) * 10 + (d.p*0.2) + (d.w*0.2);
-            if(pos === "CB") score += ( (d.cs || 0) / d.m ) * 40;
-            return Math.min(99, score + 40).toFixed(1);
+        function calcRating(d, pos) {
+            if(!d) return 0;
+            let val = ((d.g*2 + d.a*1.5 + (d.p/10)) / (d.m || 1)) * 5 + 40;
+            if(pos === "CB") val += (d.cs || 0) * 2;
+            return Math.min(99, val).toFixed(1);
         }
 
         function showSec(id, btn) {
@@ -201,116 +261,98 @@
             btn.classList.add('active');
         }
 
-        function compare() {
-            const p1 = document.getElementById('p1Select').value;
-            const p2 = document.getElementById('p2Select').value;
-            renderStatBox(p1, 'p1Stats');
-            renderStatBox(p2, 'p2Stats');
-        }
+        function init() {
+            let totalG = 0, totalA = 0;
+            const container = document.getElementById('playerStatsContainer');
+            const tactical = document.getElementById('tactical-spots');
+            const v1 = document.getElementById('v1');
+            const v2 = document.getElementById('v2');
+            const awardsList = document.getElementById('awardsList');
 
-        function renderStatBox(name, divId) {
-            const data = statsData[name];
-            let totalG = 0, totalA = 0, totalM = 0;
-            for(let m in data) { totalG += data[m].g; totalA += data[m].a; totalM += data[m].m; }
-            
-            const html = `
-                <div class="vs-stat-row">
-                    <div class="vs-stat-labels"><span>GOALS</span><span>${totalG}</span></div>
-                    <div class="vs-bar-bg"><div class="vs-bar-fill" style="width:${Math.min(100, totalG/2)}%; background:var(--gold);"></div></div>
-                </div>
-                <div class="vs-stat-row">
-                    <div class="vs-stat-labels"><span>ASSISTS</span><span>${totalA}</span></div>
-                    <div class="vs-bar-bg"><div class="vs-bar-fill" style="width:${Math.min(100, totalA/2)}%; background:var(--primary);"></div></div>
-                </div>
-                <div class="vs-stat-row">
-                    <div class="vs-stat-labels"><span>MATCHES</span><span>${totalM}</span></div>
-                    <div class="vs-bar-bg"><div class="vs-bar-fill" style="width:${Math.min(100, totalM/3)}%; background:#fff;"></div></div>
-                </div>
-            `;
-            document.getElementById(divId).innerHTML = html;
-        }
-
-        function initApp() {
-            const p1S = document.getElementById('p1Select');
-            const p2S = document.getElementById('p2Select');
-            const awardsGrid = document.getElementById('awardsGrid');
-            
-            // Fill Selects
             players.forEach(p => {
-                p1S.innerHTML += `<option value="${p.name}">${p.name}</option>`;
-                p2S.innerHTML += `<option value="${p.name}">${p.name}</option>`;
-            });
-            p2S.selectedIndex = 1;
+                // Pitch
+                tactical.innerHTML += `
+                    <div class="player-node" style="top:${p.t}; left:${p.l}">
+                        <div class="avatar-wrapper"><img src="${p.photo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102633.png'"></div>
+                        <div class="info"><b>${p.name}</b><span>${p.pos}</span></div>
+                    </div>`;
 
-            // Render Awards
-            const awards = [
-                {m:"OCTOBER", p:"M---_11_11", icon:"fa-crown"},
-                {m:"NOVEMBER", p:"H2ssain_28", icon:"fa-medal"},
-                {m:"JANUARY", p:"Almousa3M", icon:"fa-fire"},
-                {m:"FEBRUARY", p:"Almousa3M", icon:"fa-star"}
+                // Full Stats Table
+                let pStats = stats[p.name];
+                let tableHtml = `
+                    <div class="stats-card">
+                        <h2 style="font-family:Orbitron; color:var(--gold); border-bottom:1px solid #222; padding-bottom:10px;">${p.name} <span style="font-size:12px; color:var(--primary)">${p.pos}</span></h2>
+                        <table class="luxury-table">
+                            <thead>
+                                <tr><th>الشهر</th><th>M</th><th>G</th><th>A</th><th>P%</th><th>W%</th><th>S/CS</th><th>Rating</th></tr>
+                            </thead>
+                            <tbody>`;
+                
+                for(let m in pStats) {
+                    let d = pStats[m];
+                    totalG += d.g; totalA += d.a;
+                    tableHtml += `
+                        <tr>
+                            <td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}%</td><td>${d.w}%</td>
+                            <td>${p.pos === 'CB' || p.pos === 'CM' ? (d.cs || 0) : d.s + '%'}</td>
+                            <td style="color:var(--gold)">${calcRating(d, p.pos)}</td>
+                        </tr>`;
+                }
+                container.innerHTML += tableHtml + `</tbody></table></div>`;
+
+                // VS Selects
+                v1.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+                v2.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+            });
+
+            document.getElementById('totalGoals').innerText = totalG;
+            document.getElementById('totalAssists').innerText = totalA;
+
+            // Awards Render
+            const aw = [
+                {m:"OCTOBER", n:"M---_11_11", i:"fa-crown"}, {m:"NOVEMBER", n:"H2ssain_28", i:"fa-medal"},
+                {m:"JANUARY", n:"Almousa3M", i:"fa-fire"}, {m:"FEBRUARY", n:"Almousa3M", i:"fa-star"}
             ];
-            awards.forEach(a => {
-                awardsGrid.innerHTML += `
-                    <div class="award-card" style="margin-bottom:0">
-                        <i class="fas ${a.icon}" style="font-size:30px; color:var(--gold); margin-bottom:10px;"></i>
-                        <div style="font-size:10px; opacity:0.6;">${a.m}</div>
-                        <h3 style="margin:5px 0;">لاعب الشهر</h3>
-                        <p style="color:var(--gold); font-weight:900;">${a.p}</p>
+            aw.forEach(a => {
+                awardsList.innerHTML += `
+                    <div class="stats-card" style="text-align:center;">
+                        <i class="fas ${a.i}" style="font-size:40px; color:var(--gold); margin-bottom:15px;"></i>
+                        <div style="font-size:12px; color:#555;">${a.m}</div>
+                        <h3>لاعب الشهر</h3>
+                        <p style="color:var(--gold); font-family:Orbitron; font-weight:900;">${a.n}</p>
                     </div>`;
             });
 
-            // AI Prediction Logic (Find highest performer in Feb)
-            let bestFeb = {name:"", score:0};
-            players.forEach(p => {
-                if(statsData[p.name].February) {
-                    let score = calculateAIRating(statsData[p.name].February, p.pos);
-                    if(score > bestFeb.score) { bestFeb = {name:p.name, score:score}; }
-                }
-            });
-            document.getElementById('aiContent').innerHTML = `
-                <div style="margin-top:15px;">
-                    <span style="color:var(--gold); font-size:20px; font-weight:900;">${bestFeb.name}</span><br>
-                    <small>بناءً على أداء شهر فبراير، اللاعب مرشح لكسر الأرقام القياسية الشهر القادم بنسبة ثقة 94%</small>
-                </div>`;
+            // AI Prediction
+            document.getElementById('aiAnalysis').innerHTML = `
+                بناءً على وتيرة شهر فبراير، يتوقع النظام أن يحقق <span style="color:var(--gold)">Almousa3M</span> 
+                أكثر من 50 مساهمة في الشهر القادم. <br>
+                <small style="color:#555">نسبة الثقة في التحليل: 92.4%</small>
+            `;
 
-            compare();
-            renderStatsAndRank();
+            v2.selectedIndex = 1;
+            runVs();
         }
 
-        function renderStatsAndRank() {
-            const rankGrid = document.getElementById('rankGrid');
-            const statsDiv = document.getElementById('fullStats');
-
-            let ranked = players.map(p => {
-                let months = statsData[p.name] || {};
-                let total = {m:0, g:0, a:0, p:0, w:0, count:0};
-                for(let m in months) {
-                    total.m += months[m].m; total.g += months[m].g; 
-                    total.a += months[m].a; total.p += months[m].p;
-                    total.w += months[m].w; total.count++;
-                }
-                let avg = {m:total.m, g:total.g, a:total.a, p:total.p/total.count, w:total.w/total.count};
-                return { ...p, rating: calculateAIRating(avg, p.pos) };
-            }).sort((a,b) => b.rating - a.rating);
-
-            ranked.forEach((p, i) => {
-                rankGrid.innerHTML += `
-                    <div class="award-card ${i===0?'first':''}" style="border-color:${i===0? 'var(--gold)':'#333'}">
-                        <div style="font-family:Orbitron; color:var(--gold); margin-bottom:10px;">RANK #${i+1}</div>
-                        <h3>${p.name}</h3>
-                        <div style="font-size:28px; font-family:Orbitron; color:var(--primary)">${p.rating}</div>
-                    </div>`;
-
-                let table = `<div class="award-card" style="text-align:right; border-color:#222;"><h3>${p.name} - ${p.pos}</h3><table style="width:100%; color:#fff; font-size:12px; border-collapse:collapse;"><tr><th>الشهر</th><th>G</th><th>A</th><th>P%</th><th>Rate</th></tr>`;
-                for(let m in statsData[p.name]) {
-                    let d = statsData[p.name][m];
-                    table += `<tr style="border-top:1px solid #333;"><td style="padding:8px 0;">${m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}%</td><td style="color:var(--gold)">${calculateAIRating(d, p.pos)}</td></tr>`;
-                }
-                statsDiv.innerHTML += table + `</table></div>`;
+        function runVs() {
+            const names = [document.getElementById('v1').value, document.getElementById('v2').value];
+            names.forEach((n, i) => {
+                let pStats = stats[n];
+                let tg=0, ta=0, tm=0;
+                for(let m in pStats) { tg += pStats[m].g; ta += pStats[m].a; tm += pStats[m].m; }
+                document.getElementById(`v${i+1}Data`).innerHTML = `
+                    <div style="font-size:30px; margin:20px 0; font-family:Orbitron;">${calcRating({g:tg, a:ta, m:tm}, 'ST')}</div>
+                    <div style="font-size:12px; color:#555;">TOTAL PERFORMANCE RATE</div>
+                    <div style="margin-top:20px; text-align:right;">
+                        <p>الأهداف: ${tg}</p>
+                        <p>الصناعة: ${ta}</p>
+                        <p>المباريات: ${tm}</p>
+                    </div>
+                `;
             });
         }
 
-        window.onload = initApp;
+        window.onload = init;
     </script>
 </body>
 </html>
