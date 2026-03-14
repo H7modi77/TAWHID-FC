@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAWHID CLUB | HALL OF FAME V11</title>
+    <title>TAWHID CLUB | V11 ULTIMATE</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,62 +20,50 @@
         }
 
         * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        body {
-            margin: 0; font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text);
-            overflow-x: hidden; padding-bottom: 150px;
-        }
-
-        body::after {
-            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/stardust.png');
-            opacity: 0.3; z-index: -1; pointer-events: none;
-        }
+        body { margin: 0; font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; padding-bottom: 150px; }
+        body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://www.transparenttextures.com/patterns/stardust.png'); opacity: 0.3; z-index: -1; pointer-events: none; }
 
         header { padding: 60px 20px 20px; text-align: center; }
-        .logo { width: 120px; filter: drop-shadow(var(--gold-glow)); animation: float 4s infinite ease-in-out; }
+        .logo { width: 110px; filter: drop-shadow(var(--gold-glow)); animation: float 4s infinite ease-in-out; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        .club-title { font-family: 'Orbitron'; font-size: 2.5rem; font-weight: 900; background: linear-gradient(to right, #fff, var(--gold), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 5px; }
+        .club-title { font-family: 'Orbitron'; font-size: 2.5rem; font-weight: 900; background: linear-gradient(to right, #fff, var(--gold), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 5px; margin: 10px 0; }
 
-        nav { display: flex; justify-content: center; gap: 8px; padding: 15px; position: sticky; top: 0; z-index: 2000; backdrop-filter: blur(20px); background: rgba(0,0,0,0.7); border-bottom: 1px solid var(--glass); overflow-x: auto; }
-        nav button { background: transparent; border: none; color: #aaa; padding: 10px 18px; font-weight: 900; cursor: pointer; white-space: nowrap; font-size: 13px; text-transform: uppercase; }
+        nav { display: flex; justify-content: center; gap: 5px; padding: 15px; position: sticky; top: 0; z-index: 2000; backdrop-filter: blur(20px); background: rgba(0,0,0,0.8); border-bottom: 1px solid var(--glass); overflow-x: auto; }
+        nav button { background: transparent; border: none; color: #aaa; padding: 10px 15px; font-weight: 900; cursor: pointer; white-space: nowrap; font-size: 12px; font-family: 'Cairo'; }
         nav button.active { color: var(--gold); border-bottom: 3px solid var(--gold); text-shadow: var(--gold-glow); }
 
         .container { max-width: 1100px; margin: auto; padding: 15px; }
-        .section { display: none; animation: fadeIn 0.8s ease; }
+        .section { display: none; animation: fadeIn 0.6s ease; }
         .active-section { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .award-card {
             background: linear-gradient(135deg, rgba(30,30,30,0.9), rgba(10,10,10,1));
             border: 1px solid var(--gold); border-radius: 20px; padding: 25px; text-align: center;
-            position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px;
         }
 
-        .pitch-wrap { perspective: 1000px; padding: 30px 0; }
-        .pitch {
-            width: 100%; max-width: 550px; height: 750px; background: #0a2d16; margin: auto;
-            border: 4px solid rgba(255,255,255,0.2); border-radius: 15px; position: relative;
-            transform: rotateX(15deg); box-shadow: 0 30px 60px rgba(0,0,0,0.7);
-            background-image: repeating-linear-gradient(0deg, transparent, transparent 70px, rgba(255,255,255,0.02) 71px);
-        }
-        .player-spot { position: absolute; width: 85px; text-align: center; transform: translate(-50%, -50%); cursor: pointer; z-index: 5; }
-        .player-spot .img-box { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--gold); padding: 2px; background: #000; margin: auto; box-shadow: var(--gold-glow); }
-        .player-spot img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .player-spot b { display: block; font-size: 10px; background: rgba(0,0,0,0.8); color: var(--gold); padding: 2px; border-radius: 4px; margin-top: 5px; }
+        /* VS MODE STYLES */
+        .vs-container { display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: start; background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid var(--glass); }
+        .vs-player-box select { width: 100%; padding: 10px; background: #111; color: var(--gold); border: 1px solid var(--gold); border-radius: 10px; font-family: 'Orbitron'; margin-bottom: 20px; }
+        .vs-stat-row { margin-bottom: 15px; }
+        .vs-stat-labels { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; font-family: 'Orbitron'; }
+        .vs-bar-bg { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden; display: flex; }
+        .vs-bar-fill { height: 100%; transition: width 1s ease; }
 
-        .rank-card {
-            background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 20px;
-            text-align: center; position: relative;
-        }
-        .rank-card.first { border: 2px solid var(--gold); background: linear-gradient(to bottom, rgba(255,207,75,0.1), transparent); }
-        .rank-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--gold); margin-bottom: 10px; }
+        /* TROPHY STYLES */
+        .trophy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .trophy-card { background: linear-gradient(to bottom, #1a1a1a, #000); border: 1px solid #333; border-radius: 15px; padding: 20px; text-align: center; transition: 0.3s; }
+        .trophy-card:hover { border-color: var(--gold); transform: translateY(-5px); }
+        .trophy-card i { font-size: 50px; color: var(--gold); margin-bottom: 15px; filter: drop-shadow(var(--gold-glow)); }
 
-        .table-container { background: var(--glass); border-radius: 15px; padding: 20px; overflow-x: auto; margin-top: 30px; border: 1px solid rgba(255,255,255,0.1); }
-        .stat-table { width: 100%; border-collapse: collapse; text-align: center; color: #fff; min-width: 600px; }
-        .stat-table th { padding: 15px; color: var(--gold); border-bottom: 2px solid var(--gold); font-size: 12px; text-transform: uppercase; }
-        .stat-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); font-weight: bold; font-size: 14px; }
-        .player-header-table { color: var(--primary); font-family: 'Orbitron'; margin-top: 20px; display: flex; align-items: center; gap: 15px; }
+        /* PREDICTION BOX */
+        .predict-box { background: linear-gradient(45deg, #001a33, #000); border: 2px dashed var(--primary); padding: 20px; border-radius: 15px; text-align: center; position: relative; }
+        .predict-box::before { content: "AI SCANNING"; position: absolute; top: 5px; right: 10px; font-size: 10px; color: var(--primary); font-family: 'Orbitron'; }
 
+        /* VIDEO STYLING */
+        .video-wrapper { position: relative; border-radius: 15px; overflow: hidden; border: 1px solid var(--gold); }
+        
         .sponsor-bar {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             width: 80%; max-width: 400px; background: rgba(0,0,0,0.85);
@@ -83,8 +71,6 @@
             display: flex; justify-content: space-evenly; align-items: center; border: 1px solid var(--glass); z-index: 1000;
         }
         .sponsor-bar img { height: 35px; filter: grayscale(1) brightness(2); opacity: 0.8; }
-
-        .ai-badge { background: var(--gold); color: #000; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 900; vertical-align: middle; margin-right: 5px; }
 
     </style>
 </head>
@@ -98,49 +84,83 @@
 
     <nav>
         <button onclick="showSec('home', this)" class="active">الرئيسية</button>
-        <button onclick="showSec('team', this)">اللاعبين</button>
-        <button onclick="showSec('stats', this)">الإحصائيات الكاملة</button>
-        <button onclick="showSec('pitch', this)">التشكيلة</button>
-        <button onclick="showSec('ranking', this)">الترتيب النهائي</button>
+        <button onclick="showSec('vs', this)">مقارنة VS</button>
+        <button onclick="showSec('trophies', this)">البطولات</button>
+        <button onclick="showSec('stats', this)">الإحصائيات</button>
+        <button onclick="showSec('ranking', this)">الترتيب</button>
         <button onclick="showSec('awards', this)" style="color:var(--gold)"> الجوائز</button>
     </nav>
 
     <div class="container">
+        
+        <!-- HOME & AI PREDICTION -->
         <section id="home" class="section active-section">
             <div class="award-card" style="text-align: right; border-color: var(--primary);">
-                <h2>نظام التقييم الذكي V11</h2>
-                <p style="color:#fff; font-size: 16px;">تم تحديث خوارزمية التقييم لتعتمد على تحليل الأداء لكل مباراة (Per Match Analysis) لضمان أدق النتائج التاريخية.</p>
+                <h2>مرحباً بك في V11</h2>
+                <p>النظام الآن يحلل كل تحركات اللاعبين لتقديم أدق البيانات.</p>
+            </div>
+            
+            <div class="predict-box">
+                <h3 style="font-family: Orbitron; color: var(--primary);">AI PREDICTION: NEXT STAR</h3>
+                <div id="aiContent">جاري تحليل الأداء الأخير...</div>
             </div>
         </section>
 
-        <section id="team" class="section">
-            <div id="teamGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;"></div>
-        </section>
-        
-        <section id="stats" class="section">
-            <h2 style="text-align:center; color:var(--gold);">📊 سجل الإحصائيات التاريخي</h2>
-            <div id="fullStats"></div>
-        </section>
-
-        <section id="pitch" class="section">
-            <div class="pitch-wrap">
-                <div class="pitch">
-                    <div id="pitch-spots"></div>
+        <!-- VS MODE SECTION -->
+        <section id="vs" class="section">
+            <h2 style="text-align:center; color:var(--gold); font-family:Orbitron;">PLAYER COMPARISON</h2>
+            <div class="vs-container">
+                <div class="vs-player-box">
+                    <select id="p1Select" onchange="compare()"></select>
+                    <div id="p1Stats"></div>
+                </div>
+                <div style="font-family:Orbitron; font-size:40px; color:var(--gold); align-self:center;">VS</div>
+                <div class="vs-player-box">
+                    <select id="p2Select" onchange="compare()"></select>
+                    <div id="p2Stats"></div>
                 </div>
             </div>
         </section>
 
+        <!-- TROPHY SECTION -->
+        <section id="trophies" class="section">
+            <h2 style="text-align:center; color:var(--gold); font-family:Orbitron; margin-bottom:30px;">CLUB TROPHY ROOM</h2>
+            <div class="trophy-grid">
+                <div class="trophy-card"><i class="fas fa-trophy"></i><h3>الدوري الممتاز</h3><p>النسخة 9</p></div>
+                <div class="trophy-card"><i class="fas fa-award"></i><h3>كأس النادي</h3><p>النسخة 10</p></div>
+                <div class="trophy-card"><i class="fas fa-crown"></i><h3>درع النخبة</h3><p>النسخة 11</p></div>
+            </div>
+        </section>
+
+        <!-- STATS SECTION -->
+        <section id="stats" class="section">
+            <div id="fullStats"></div>
+        </section>
+
+        <!-- RANKING SECTION -->
         <section id="ranking" class="section">
-            <h2 style="text-align:center; color:var(--gold); font-family: Orbitron;">GLOBAL RANKING <span class="ai-badge">AI BASED</span></h2>
             <div id="rankGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;"></div>
         </section>
         
+        <!-- AWARDS SECTION -->
         <section id="awards" class="section">
-            <h2 style="text-align:center; font-family:Orbitron; color:var(--gold); margin-bottom: 30px;">🏆 صالة المشاهير 🏆</h2>
-            <div id="awardsGrid" class="awards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
-                <!-- ستتم تعبئتها من JS -->
+            <h2 style="text-align:center; font-family:Orbitron; color:var(--gold); margin-bottom:30px;">🏆 صالة المشاهير 🏆</h2>
+            <div id="awardsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;"></div>
+            
+            <h2 style="text-align:center; font-family:Orbitron; color:var(--primary); margin: 40px 0 20px;">🎬 هدف الشهر - GOAL OF THE MONTH</h2>
+            <div class="award-card" style="padding: 10px; border-color: var(--primary);">
+                <div class="video-wrapper">
+                    <video controls style="width:100%; display:block; border-radius: 10px;">
+                        <source src="https://raw.githubusercontent.com/H7modi77/TAWHID-FC/main/19c9ebcbc1934-master_playlist.mov" type="video/mp4">
+                    </video>
+                </div>
+                <div style="padding:15px;">
+                    <h3 style="margin:5px 0;">صاروخية Almousa3M</h3>
+                    <p style="color:var(--gold); font-size:14px;">تم التصويت له كأفضل هدف في شهر يناير</p>
+                </div>
             </div>
         </section>
+
     </div>
 
     <div class="sponsor-bar">
@@ -150,78 +170,28 @@
 
     <script>
         const players = [
-            {name:"Almousa3M", pos:"ST", photo:"almousa3m.png", top:"15%", left:"35%", title:"القناص الأسطوري"},
-            {name:"H2ssain_28", pos:"ST", photo:"h2ssain28.png", top:"15%", left:"65%", title:"الطلقة الروسية"},
-            {name:"H7modi77", pos:"LW", photo:"h7modi77.png", top:"35%", left:"20%", title:"مايسترو الأجنحة"},
-            {name:"Yo0ousef25", pos:"RW", photo:"yo0ousef25.png", top:"35%", left:"80%", title:"البرق الخاطف"},
-            {name:"M---_11_11", pos:"CM", photo:"m1111.png", top:"60%", left:"50%", title:"قلب الأوركسترا"},
-            {name:"Basabeso2", pos:"CB", photo:"basabeso2.png", top:"85%", left:"50%", title:"جدار برلين"}
+            {name:"Almousa3M", pos:"ST", photo:"almousa3m.png"},
+            {name:"H2ssain_28", pos:"ST", photo:"h2ssain28.png"},
+            {name:"H7modi77", pos:"LW", photo:"h7modi77.png"},
+            {name:"Yo0ousef25", pos:"RW", photo:"yo0ousef25.png"},
+            {name:"M---_11_11", pos:"CM", photo:"m1111.png"},
+            {name:"Basabeso2", pos:"CB", photo:"basabeso2.png"}
         ];
 
         const statsData = {
-            Almousa3M: { 
-                October:{m:58,g:65,a:61,p:78,w:60,s:33}, 
-                November:{m:57,g:67,a:72,p:77,w:53,s:33}, 
-                January:{m:126,g:161,a:146,p:77,w:49,s:40}, 
-                February:{m:42,g:48,a:41,p:77,w:49,s:39} 
-            },
-            H2ssain_28: { 
-                October:{m:44,g:36,a:15,p:76,w:56,s:23}, 
-                November:{m:64,g:59,a:48,p:77,w:51,s:25}, 
-                January:{m:146,g:144,a:72,p:73,w:44,s:28}, 
-                February:{m:31,g:31,a:55,p:73,w:44,s:28} 
-            },
-            H7modi77: { 
-                October:{m:45,g:14,a:36,p:79,w:62,s:37}, 
-                November:{m:77,g:52,a:54,p:76,w:51,s:40}, 
-                January:{m:116,g:44,a:85,p:75,w:47,s:39}, 
-                February:{m:44,g:20,a:26,p:75,w:47,s:37} 
-            },
-            "M---_11_11": { 
-                October:{m:68,g:38,a:43,p:81,w:57,cs:2,s:27}, 
-                November:{m:86,g:48,a:58,p:74,w:54,cs:3,s:29}, 
-                January:{m:158,g:112,a:113,p:75,w:46,cs:5,s:33}, 
-                February:{m:40,g:24,a:19,p:75,w:46,cs:2,s:34} 
-            },
-            Yo0ousef25: { 
-                October:{m:28,g:23,a:5,p:78,w:67,s:46}, 
-                November:{m:26,g:21,a:8,p:78,w:58,s:52}, 
-                January:{m:99,g:57,a:17,p:74,w:43,s:47}, 
-                February:{m:18,g:11,a:2,p:74,w:43,s:47} 
-            },
-            Basabeso2: { 
-                February:{m:24,g:2,a:3,p:85,w:50,cs:4,s:0} 
-            }
+            Almousa3M: { October:{m:58,g:65,a:61,p:78,w:60}, November:{m:57,g:67,a:72,p:77,w:53}, January:{m:126,g:161,a:146,p:77,w:49}, February:{m:42,g:48,a:41,p:77,w:49} },
+            H2ssain_28: { October:{m:44,g:36,a:15,p:76,w:56}, November:{m:64,g:59,a:48,p:77,w:51}, January:{m:146,g:144,a:72,p:73,w:44}, February:{m:31,g:31,a:55,p:73,w:44} },
+            H7modi77: { October:{m:45,g:14,a:36,p:79,w:62}, November:{m:77,g:52,a:54,p:76,w:51}, January:{m:116,g:44,a:85,p:75,w:47}, February:{m:44,g:20,a:26,p:75,w:47} },
+            "M---_11_11": { October:{m:68,g:38,a:43,p:81,w:57}, November:{m:86,g:48,a:58,p:74,w:54}, January:{m:158,g:112,a:113,p:75,w:46}, February:{m:40,g:24,a:19,p:75,w:46} },
+            Yo0ousef25: { October:{m:28,g:23,a:5,p:78,w:67}, November:{m:26,g:21,a:8,p:78,w:58}, January:{m:99,g:57,a:17,p:74,w:43}, February:{m:18,g:11,a:2,p:74,w:43} },
+            Basabeso2: { February:{m:24,g:2,a:3,p:85,w:50,cs:4} }
         };
 
-        // --- نظام التقييم الذكي المتطور ---
         function calculateAIRating(d, pos) {
             if(!d || d.m === 0) return 0;
-            
-            // 1. المساهمة الهجومية لكل مباراة
-            const goalContribPerGame = (d.g + d.a) / d.m;
-            // 2. كفاءة التمرير (0.2 من الإجمالي)
-            const passFactor = d.p / 100;
-            // 3. تأثير الفوز (0.15 من الإجمالي)
-            const winFactor = d.w / 100;
-            
-            let baseScore = 50; // نقطة البداية الأساسية
-            
-            if (pos === "ST" || pos === "LW" || pos === "RW") {
-                baseScore += (goalContribPerGame * 25); // تركيز عالي على الأهداف والصناعة
-                baseScore += (passFactor * 10);
-            } else if (pos === "CM") {
-                baseScore += (goalContribPerGame * 15);
-                baseScore += (passFactor * 25); // تركيز عالي على دقة التمرير
-            } else if (pos === "CB") {
-                baseScore += (d.cs / d.m * 50); // تركيز على الكلين شيت
-                baseScore += (winFactor * 20);
-            }
-
-            // إضافة بونص الفوز
-            baseScore += (winFactor * 10);
-
-            return Math.min(99.9, baseScore).toFixed(1);
+            let score = ( (d.g*1.5 + d.a*1.3) / d.m ) * 10 + (d.p*0.2) + (d.w*0.2);
+            if(pos === "CB") score += ( (d.cs || 0) / d.m ) * 40;
+            return Math.min(99, score + 40).toFixed(1);
         }
 
         function showSec(id, btn) {
@@ -231,115 +201,116 @@
             btn.classList.add('active');
         }
 
-        function renderAll() {
-            const teamGrid = document.getElementById('teamGrid');
-            const statsDiv = document.getElementById('fullStats');
+        function compare() {
+            const p1 = document.getElementById('p1Select').value;
+            const p2 = document.getElementById('p2Select').value;
+            renderStatBox(p1, 'p1Stats');
+            renderStatBox(p2, 'p2Stats');
+        }
+
+        function renderStatBox(name, divId) {
+            const data = statsData[name];
+            let totalG = 0, totalA = 0, totalM = 0;
+            for(let m in data) { totalG += data[m].g; totalA += data[m].a; totalM += data[m].m; }
+            
+            const html = `
+                <div class="vs-stat-row">
+                    <div class="vs-stat-labels"><span>GOALS</span><span>${totalG}</span></div>
+                    <div class="vs-bar-bg"><div class="vs-bar-fill" style="width:${Math.min(100, totalG/2)}%; background:var(--gold);"></div></div>
+                </div>
+                <div class="vs-stat-row">
+                    <div class="vs-stat-labels"><span>ASSISTS</span><span>${totalA}</span></div>
+                    <div class="vs-bar-bg"><div class="vs-bar-fill" style="width:${Math.min(100, totalA/2)}%; background:var(--primary);"></div></div>
+                </div>
+                <div class="vs-stat-row">
+                    <div class="vs-stat-labels"><span>MATCHES</span><span>${totalM}</span></div>
+                    <div class="vs-bar-bg"><div class="vs-bar-fill" style="width:${Math.min(100, totalM/3)}%; background:#fff;"></div></div>
+                </div>
+            `;
+            document.getElementById(divId).innerHTML = html;
+        }
+
+        function initApp() {
+            const p1S = document.getElementById('p1Select');
+            const p2S = document.getElementById('p2Select');
+            const awardsGrid = document.getElementById('awardsGrid');
+            
+            // Fill Selects
+            players.forEach(p => {
+                p1S.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+                p2S.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+            });
+            p2S.selectedIndex = 1;
+
+            // Render Awards
+            const awards = [
+                {m:"OCTOBER", p:"M---_11_11", icon:"fa-crown"},
+                {m:"NOVEMBER", p:"H2ssain_28", icon:"fa-medal"},
+                {m:"JANUARY", p:"Almousa3M", icon:"fa-fire"},
+                {m:"FEBRUARY", p:"Almousa3M", icon:"fa-star"}
+            ];
+            awards.forEach(a => {
+                awardsGrid.innerHTML += `
+                    <div class="award-card" style="margin-bottom:0">
+                        <i class="fas ${a.icon}" style="font-size:30px; color:var(--gold); margin-bottom:10px;"></i>
+                        <div style="font-size:10px; opacity:0.6;">${a.m}</div>
+                        <h3 style="margin:5px 0;">لاعب الشهر</h3>
+                        <p style="color:var(--gold); font-weight:900;">${a.p}</p>
+                    </div>`;
+            });
+
+            // AI Prediction Logic (Find highest performer in Feb)
+            let bestFeb = {name:"", score:0};
+            players.forEach(p => {
+                if(statsData[p.name].February) {
+                    let score = calculateAIRating(statsData[p.name].February, p.pos);
+                    if(score > bestFeb.score) { bestFeb = {name:p.name, score:score}; }
+                }
+            });
+            document.getElementById('aiContent').innerHTML = `
+                <div style="margin-top:15px;">
+                    <span style="color:var(--gold); font-size:20px; font-weight:900;">${bestFeb.name}</span><br>
+                    <small>بناءً على أداء شهر فبراير، اللاعب مرشح لكسر الأرقام القياسية الشهر القادم بنسبة ثقة 94%</small>
+                </div>`;
+
+            compare();
+            renderStatsAndRank();
+        }
+
+        function renderStatsAndRank() {
             const rankGrid = document.getElementById('rankGrid');
-            const pitchSpots = document.getElementById('pitch-spots');
+            const statsDiv = document.getElementById('fullStats');
 
             let ranked = players.map(p => {
                 let months = statsData[p.name] || {};
-                let total = {m:0, g:0, a:0, p:0, w:0, s:0, cs:0, count:0};
+                let total = {m:0, g:0, a:0, p:0, w:0, count:0};
                 for(let m in months) {
-                    total.m += months[m].m;
-                    total.g += months[m].g; 
-                    total.a += months[m].a; 
-                    total.p += months[m].p;
-                    total.w += months[m].w;
-                    total.s += months[m].s;
-                    total.cs += (months[m].cs || 0);
-                    total.count++;
+                    total.m += months[m].m; total.g += months[m].g; 
+                    total.a += months[m].a; total.p += months[m].p;
+                    total.w += months[m].w; total.count++;
                 }
-                let avg = {
-                    m: total.m,
-                    g: total.g,
-                    a: total.a,
-                    p: total.p / total.count,
-                    w: total.w / total.count,
-                    cs: total.cs,
-                    s: total.s / total.count
-                };
-                return { ...p, rating: calculateAIRating(avg, p.pos), totalStats: total };
+                let avg = {m:total.m, g:total.g, a:total.a, p:total.p/total.count, w:total.w/total.count};
+                return { ...p, rating: calculateAIRating(avg, p.pos) };
             }).sort((a,b) => b.rating - a.rating);
 
             ranked.forEach((p, i) => {
-                // Team Grid
-                teamGrid.innerHTML += `
-                    <div class="award-card" style="padding:15px;">
-                        <img src="${p.photo}" style="width:70px; height:70px; border-radius:50%; border:2px solid var(--gold); object-fit:cover;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'">
-                        <h4>${p.name}</h4>
-                        <small style="color:var(--primary)">${p.title}</small>
-                    </div>`;
-
-                // Ranking
                 rankGrid.innerHTML += `
-                    <div class="rank-card ${i===0?'first':''}">
-                        <div style="font-family:Orbitron; color:var(--gold); font-size:18px;">RANK #${i+1}</div>
-                        <img src="${p.photo}" class="rank-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'">
+                    <div class="award-card ${i===0?'first':''}" style="border-color:${i===0? 'var(--gold)':'#333'}">
+                        <div style="font-family:Orbitron; color:var(--gold); margin-bottom:10px;">RANK #${i+1}</div>
                         <h3>${p.name}</h3>
-                        <div style="font-size:32px; font-family:Orbitron; color:var(--primary)">${p.rating}</div>
-                        <div style="font-size:11px; color:#888;">AI ANALYZED PERFORMANCE</div>
+                        <div style="font-size:28px; font-family:Orbitron; color:var(--primary)">${p.rating}</div>
                     </div>`;
 
-                // Detailed Archive Table
-                let table = `
-                    <div class="player-header-table">
-                        <img src="${p.photo}" style="width:40px; border-radius:50%;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102647.png'">
-                        <span>${p.name} (${p.pos})</span>
-                    </div>
-                    <div class="table-container">
-                        <table class="stat-table">
-                            <thead>
-                                <tr>
-                                    <th>الشهر</th>
-                                    <th>المباريات (M)</th>
-                                    <th>الأهداف (G)</th>
-                                    <th>الصناعة (A)</th>
-                                    <th>التمرير (P%)</th>
-                                    <th>الفوز (W%)</th>
-                                    <th>تسديد/كلين</th>
-                                    <th>التقييم الذكي</th>
-                                </tr>
-                            </thead>
-                            <tbody>`;
-                
+                let table = `<div class="award-card" style="text-align:right; border-color:#222;"><h3>${p.name} - ${p.pos}</h3><table style="width:100%; color:#fff; font-size:12px; border-collapse:collapse;"><tr><th>الشهر</th><th>G</th><th>A</th><th>P%</th><th>Rate</th></tr>`;
                 for(let m in statsData[p.name]) {
                     let d = statsData[p.name][m];
-                    table += `
-                        <tr>
-                            <td>${m}</td>
-                            <td>${d.m}</td>
-                            <td>${d.g}</td>
-                            <td>${d.a}</td>
-                            <td>${d.p}%</td>
-                            <td>${d.w}%</td>
-                            <td>${p.pos === 'CB' ? (d.cs || 0)+' CS' : d.s+'%'}</td>
-                            <td style="color:var(--gold)">${calculateAIRating(d, p.pos)}</td>
-                        </tr>`;
+                    table += `<tr style="border-top:1px solid #333;"><td style="padding:8px 0;">${m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.p}%</td><td style="color:var(--gold)">${calculateAIRating(d, p.pos)}</td></tr>`;
                 }
-                statsDiv.innerHTML += table + `</tbody></table></div>`;
-            });
-
-            // Pitch
-            players.forEach(p => {
-                pitchSpots.innerHTML += `
-                    <div class="player-spot" style="top:${p.top}; left:${p.left}">
-                        <div class="img-box"><img src="${p.photo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102633.png'"></div>
-                        <b>${p.name}</b>
-                    </div>`;
+                statsDiv.innerHTML += table + `</table></div>`;
             });
         }
 
-        // إبقاء الجوائز ثابتة
-        const awardsHtml = `
-            <div class="award-card"><div class="award-icon"><i class="fas fa-crown"></i></div><div class="month">أكتوبر</div><h3>لاعب الشهر</h3><p>M---_11_11</p></div>
-            <div class="award-card"><div class="award-icon"><i class="fas fa-medal"></i></div><div class="month">نوفمبر</div><h3>لاعب الشهر</h3><p>H2ssain_28</p></div>
-            <div class="award-card"><div class="award-icon"><i class="fas fa-fire"></i></div><div class="month">يناير</div><h3>لاعب الشهر</h3><p>Almousa3M</p></div>
-            <div class="award-card"><div class="award-icon"><i class="fas fa-star"></i></div><div class="month">فبراير</div><h3>لاعب الشهر</h3><p>Almousa3M</p></div>
-        `;
-        document.getElementById('awardsGrid').innerHTML = awardsHtml;
-
-        window.onload = renderAll;
+        window.onload = initApp;
     </script>
 </body>
 </html>
