@@ -1,391 +1,366 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAWHID CLUB | V11 ELITE PRESTIGE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TAWHID FC | ELITE HUB V12</title>
     
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         :root {
-            --gold: #ffcf4b;
-            --gold-glow: 0 0 20px rgba(255, 207, 75, 0.5);
-            --primary: #00d2ff;
-            --bg: #030303;
-            --card-bg: rgba(15, 15, 15, 0.8);
-            --border: rgba(255, 207, 75, 0.2);
-            --neon-blue: #00f2ff;
+            --bg: #05050a;
+            --card: #0f0f1a;
+            --text: #ffffff;
+            --accent: #4cc9f0;
+            --gold: #d4af37;
+            --danger: #ff4b2b;
+            --border: rgba(255,255,255,0.1);
         }
 
-        * { box-sizing: border-box; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .light-mode {
+            --bg: #f0f2f5;
+            --card: #ffffff;
+            --text: #1a1a1a;
+            --accent: #4361ee;
+            --gold: #b8860b;
+            --border: rgba(0,0,0,0.1);
+        }
+
+        * { box-sizing: border-box; transition: 0.3s; -webkit-tap-highlight-color: transparent; }
         
         body {
-            margin: 0; font-family: 'Cairo', sans-serif; background: var(--bg); color: #fff;
-            overflow-x: hidden; scroll-behavior: smooth;
+            margin: 0; background: var(--bg); color: var(--text);
+            font-family: 'Orbitron', sans-serif; overflow-x: hidden; padding-bottom: 100px;
         }
 
-        /* خلفية متحركة احترافية */
-        body::before {
-            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, #0a1128 0%, #030303 100%);
-            z-index: -2;
-        }
+        .arabic { font-family: 'Cairo', sans-serif; direction: rtl; }
 
-        /* شريط الأخبار المتطور */
-        .news-ticker {
-            background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--gold);
-            padding: 12px 0; overflow: hidden; position: fixed; top: 0; width: 100%; z-index: 9999;
-            backdrop-filter: blur(15px);
+        /* --- Header & Back Button --- */
+        .top-bar {
+            position: sticky; top: 0; width: 100%; background: var(--bg);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 15px 20px; z-index: 10000; border-bottom: 1px solid var(--border);
         }
-        .ticker-content { 
-            display: inline-block; white-space: nowrap; animation: ticker 25s linear infinite;
-            font-family: 'Orbitron'; color: var(--gold); font-weight: 900; font-size: 14px;
+        .back-btn { 
+            visibility: hidden; font-size: 18px; color: var(--accent); 
+            display: flex; align-items: center; gap: 5px; cursor: pointer;
+            font-family: 'Cairo'; font-weight: bold;
         }
-        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .back-btn.visible { visibility: visible; }
 
-        /* الهيدر الفاخر */
-        header { padding: 160px 20px 60px; text-align: center; position: relative; }
-        .logo { 
-            width: 160px; filter: drop-shadow(var(--gold-glow));
-            animation: float 4s infinite ease-in-out;
+        /* Navigation Footer */
+        nav {
+            position: fixed; bottom: 20px; left: 5%; width: 90%;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 40px; display: flex; justify-content: space-around;
+            padding: 15px; backdrop-filter: blur(20px); z-index: 9000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-        @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.05); } }
-        
-        .club-title { 
-            font-family: 'Orbitron'; font-size: 4.5rem; font-weight: 900; 
-            background: linear-gradient(to bottom, #fff, var(--gold));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: 12px; margin: 20px 0; text-shadow: var(--gold-glow);
-        }
+        nav button { background: none; border: none; color: #666; font-size: 18px; }
+        nav button.active { color: var(--accent); transform: scale(1.2); }
 
-        /* قائمة التنقل العائمة */
-        nav { 
-            display: flex; justify-content: center; gap: 10px; padding: 15px; 
-            position: sticky; top: 50px; z-index: 9000; backdrop-filter: blur(20px); 
-            background: rgba(0,0,0,0.7); border-bottom: 1px solid var(--border);
-        }
-        nav button { 
-            background: transparent; border: 1px solid transparent; color: #888; 
-            padding: 12px 25px; font-weight: 700; cursor: pointer; border-radius: 5px;
-            font-family: 'Orbitron', 'Cairo'; font-size: 13px;
-        }
-        nav button.active { 
-            color: var(--gold); border-color: var(--gold); background: rgba(255,207,75,0.05);
-            box-shadow: inset 0 0 15px rgba(255,207,75,0.1);
-        }
-
-        .container { max-width: 1250px; margin: auto; padding: 40px 20px; }
-        .section { display: none; animation: fadeIn 0.8s ease; }
+        .container { padding: 20px; }
+        .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid var(--border); margin-bottom: 20px; position: relative; }
+        .section { display: none; animation: fadeIn 0.4s ease; }
         .active-section { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* كروت الإحصائيات (Glassmorphism) */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
-        .stat-card { 
-            background: var(--card-bg); border: 1px solid var(--border); padding: 30px; 
-            border-radius: 20px; text-align: center; position: relative; overflow: hidden;
-        }
-        .stat-card::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--gold); }
-        .stat-card i { font-size: 40px; color: var(--gold); margin-bottom: 15px; opacity: 0.8; }
-        .stat-card h3 { font-family: 'Orbitron'; font-size: 32px; margin: 10px 0; color: #fff; }
-        .stat-card p { color: #888; font-size: 14px; margin: 0; letter-spacing: 2px; }
+        /* Player Items & Form Trend */
+        .player-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .player-img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--accent); background: #000; padding: 2px; }
+        .form-up { color: #00ff88; font-size: 10px; }
+        .form-down { color: var(--danger); font-size: 10px; }
 
-        /* التشكيلة التكتيكية (نسخة الـ FUT) */
-        .pitch-box {
-            background: radial-gradient(circle at center, #0a200a 0%, #000 100%);
-            border-radius: 30px; padding: 40px; border: 2px solid #111; margin: auto;
-            position: relative; max-width: 700px; height: 900px;
-        }
-        .pitch-line { position: absolute; border: 2px solid rgba(255,255,255,0.05); }
-        .pitch-center { top: 50%; left: 50%; width: 150px; height: 150px; border-radius: 50%; transform: translate(-50%, -50%); }
-        
-        .fut-player { 
-            position: absolute; width: 110px; text-align: center; transform: translate(-50%, -50%); 
-            cursor: pointer; z-index: 5;
-        }
-        .fut-card {
-            background: url('https://selimdoyranli.com/cdn/fut-cards/img/card_gold.png');
-            background-size: 100% 100%; width: 100px; height: 140px; margin: auto;
-            display: flex; align-items: center; justify-content: center; position: relative;
-        }
-        .fut-player img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin-top: -20px; }
-        .fut-player b { display: block; font-size: 11px; color: #000; margin-top: 5px; font-family: 'Orbitron'; font-weight: 900; }
+        .stat-table { width: 100%; border-collapse: collapse; font-size: 10px; }
+        .stat-table th { color: var(--accent); padding: 5px; border-bottom: 1px solid var(--border); }
+        .stat-table td { padding: 8px 4px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.02); }
 
-        /* نظام المقارنة VS الرهيب */
-        .vs-arena { display: grid; grid-template-columns: 1fr auto 1fr; gap: 30px; align-items: center; }
-        .vs-side { background: var(--card-bg); padding: 40px; border-radius: 25px; border: 1px solid #222; text-align: center; }
-        .vs-select { 
-            width: 100%; padding: 15px; background: #000; color: var(--gold); 
-            border: 1px solid var(--gold); border-radius: 10px; font-family: 'Orbitron'; margin-bottom: 25px;
-        }
-        .radar-chart { width: 100%; height: 300px; }
+        /* AI Prediction Box */
+        .ai-box { background: linear-gradient(135deg, rgba(76, 201, 240, 0.05), rgba(212, 175, 55, 0.05)); border: 1px dashed var(--gold); border-radius: 15px; padding: 15px; }
+        .synergy-score { font-size: 24px; font-weight: 900; color: var(--accent); text-shadow: 0 0 10px var(--accent); }
 
-        /* جداول الإحصائيات الفاخرة */
-        .table-container { background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); }
-        .elite-table { width: 100%; border-collapse: collapse; }
-        .elite-table th { padding: 20px; background: rgba(255,207,75,0.1); color: var(--gold); font-family: 'Orbitron'; font-size: 12px; }
-        .elite-table td { padding: 15px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); font-family: 'Orbitron'; }
-        .elite-table tr:hover { background: rgba(255,255,255,0.02); }
+        /* Trophy Cabinet */
+        .trophy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .trophy-item { text-align: center; font-size: 10px; color: var(--gold); }
+        .trophy-item i { font-size: 20px; display: block; margin-bottom: 5px; }
 
-        /* زر التحميل */
-        .loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000;
-            display: flex; justify-content: center; align-items: center; z-index: 10000;
-        }
+        /* News Section */
+        .news-cat { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; }
+        .news-btn { padding: 8px 15px; border-radius: 20px; border: 1px solid var(--border); background: var(--card); font-size: 12px; white-space: nowrap; color: var(--text); }
+        .news-btn.active { background: var(--accent); color: #000; border: none; }
+
+        /* Modals */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 20000; flex-direction: column; }
+        .modal-header { padding: 20px; display: flex; align-items: center; border-bottom: 1px solid var(--border); }
+        .modal-body { padding: 20px; overflow-y: auto; flex-grow: 1; }
+
+        /* Tactic Pitch */
+        .pitch { height: 450px; background: rgba(76, 201, 240, 0.03); border: 1px solid var(--border); border-radius: 20px; position: relative; overflow: hidden; }
+        .p-node { position: absolute; transform: translate(-50%, -50%); text-align: center; }
+        .p-node img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--accent); }
+        .p-node b { display: block; font-size: 8px; color: var(--text); background: rgba(0,0,0,0.5); border-radius: 3px; }
     </style>
 </head>
-<body onload="initApp()">
+<body>
 
-    <div class="loader" id="loader">
-        <div style="text-align:center;">
-            <img src="logo.png" width="100" class="logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1165/1165187.png'">
-            <h2 style="font-family: Orbitron; letter-spacing: 5px; color: var(--gold);">LOADING ELITE V11...</h2>
+    <!-- الشريط العلوي الذكي -->
+    <div class="top-bar">
+        <div id="globalBack" class="back-btn" onclick="goHome()">
+            <i class="fas fa-chevron-left"></i> عودة
         </div>
-    </div>
-
-    <div class="news-ticker">
-        <div class="ticker-content" id="tickerText">
-            ✦ TAWHID FC: THE PINNACLE OF COMPETITIVE GAMING ✦ ALMOUSA3M DOMINATING WITH 441 GOALS ✦ WELCOME TO THE PRESTIGE ERA ✦
+        <div style="text-align: center;">
+            <img src="logo.png" width="35" style="vertical-align: middle;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1165/1165187.png'">
+            <span style="font-weight: 900; letter-spacing: 1px; margin-left: 5px;">TAWHID FC</span>
         </div>
+        <div onclick="toggleTheme()" style="color: var(--accent); font-size: 18px;"><i id="themeIcon" class="fas fa-moon"></i></div>
     </div>
-
-    <header>
-        <img src="logo.png" class="logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1165/1165187.png'">
-        <h1 class="club-title">TAWHID CLUB</h1>
-        <div style="font-family:'Orbitron'; color:var(--primary); font-size: 16px; letter-spacing: 10px; font-weight:900;">V11 ELITE PRESTIGE</div>
-    </header>
-
-    <nav>
-        <button onclick="showSection('home', this)" class="active"><i class="fas fa-chart-pie"></i> DASHBOARD</button>
-        <button onclick="showSection('pitch', this)"><i class="fas fa-Microchip"></i> TACTICAL</button>
-        <button onclick="showSection('stats', this)"><i class="fas fa-list-ol"></i> STATISTICS</button>
-        <button onclick="showSection('vs', this)"><i class="fas fa-crosshairs"></i> VS ARENA</button>
-        <button onclick="showSection('awards', this)"><i class="fas fa-award"></i> HALL OF FAME</button>
-    </nav>
 
     <div class="container">
         
-        <!-- DASHBOARD -->
-        <section id="home" class="section active-section">
-            <div class="stats-grid" id="mainRecords">
-                <!-- Auto-Generated -->
+        <!-- صفحة البداية / About -->
+        <section id="about" class="section active-section">
+            <div class="card">
+                <h3 style="margin-top: 0;">CLUB OVERVIEW</h3>
+                <p style="font-size: 12px; color: #888;">Founded: 12/02/2025</p>
+                
+                <div class="trophy-grid">
+                    <div class="trophy-item"><i class="fas fa-trophy"></i> Div 1 Champ</div>
+                    <div class="trophy-item"><i class="fas fa-crown"></i> Elite Cup</div>
+                    <div class="trophy-item"><i class="fas fa-star"></i> V10 Winner</div>
+                </div>
+
+                <div class="ai-box" style="margin-top: 20px;">
+                    <div style="color: var(--gold); font-size: 12px; font-weight: bold;"><i class="fas fa-award"></i> SEASON 24/25 LEGENDS</div>
+                    <div style="font-size: 11px; margin-top: 5px;">
+                        Ballon d'Or: <span style="color:var(--gold)">Almousa3m</span><br>
+                        Golden Boot: <span style="color:var(--gold)">H2ssain28</span>
+                    </div>
+                </div>
             </div>
+
+            <h4 style="color: var(--accent);">HISTORICAL DATA ARCHIVE</h4>
+            <div id="legacy-stats-container"></div>
+        </section>
+
+        <!-- صفحة التشكيلة واللاعبين -->
+        <section id="squad" class="section">
+            <div class="card ai-box" style="margin-bottom: 20px; text-align: center;">
+                <div style="font-size: 11px; color: var(--accent);">AI BEST DUO SYNERGY</div>
+                <div class="synergy-score">94%</div>
+                <div style="font-size: 10px;">Almousa3m + M---_11_11</div>
+            </div>
+
+            <div id="active-squad-container"></div>
             
-            <div class="table-container" style="padding: 30px;">
-                <h2 style="font-family: Orbitron; color: var(--gold);"><i class="fas fa-brain"></i> AI PERFORMANCE TRENDS</h2>
-                <canvas id="mainTrendChart" style="max-height: 400px;"></canvas>
+            <h4 style="margin-top: 20px; color: var(--accent);">TACTICAL BOARD</h4>
+            <div class="pitch" id="pitch-map"></div>
+        </section>
+
+        <!-- صفحة الأخبار -->
+        <section id="news" class="section arabic">
+            <div class="news-cat">
+                <button class="news-btn active" onclick="filterNews('all', this)">الكل</button>
+                <button class="news-btn" onclick="filterNews('transfers', this)">انتقالات</button>
+                <button class="news-btn" onclick="filterNews('official', this)">بيان رسمي</button>
+                <button class="news-btn" onclick="filterNews('injuries', this)">إصابات</button>
             </div>
+            <div id="news-list"></div>
         </section>
 
-        <!-- TACTICAL PITCH -->
-        <section id="pitch" class="section">
-            <div class="pitch-box">
-                <div class="pitch-line pitch-center"></div>
-                <div style="position:absolute; top:50%; width:100%; height:2px; background:rgba(255,255,255,0.05);"></div>
-                <div id="futPitch"></div>
-            </div>
-        </section>
-
-        <!-- STATISTICS -->
-        <section id="stats" class="section">
-            <div id="allPlayersStats"></div>
-        </section>
-
-        <!-- VS ARENA -->
-        <section id="vs" class="section">
-            <div class="vs-arena">
-                <div class="vs-side">
-                    <select id="v1" class="vs-select" onchange="compare()"></select>
-                    <div id="v1Info"></div>
-                    <canvas id="v1Chart" class="radar-chart"></canvas>
-                </div>
-                <div style="font-family: Orbitron; font-size: 50px; color: var(--gold); text-shadow: var(--gold-glow);">VS</div>
-                <div class="vs-side">
-                    <select id="v2" class="vs-select" onchange="compare()"></select>
-                    <div id="v2Info"></div>
-                    <canvas id="v2Chart" class="radar-chart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- HALL OF FAME -->
+        <!-- صفحة الجوائز وتوقعات AI -->
         <section id="awards" class="section">
-            <div class="stats-grid" id="awardsHall"></div>
+            <div class="card ai-box" style="text-align: center;">
+                <h3 style="color: var(--gold); margin-top: 0;"><i class="fas fa-crystal-ball"></i> AI SEASON PREDICTIONS</h3>
+                <div id="ai-predictions-list" style="font-size: 12px; line-height: 2;"></div>
+            </div>
             
-            <div class="table-container" style="margin-top: 40px; padding: 20px;">
-                <h2 style="text-align:center; font-family:Orbitron; color:var(--primary)">GOAL OF THE SEASON (V11)</h2>
-                <video controls style="width:100%; border-radius: 15px; border: 2px solid var(--gold);">
+            <!-- هدف الشهر: لا يتغير كما طلبت -->
+            <div class="card">
+                <h4 style="color: var(--accent); margin-top:0;"><i class="fas fa-video"></i> GOAL OF THE MONTH</h4>
+                <video controls style="width:100%; border-radius: 15px; border: 1px solid var(--gold);">
                     <source src="https://raw.githubusercontent.com/H7modi77/TAWHID-FC/main/19c9ebcbc1934-master_playlist.mov" type="video/mp4">
                 </video>
+                <div style="text-align: center; margin-top: 10px;">
+                    <b style="color: var(--gold);">H7MODI_77</b>
+                    <p style="font-size: 11px; margin: 0; opacity: 0.7;">An absolute screamer from outside the box.</p>
+                </div>
+            </div>
+
+            <div class="card" style="text-align: center;">
+                <h4 style="color: var(--accent);">PLAYER OF THE MONTH</h4>
+                <img src="almousa3m.png" class="player-img" style="width: 80px; height: 80px; border-color: var(--gold);" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102633.png'">
+                <h4 style="margin: 10px 0;">Almousa3m</h4>
+                <p style="font-size: 11px; opacity: 0.7;">Performance Score: 9.2/10</p>
             </div>
         </section>
 
     </div>
 
+    <!-- نافذة الإحصائيات -->
+    <div id="statsModal" class="modal">
+        <div class="modal-header">
+            <div class="back-btn visible" onclick="closeStats()"><i class="fas fa-chevron-left"></i> عودة</div>
+            <div id="modalPlayerName" style="flex-grow: 1; text-align: center; font-weight: bold; color: var(--accent);">Analytics</div>
+        </div>
+        <div class="modal-body">
+            <div class="card"><canvas id="playerChart" height="250"></canvas></div>
+            <div class="ai-box">
+                <p id="playerAdvice" style="font-size: 11px; color: var(--gold); margin:0;"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة الملفات -->
+    <div id="fileViewer" class="modal">
+        <div class="modal-header">
+            <div class="back-btn visible" onclick="closeFile()"><i class="fas fa-chevron-left"></i> عودة</div>
+            <div style="flex-grow: 1; text-align: center;">Document Viewer</div>
+        </div>
+        <div class="modal-body"><img src="M1.png" style="width: 100%; border-radius: 10px;" onerror="this.src='https://via.placeholder.com/500x700?text=OFFICIAL+DATA'"></div>
+    </div>
+
+    <nav>
+        <button id="btn-about" onclick="navTo('about', this)" class="active"><i class="fas fa-home"></i></button>
+        <button id="btn-squad" onclick="navTo('squad', this)"><i class="fas fa-users-cog"></i></button>
+        <button id="btn-news" onclick="navTo('news', this)"><i class="fas fa-newspaper"></i></button>
+        <button id="btn-awards" onclick="navTo('awards', this)"><i class="fas fa-award"></i></button>
+    </nav>
+
     <script>
-        const players = [
-            {name:"Almousa3M", pos:"ST", photo:"p1.png", t:"15%", l:"35%"},
-            {name:"H2ssain_28", pos:"ST", photo:"p2.png", t:"15%", l:"65%"},
-            {name:"H7modi77", pos:"LW", photo:"p3.png", t:"35%", l:"20%"},
-            {name:"Yo0ousef25", pos:"RW", photo:"p4.png", t:"35%", l:"80%"},
-            {name:"M---_11_11", pos:"CM", photo:"p5.png", t:"60%", l:"50%"},
-            {name:"Basabeso2", pos:"CB", photo:"p6.png", t:"85%", l:"50%"}
+        const legacyPlayers = [
+            {n: "yo0ousef25", g: 434, a: 171, r: 6.9},
+            {n: "M-_-_-_-11_11", g: 635, a: 728, r: 7.3},
+            {n: "Alaly19", g: 507, a: 263, r: 7.5},
+            {n: "H7modi_77", g: 446, a: 885, r: 7.7},
+            {n: "h2ssain", g: 842, a: 507, r: 8.1},
+            {n: "basabeso2", g: 713, a: 511, r: 8.4},
+            {n: "almousa3m", g: 700, a: 716, r: 8.8}
         ];
 
-        const statsData = {
-            Almousa3M: { October:{m:58,g:65,a:61,p:78,w:60}, November:{m:57,g:67,a:72,p:77,w:53}, January:{m:126,g:161,a:146,p:77,w:49}, February:{m:42,g:48,a:41,p:77,w:49} },
-            H2ssain_28: { October:{m:44,g:36,a:15,p:76,w:56}, November:{m:64,g:59,a:48,p:77,w:51}, January:{m:146,g:144,a:72,p:73,w:44}, February:{m:31,g:31,a:55,p:73,w:44} },
-            H7modi77: { October:{m:45,g:14,a:36,p:79,w:62}, November:{m:77,g:52,a:54,p:76,w:51}, January:{m:116,g:44,a:85,p:75,w:47}, February:{m:44,g:20,a:26,p:75,w:47} },
-            "M---_11_11": { October:{m:68,g:38,a:43,p:81,w:57,cs:2}, November:{m:86,g:48,a:58,p:74,w:54,cs:3}, January:{m:158,g:112,a:113,p:75,w:46,cs:5}, February:{m:40,g:24,a:19,p:75,w:46,cs:2} },
-            Yo0ousef25: { October:{m:28,g:23,a:5,p:78,w:67}, November:{m:26,g:21,a:8,p:78,w:58}, January:{m:99,g:57,a:17,p:74,w:43}, February:{m:18,g:11,a:2,p:74,w:43} },
-            Basabeso2: { February:{m:24,g:2,a:3,p:85,w:50,cs:4} }
-        };
+        const activeSquad = [
+            {n: "Almousa3m", pos: "ST", t: "15%", l: "35%", img: "almousa3m.png", trend: 'up', stats: {Oct:{m:58,g:65,a:61,p:79,s:38,mo:22}, Nov:{m:57,g:67,a:72,p:80,s:40,mo:18}, Jan:{m:126,g:161,a:146,p:78,s:39,mo:45}, Feb:{m:42,g:48,a:41,p:81,s:42,mo:15}}},
+            {n: "H2ssain_28", pos: "ST", t: "15%", l: "65%", img: "h2ssain28.png", trend: 'down', stats: {Oct:{m:44,g:36,a:15,p:75,s:33,mo:10}, Nov:{m:64,g:59,a:48,p:76,s:35,mo:14}, Jan:{m:146,g:144,a:72,p:74,s:34,mo:30}, Feb:{m:31,g:31,a:55,p:77,s:36,mo:9}}},
+            {n: "Yo0ousef25", pos: "RW", t: "35%", l: "85%", img: "yo0ousef25.png", trend: 'up', stats: {Oct:{m:28,g:23,a:5,p:75,s:46,mo:2}, Nov:{m:26,g:21,a:8,p:74,s:47,mo:1}, Jan:{m:99,g:57,a:17,p:73,s:45,mo:10}, Feb:{m:18,g:11,a:2,p:76,s:48,mo:2}}},
+            {n: "M---_11_11", pos: "CM", t: "55%", l: "50%", img: "m1111.png", trend: 'up', stats: {Oct:{m:68,g:38,a:43,p:81,s:28,mo:15}, Nov:{m:86,g:48,a:58,p:74,s:30,mo:20}, Jan:{m:158,g:112,a:113,p:75,s:29,mo:35}, Feb:{m:40,g:24,a:19,p:75,s:32,mo:10}}},
+            {n: "H7modi_07", pos: "CDM", t: "75%", l: "50%", img: "h7modi07.png", trend: 'none', stats: {}},
+            {n: "Basabeso2", pos: "CB", t: "90%", l: "50%", img: "basabeso2.png", trend: 'up', stats: {Feb:{m:24,g:2,a:3,p:85,s:35,mo:5}}}
+        ];
 
-        let radar1, radar2;
+        let chartObj = null;
 
-        function calcRating(d) {
-            if(!d || d.m === 0) return 0;
-            return Math.min(99, (((d.g*1.8 + d.a*1.5 + (d.p/10)) / d.m) * 6 + 40)).toFixed(1);
-        }
-
-        function initApp() {
-            setTimeout(() => {
-                document.getElementById('loader').style.display = 'none';
-                renderData();
-                renderMainChart();
-                compare();
-            }, 1500);
-        }
-
-        function showSection(id, btn) {
+        function navTo(id, btn) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
             document.getElementById(id).classList.add('active-section');
             document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            
+            const backBtn = document.getElementById('globalBack');
+            if(id === 'about') backBtn.classList.remove('visible');
+            else backBtn.classList.add('visible');
+            
+            window.scrollTo(0,0);
         }
 
-        function renderData() {
-            const records = document.getElementById('mainRecords');
-            const pitch = document.getElementById('futPitch');
-            const statsCont = document.getElementById('allPlayersStats');
-            const v1 = document.getElementById('v1');
-            const v2 = document.getElementById('v2');
-            const hall = document.getElementById('awardsHall');
+        function goHome() { navTo('about', document.getElementById('btn-about')); }
 
-            let clubGoals = 0, clubAssists = 0;
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            document.getElementById('themeIcon').className = isLight ? 'fas fa-sun' : 'fas fa-moon';
+        }
 
-            players.forEach(p => {
-                // Tactical Pitch
-                pitch.innerHTML += `
-                    <div class="fut-player" style="top:${p.t}; left:${p.l}">
-                        <div class="fut-card"><img src="${p.photo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102633.png'"></div>
-                        <b>${p.name}</b>
+        function init() {
+            // Legacy
+            const legCont = document.getElementById('legacy-stats-container');
+            legacyPlayers.forEach(p => {
+                legCont.innerHTML += `<div class="card" style="padding:10px; font-size:11px;"><b style="color:var(--gold);">${p.n.toUpperCase()}</b> | G: ${p.g} | A: ${p.a} | R: ${p.r}</div>`;
+            });
+
+            // Active
+            const squadCont = document.getElementById('active-squad-container');
+            const pitch = document.getElementById('pitch-map');
+            activeSquad.forEach(p => {
+                let tg=0, ta=0, tm=0;
+                let rows = "";
+                for(let m in p.stats) {
+                    let d = p.stats[m];
+                    tg+=d.g; ta+=d.a; tm+=d.m;
+                    rows += `<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td>${d.mo}</td><td>${d.p}%</td></tr>`;
+                }
+
+                const trendIcon = p.trend === 'up' ? '<i class="fas fa-arrow-up form-up"></i>' : (p.trend === 'down' ? '<i class="fas fa-arrow-down form-down"></i>' : '');
+
+                squadCont.innerHTML += `
+                    <div class="card">
+                        <div class="player-row">
+                            <img src="${p.img}" class="player-img" onclick="openStats('${p.n}')" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102633.png'">
+                            <div>
+                                <b style="font-size: 16px;">${p.n} ${trendIcon}</b>
+                                <div style="font-size: 10px; color: var(--accent);">POS: ${p.pos} | TOTAL G: ${tg}</div>
+                            </div>
+                        </div>
+                        <table class="stat-table">
+                            <thead><tr><th>MO</th><th>M</th><th>G</th><th>A</th><th>MOTM</th><th>PASS</th></tr></thead>
+                            <tbody>${rows || '<tr><td colspan="6">Scouting Status: New Deployment</td></tr>'}</tbody>
+                        </table>
                     </div>`;
 
-                // Stats Aggregate
-                let tg=0, ta=0, tm=0;
-                let playerTable = `<div class="table-container" style="margin-bottom:30px;"><h3 style="padding:20px; color:var(--gold); font-family:Orbitron;">${p.name} FULL REPORT</h3><table class="elite-table"><thead><tr><th>MONTH</th><th>MATCHES</th><th>GOALS</th><th>ASSISTS</th><th>RATING</th></tr></thead><tbody>`;
-                
-                for(let m in statsData[p.name]) {
-                    let d = statsData[p.name][m];
-                    tg+=d.g; ta+=d.a; tm+=d.m;
-                    playerTable += `<tr><td>${m}</td><td>${d.m}</td><td>${d.g}</td><td>${d.a}</td><td style="color:var(--gold)">${calcRating(d)}</td></tr>`;
-                }
-                clubGoals += tg; clubAssists += ta;
-                statsCont.innerHTML += playerTable + `</tbody></table></div>`;
-
-                // Selects
-                v1.innerHTML += `<option value="${p.name}">${p.name}</option>`;
-                v2.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+                pitch.innerHTML += `<div class="p-node" style="top:${p.t}; left:${p.l}"><img src="${p.img}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2102/2102633.png'"><b>${p.n}</b></div>`;
             });
 
-            records.innerHTML = `
-                <div class="stat-card"><i class="fas fa-futbol"></i><p>CLUB GOALS</p><h3>${clubGoals}</h3></div>
-                <div class="stat-card"><i class="fas fa-hands-helping"></i><p>CLUB ASSISTS</p><h3>${clubAssists}</h3></div>
-                <div class="stat-card"><i class="fas fa-chart-line"></i><p>WIN RATE</p><h3>54%</h3></div>
+            document.getElementById('ai-predictions-list').innerHTML = `
+                <span style="color: var(--gold);">Golden Boot Prediction:</span> H2ssain_28<br>
+                <span style="color: var(--accent);">Ballon d'Or Prediction:</span> Almousa3m<br>
+                <span style="color: var(--accent);">Next POTM Candidate:</span> Yo0ousef25 (+5% Trend)
             `;
 
-            // Awards Hall
-            const trophyIcons = ["fa-crown", "fa-medal", "fa-fire", "fa-star"];
-            const trophyMonths = ["OCTOBER", "NOVEMBER", "JANUARY", "FEBRUARY"];
-            const winners = ["M---_11_11", "H2ssain_28", "Almousa3M", "Almousa3M"];
-            
-            winners.forEach((w, i) => {
-                hall.innerHTML += `
-                <div class="stat-card">
-                    <i class="fas ${trophyIcons[i]}"></i>
-                    <p>${trophyMonths[i]} MVP</p>
-                    <h3 style="font-size:18px;">${w}</h3>
-                </div>`;
-            });
-
-            v2.selectedIndex = 1;
+            filterNews('all');
         }
 
-        function renderMainChart() {
-            const ctx = document.getElementById('mainTrendChart').getContext('2d');
-            new Chart(ctx, {
+        function filterNews(cat, btn) {
+            if(btn) {
+                document.querySelectorAll('.news-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+            const list = document.getElementById('news-list');
+            const items = [
+                {c:'transfers', t:'انتقالات القادمين', d:'H7MODI_07 ينضم رسمياً لتعزيز مركز المحور الدفاعي.', date:'20/04/2026'},
+                {c:'transfers', t:'انتقالات المغادرين', d:'H7MODI_77 يغادر النادي رسمياً، نتمنى له التوفيق.', date:'20/04/2026'},
+                {c:'official', t:'وثيقة رسمية', d:'تم اعتماد قائمة اللاعبين الجديدة لعام 2026.', file:true, date:'21/04/2026'},
+                {c:'official', t:'تحديث النظام', d:'فترة انقطاع مارس انتهت بنجاح، العودة للإحصائيات.', date:'01/04/2026'},
+                {c:'injuries', t:'الحالة البدنية', d:'لا توجد إصابات، الفريق كامل الجاهزية بنسبة 100%.', date:'21/04/2026'}
+            ];
+            list.innerHTML = "";
+            items.filter(n => cat === 'all' || n.c === cat).forEach(n => {
+                list.innerHTML += `<div class="card"><small style="color: var(--accent);">${n.date}</small><h4>${n.t}</h4><p style="font-size: 12px; opacity:0.8;">${n.d}</p>${n.file ? `<button onclick="openFile()" style="background:var(--accent); border:none; padding:6px 15px; border-radius:5px; font-family:Cairo; font-weight:bold;">عرض الوثيقة</button>` : ''}</div>`;
+            });
+        }
+
+        function openStats(name) {
+            const p = activeSquad.find(x => x.n === name);
+            const months = Object.keys(p.stats);
+            if(months.length === 0) return;
+            document.getElementById('modalPlayerName').innerText = name;
+            document.getElementById('statsModal').style.display = 'flex';
+            const ctx = document.getElementById('playerChart').getContext('2d');
+            if(chartObj) chartObj.destroy();
+            chartObj = new Chart(ctx, {
                 type: 'line',
-                data: {
-                    labels: ['October', 'November', 'January', 'February'],
-                    datasets: [{
-                        label: 'Team Performance Index',
-                        data: [75, 82, 91, 88],
-                        borderColor: '#ffcf4b',
-                        tension: 0.4,
-                        fill: true,
-                        backgroundColor: 'rgba(255, 207, 75, 0.1)'
-                    }]
-                },
-                options: { plugins: { legend: { labels: { color: '#fff' } } }, scales: { y: { grid: { color: '#222' }, ticks: { color: '#888' } }, x: { ticks: { color: '#888' } } } }
+                data: { labels: months, datasets: [{ label: 'Goals', data: months.map(m=>p.stats[m].g), borderColor: '#4cc9f0' }, { label: 'Assists', data: months.map(m=>p.stats[m].a), borderColor: '#d4af37' }] },
+                options: { plugins: { legend: { labels: { color: '#888' } } } }
             });
+            const tips = { Almousa3m: "AI Advice: Performance is elite. Maintain shot volume for Ballon d'Or dominance.", H2ssain_28: "AI Advice: Recent dip detected. Focus on positioning to regain Golden Boot lead.", Yo0ousef25: "AI Advice: Growth trend active. Exploit wing space more for assists.", "M---_11_11": "AI Advice: Synergy master. Your connection with STs is the highest in V11.", H7modi_07: "AI Advice: Initial scouting phase. Focus on CDM defensive coverage.", Basabeso2: "AI Advice: Solid wall. Maintain interception rate to secure POTM." };
+            document.getElementById('playerAdvice').innerHTML = `<i class="fas fa-robot"></i> AI INSIGHT: <br>${tips[name] || "Continue current development path."}`;
         }
 
-        function compare() {
-            const p1 = document.getElementById('v1').value;
-            const p2 = document.getElementById('v2').value;
+        function closeStats() { document.getElementById('statsModal').style.display = 'none'; }
+        function openFile() { document.getElementById('fileViewer').style.display = 'flex'; }
+        function closeFile() { document.getElementById('fileViewer').style.display = 'none'; }
 
-            [p1, p2].forEach((name, i) => {
-                let g=0, a=0, m=0;
-                for(let mo in statsData[name]) { g+=statsData[name][mo].g; a+=statsData[name][mo].a; m+=statsData[name][mo].m; }
-                
-                const rate = calcRating({g, a, m, p:75});
-                document.getElementById(`v${i+1}Info`).innerHTML = `<h1 style="color:var(--gold); font-family:Orbitron; margin:0;">${rate}</h1><p>G: ${g} | A: ${a}</p>`;
-                
-                renderRadar(`v${i+1}Chart`, name, i);
-            });
-        }
-
-        function renderRadar(id, name, idx) {
-            const ctx = document.getElementById(id).getContext('2d');
-            const data = idx === 0 ? [90, 85, 70, 88, 40] : [80, 75, 95, 70, 50]; // Static for demo, could be dynamic
-            
-            if(window[`chartObj${idx}`]) window[`chartObj${idx}`].destroy();
-
-            window[`chartObj${idx}`] = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: ['Shooting', 'Passing', 'Speed', 'Dribbling', 'Defense'],
-                    datasets: [{
-                        label: name,
-                        data: data,
-                        backgroundColor: 'rgba(0, 242, 255, 0.2)',
-                        borderColor: '#00f2ff',
-                        pointBackgroundColor: '#fff'
-                    }]
-                },
-                options: {
-                    scales: { r: { grid: { color: '#333' }, angleLines: { color: '#333' }, pointLabels: { color: '#fff' }, ticks: { display: false } } },
-                    plugins: { legend: { display: false } }
-                }
-            });
-        }
+        window.onload = init;
     </script>
 </body>
 </html>
