@@ -3,69 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TAWHID FC | ELITE HUB</title>
+    <title>TAWHID FC | ELITE HUB V13</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
     <style>
-        :root {
-            --primary: #6b21a8; /* بنفسجي ملكي */
-            --bg: #ffffff;
-            --card: #f9fafb;
-            --text: #111827;
-            --accent: #fbbf24;
-            --border: #e5e7eb;
-        }
-
+        :root { --primary: #6b21a8; --bg: #ffffff; --card: #f9fafb; --text: #111827; --accent: #fbbf24; --border: #e5e7eb; }
         [dir="ltr"] { font-family: 'Poppins', sans-serif; }
         [dir="rtl"] { font-family: 'Cairo', sans-serif; }
-
         * { box-sizing: border-box; transition: 0.3s; }
         body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 90px; overflow-x: hidden; }
 
-        /* Login Screen */
-        #login-overlay {
-            position: fixed; inset: 0; background: var(--primary); z-index: 100000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;
-        }
-        .pin-input {
-            background: rgba(255,255,255,0.1); border: 2px solid white; border-radius: 15px;
-            padding: 15px; width: 220px; text-align: center; font-size: 28px; color: white; outline: none;
-        }
+        /* Login Overlay */
+        #login-overlay { position: fixed; inset: 0; background: var(--primary); z-index: 100000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; }
+        .pin-input { background: rgba(255,255,255,0.1); border: 2px solid white; border-radius: 15px; padding: 15px; width: 220px; text-align: center; font-size: 28px; color: white; outline: none; }
 
         /* Top Bar */
-        .top-bar {
-            position: sticky; top: 0; background: white; padding: 12px 20px;
-            display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05); z-index: 1000;
-        }
+        .top-bar { position: sticky; top: 0; background: white; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 15px rgba(0,0,0,0.05); z-index: 1000; }
         .logo-img { height: 45px; object-fit: contain; }
         .lang-btn { background: var(--primary); color: white; border: none; padding: 5px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 12px; }
 
         .container { padding: 15px; max-width: 500px; margin: auto; }
-        .card { 
-            background: var(--card); border-radius: 20px; padding: 15px; 
-            margin-bottom: 15px; border: 1px solid var(--border);
-        }
+        .card { background: var(--card); border-radius: 20px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--border); position: relative; }
 
-        /* News & Vertical Items */
-        .news-item { margin-bottom: 25px; }
+        /* News & Players */
         .news-item img { width: 100%; border-radius: 15px; margin: 10px 0; }
-        .date-tag { font-size: 11px; color: var(--primary); font-weight: bold; }
-
-        /* Squad List */
         .player-card { display: flex; align-items: center; gap: 15px; cursor: pointer; padding: 10px; }
         .p-img-circle { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
         .pos-badge { background: #f3e8ff; color: var(--primary); padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; }
 
-        /* Player Details Table */
-        .stats-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 15px; }
-        .stats-table th { background: var(--primary); color: white; padding: 10px; }
-        .stats-table td { padding: 10px; text-align: center; border-bottom: 1px solid var(--border); }
+        /* Stats Table */
+        .stats-table { width: 100%; border-collapse: collapse; font-size: 10px; margin-top: 15px; }
+        .stats-table th { background: var(--primary); color: white; padding: 8px 4px; }
+        .stats-table td { padding: 8px 4px; text-align: center; border-bottom: 1px solid var(--border); }
 
         /* Rating Stars */
         .stars { display: flex; justify-content: center; gap: 5px; margin: 15px 0; direction: ltr; }
@@ -73,39 +49,36 @@
         .fa-star.active { color: var(--accent); }
 
         /* Navigation */
-        nav {
-            position: fixed; bottom: 15px; left: 15px; right: 15px; background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(10px); border-radius: 30px; display: flex; 
-            justify-content: space-around; padding: 12px; border: 1px solid var(--border); box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
+        nav { position: fixed; bottom: 15px; left: 15px; right: 15px; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border-radius: 30px; display: flex; justify-content: space-around; padding: 12px; border: 1px solid var(--border); box-shadow: 0 10px 25px rgba(0,0,0,0.1); z-index: 999; }
         nav button { background: none; border: none; color: #9ca3af; font-size: 22px; cursor: pointer; }
         nav button.active { color: var(--primary); transform: scale(1.1); }
 
         /* Admin UI */
-        .admin-sec { display: none; padding-bottom: 50px; }
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-size: 12px; margin-bottom: 5px; color: #666; }
-        input, select, textarea { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); outline: none; }
-        .btn-save { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; margin-top: 10px; }
-
+        input, select, textarea { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 10px; font-size: 14px; }
+        .btn-save { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .file-label { display: block; background: #eee; padding: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; cursor: pointer; font-size: 12px; border: 1px dashed #999; }
+        
         .section { display: none; }
         .active { display: block; }
         .back-btn { display: none; color: var(--primary); font-weight: bold; cursor: pointer; }
         .back-btn.show { display: inline-block; }
+
+        /* Upload Progress */
+        #upload-status { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: var(--accent); padding: 5px 15px; border-radius: 20px; font-size: 12px; display: none; z-index: 10000; }
     </style>
 </head>
 <body>
 
-    <!-- الشاشة الافتتاحية -->
+    <div id="upload-status">جارِ الرفع...</div>
+
     <div id="login-overlay">
-        <img id="login-logo" src="" width="120" style="margin-bottom: 20px;">
-        <h1 style="margin: 0;">TAWHID FC</h1>
-        <p id="txt-enter-pin">Enter Access Code</p>
-        <input type="password" id="pin-input" class="pin-input" maxlength="2" placeholder="00">
+        <img id="login-logo" src="" width="100" style="margin-bottom: 20px;">
+        <h1>TAWHID FC</h1>
+        <p id="txt-enter-pin">Access Code</p>
+        <input type="password" id="pin-input" class="pin-input" maxlength="2">
         <button onclick="checkAuth()" style="margin-top:20px; padding:12px 40px; border-radius:30px; border:none; font-weight:bold; background:white; color:var(--primary);">GO</button>
     </div>
 
-    <!-- الشريط العلوي -->
     <div class="top-bar">
         <div id="back-btn" class="back-btn" onclick="showSec('news')"><i class="fas fa-arrow-right"></i></div>
         <img id="header-logo" class="logo-img" src="">
@@ -114,23 +87,14 @@
     </div>
 
     <div class="container">
-        <!-- قسم الأخبار -->
-        <section id="news-sec" class="section active">
-            <h2 id="title-news">النشاط الأخير</h2>
-            <div id="news-list"></div>
-        </section>
+        <section id="news-sec" class="section active"><h2 id="title-news"></h2><div id="news-list"></div></section>
+        
+        <section id="squad-sec" class="section"><h2 id="title-squad"></h2><div id="squad-list"></div></section>
 
-        <!-- قسم اللاعبين -->
-        <section id="squad-sec" class="section">
-            <h2 id="title-squad">قائمة اللاعبين</h2>
-            <div id="squad-list"></div>
-        </section>
-
-        <!-- تفاصيل اللاعب -->
         <section id="player-profile-sec" class="section">
             <div id="player-card-detail" style="text-align: center;"></div>
             <div class="card" style="text-align: center;">
-                <h4 id="txt-rate-this">قيم اللاعب</h4>
+                <h4 id="txt-rate-this"></h4>
                 <div id="rating-stars" class="stars"></div>
                 <div id="avg-rating" style="font-weight: bold; color: var(--primary);"></div>
             </div>
@@ -138,9 +102,8 @@
                 <table class="stats-table">
                     <thead>
                         <tr>
-                            <th id="th-month">Month</th>
-                            <th id="th-m">M</th><th id="th-g">G</th><th id="th-a">A</th>
-                            <th id="th-motm">MOTM</th><th id="th-rate">Rate</th>
+                            <th id="th-month"></th><th id="th-m"></th><th id="th-g"></th><th id="th-a"></th>
+                            <th id="th-motm"></th><th id="th-pass">Pass%</th><th id="th-shot">Shot%</th><th id="th-rate"></th>
                         </tr>
                     </thead>
                     <tbody id="player-stats-body"></tbody>
@@ -148,82 +111,70 @@
             </div>
         </section>
 
-        <!-- قسم الجوائز -->
-        <section id="awards-sec" class="section">
-            <h2 id="title-awards" style="text-align:center">الجوائز</h2>
-            <div id="awards-container"></div>
-        </section>
+        <section id="awards-sec" class="section"><h2 id="title-awards"></h2><div id="awards-container"></div></section>
 
-        <!-- قسم الرعاة -->
-        <section id="sponsors-sec" class="section">
-            <h2 id="title-sponsors" style="text-align:center">الرعاة</h2>
-            <div id="sponsors-list"></div>
-        </section>
+        <section id="sponsors-sec" class="section"><h2 id="title-sponsors"></h2><div id="sponsors-list"></div></section>
 
         <!-- لوحة التحكم -->
-        <section id="admin-sec" class="section admin-sec">
-            <h2 id="title-admin">لوحة التحكم</h2>
+        <section id="admin-sec" class="section">
+            <h2 id="title-admin">Admin Control</h2>
             
             <div class="card">
-                <h4 id="txt-add-player">إضافة لاعب</h4>
+                <h4>إضافة لاعب</h4>
                 <input type="text" id="adm-p-name" placeholder="Full Name">
-                <input type="text" id="adm-p-user" placeholder="Display Name">
+                <input type="text" id="adm-p-user" placeholder="User Name">
                 <input type="text" id="adm-p-dob" placeholder="Birth Date">
                 <input type="number" id="adm-p-num" placeholder="Shirt Number">
-                <input type="text" id="adm-p-img" placeholder="Image URL">
+                <label class="file-label">صورة اللاعب <input type="file" id="adm-p-img" accept="image/*" hidden></label>
                 <select id="adm-p-pos">
-                    <option value="1">GK (حارس)</option>
-                    <option value="2">DEF (دفاع)</option>
-                    <option value="3">MID (وسط)</option>
-                    <option value="4">ATT (هجوم)</option>
+                    <option value="1">حارس</option><option value="2">دفاع</option><option value="3">وسط</option><option value="4">هجوم</option>
                 </select>
-                <button class="btn-save" onclick="dbAddPlayer()">Save Player</button>
+                <button class="btn-save" onclick="dbAddPlayer()">حفظ اللاعب</button>
             </div>
 
             <div class="card">
-                <h4 id="txt-add-news">إضافة خبر</h4>
-                <input type="text" id="adm-n-title" placeholder="Title">
-                <textarea id="adm-n-desc" placeholder="Details"></textarea>
-                <input type="text" id="adm-n-img" placeholder="Image URL">
-                <button class="btn-save" onclick="dbAddNews()">Post News</button>
-            </div>
-            
-            <div class="card">
-                <h4>تعديل إحصائيات الشهر</h4>
+                <h4>تحديث إحصائيات</h4>
                 <select id="adm-stat-player"></select>
-                <input type="text" id="adm-stat-month" placeholder="Month (e.g. Feb 2025)">
-                <input type="number" id="adm-stat-m" placeholder="Matches">
-                <input type="number" id="adm-stat-g" placeholder="Goals">
-                <input type="number" id="adm-stat-a" placeholder="Assists">
-                <input type="number" id="adm-stat-motm" placeholder="MOTM">
-                <input type="number" step="0.1" id="adm-stat-rate" placeholder="Rating">
-                <button class="btn-save" onclick="dbUpdateStats()">Update Stats</button>
+                <select id="adm-stat-month">
+                    <!-- سيتم تعبئتها من 10-2025 إلى 09-2026 -->
+                </select>
+                <input type="number" id="adm-stat-m" placeholder="مباريات">
+                <input type="number" id="adm-stat-g" placeholder="أهداف">
+                <input type="number" id="adm-stat-a" placeholder="أسيست">
+                <input type="number" id="adm-stat-motm" placeholder="رجل المباراة">
+                <input type="number" id="adm-stat-pass" placeholder="دقة التمرير %">
+                <input type="number" id="adm-stat-shot" placeholder="دقة التسديد %">
+                <input type="number" step="0.1" id="adm-stat-rate" placeholder="التقييم">
+                <button class="btn-save" onclick="dbUpdateStats()">تحديث</button>
             </div>
 
             <div class="card">
-                <h4>تغيير الشعار</h4>
-                <input type="text" id="adm-club-logo" placeholder="Logo URL">
-                <button class="btn-save" onclick="dbUpdateLogo()">Update Logo</button>
+                <h4>نشر خبر</h4>
+                <input type="text" id="adm-n-title" placeholder="العنوان">
+                <textarea id="adm-n-desc" placeholder="التفاصيل"></textarea>
+                <label class="file-label">صورة الخبر <input type="file" id="adm-n-img" accept="image/*" hidden></label>
+                <button class="btn-save" onclick="dbAddNews()">نشر</button>
+            </div>
+
+            <div class="card">
+                <h4>الجوائز والشعار</h4>
+                <label class="file-label">تحديث الشعار <input type="file" id="adm-club-logo" accept="image/*" hidden></label>
+                <hr>
+                <input type="text" id="adm-potm-name" placeholder="اسم لاعب الشهر">
+                <label class="file-label">صورة لاعب الشهر <input type="file" id="adm-potm-img" accept="image/*" hidden></label>
+                <label class="file-label">فيديو هدف الشهر <input type="file" id="adm-goal-vid" accept="video/*" hidden></label>
+                <button class="btn-save" onclick="dbUpdateAwards()">تحديث</button>
             </div>
 
             <div class="card">
                 <h4>إضافة راعي</h4>
-                <input type="text" id="adm-sp-img" placeholder="Sponsor Logo URL">
-                <input type="text" id="adm-sp-desc" placeholder="Sponsor Description">
-                <button class="btn-save" onclick="dbAddSponsor()">Add Sponsor</button>
-            </div>
-
-            <div class="card">
-                <h4>تحديث الجوائز</h4>
-                <input type="text" id="adm-potm-name" placeholder="POTM Name">
-                <input type="text" id="adm-potm-img" placeholder="POTM Image URL">
-                <input type="text" id="adm-goal-vid" placeholder="Goal Video URL">
-                <button class="btn-save" onclick="dbUpdateAwards()">Update Awards</button>
+                <label class="file-label">شعار الراعي <input type="file" id="adm-sp-img" accept="image/*" hidden></label>
+                <input type="text" id="adm-sp-desc" placeholder="وصف الراعي">
+                <button class="btn-save" onclick="dbAddSponsor()">حفظ الراعي</button>
             </div>
         </section>
     </div>
 
-    <!-- التنقل -->
     <nav>
         <button onclick="showSec('news')" id="btn-news" class="active"><i class="fas fa-home"></i></button>
         <button onclick="showSec('squad')" id="btn-squad"><i class="fas fa-users"></i></button>
@@ -232,7 +183,7 @@
     </nav>
 
     <script>
-        // --- 1. إعدادات FIREBASE ---
+        // --- 1. CONFIG (ضع بياناتك هنا) ---
         const firebaseConfig = {
             apiKey: "AIzaSy...",
             authDomain: "tawhid-fc.firebaseapp.com",
@@ -244,277 +195,146 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+        const storage = firebase.storage();
 
-        // --- 2. نظام اللغات ---
+        // --- 2. LANGUAGES ---
         let currLang = 'ar';
         const i18n = {
-            ar: {
-                enterPin: "أدخل رمز الدخول", news: "آخر الأخبار", squad: "قائمة اللاعبين",
-                awards: "الجوائز", sponsors: "الرعاة", admin: "لوحة التحكم",
-                month: "الشهر", matches: "مباريات", goals: "أهداف", assists: "أسيست",
-                motm: "الأفضل", rate: "التقييم", rateThis: "قيم اللاعب",
-                gk: "حارس", def: "دفاع", mid: "وسط", att: "هجوم", back: "عودة"
-            },
-            en: {
-                enterPin: "Enter Access Code", news: "Latest News", squad: "Elite Squad",
-                awards: "Awards", sponsors: "Sponsors", admin: "Admin Panel",
-                month: "Month", matches: "M", goals: "G", assists: "A",
-                motm: "MOTM", rate: "Rating", rateThis: "Rate Player",
-                gk: "GK", def: "DEF", mid: "MID", att: "ATT", back: "Back"
-            }
+            ar: { news: "الأخبار", squad: "اللاعبين", awards: "الجوائز", sponsors: "الرعاة", month: "شهر", rateThis: "قيم اللاعب", matches: "م", goals: "أ", assists: "أس", motm: "MOTM", rate: "تقييم" },
+            en: { news: "News", squad: "Squad", awards: "Awards", sponsors: "Sponsors", month: "Month", rateThis: "Rate Him", matches: "M", goals: "G", assists: "A", motm: "MOTM", rate: "Rate" }
         };
 
-        function toggleLang() {
-            currLang = (currLang === 'ar') ? 'en' : 'ar';
-            applyLang();
+        // --- 3. HELPERS ---
+        async function uploadFile(fileInput) {
+            if(!fileInput.files[0]) return null;
+            const file = fileInput.files[0];
+            const path = `uploads/${Date.now()}_${file.name}`;
+            const ref = storage.ref().child(path);
+            document.getElementById('upload-status').style.display = 'block';
+            await ref.put(file);
+            const url = await ref.getDownloadURL();
+            document.getElementById('upload-status').style.display = 'none';
+            return url;
+        }
+
+        function populateMonths() {
+            const select = document.getElementById('adm-stat-month');
+            const months = ["10-2025", "11-2025", "12-2025", "01-2026", "02-2026", "03-2026", "04-2026", "05-2026", "06-2026", "07-2026", "08-2026", "09-2026"];
+            months.forEach(m => select.innerHTML += `<option value="${m}">${m}</option>`);
+        }
+
+        // --- 4. CORE ---
+        function checkAuth() {
+            const pin = document.getElementById('pin-input').value;
+            const valid = ["07", "78", "28", "29", "08", "02"];
+            if(valid.includes(pin)) {
+                window.userPin = pin;
+                window.isAdmin = (pin === "07");
+                document.getElementById('login-overlay').style.display = 'none';
+                if(window.isAdmin) document.getElementById('admin-icon').style.display = 'block';
+                applyLang(); populateMonths(); loadData();
+            } else alert("Invalid Pin");
         }
 
         function applyLang() {
             const t = i18n[currLang];
-            const html = document.getElementById('html-tag');
-            html.dir = (currLang === 'ar') ? 'rtl' : 'ltr';
-            document.getElementById('lang-toggle').innerText = (currLang === 'ar') ? 'English' : 'عربي';
-            
-            // تحديث النصوص الثابتة
-            document.getElementById('txt-enter-pin').innerText = t.enterPin;
+            document.getElementById('html-tag').dir = currLang==='ar'?'rtl':'ltr';
             document.getElementById('title-news').innerText = t.news;
             document.getElementById('title-squad').innerText = t.squad;
             document.getElementById('title-awards').innerText = t.awards;
             document.getElementById('title-sponsors').innerText = t.sponsors;
-            document.getElementById('txt-rate-this').innerText = t.rateThis;
             document.getElementById('th-month').innerText = t.month;
             document.getElementById('th-m').innerText = t.matches;
             document.getElementById('th-g').innerText = t.goals;
             document.getElementById('th-a').innerText = t.assists;
             document.getElementById('th-motm').innerText = t.motm;
             document.getElementById('th-rate').innerText = t.rate;
-            
-            // إعادة تحميل القوائم لتحديث المصطلحات (مثل مراكز اللاعبين)
-            loadData();
         }
 
-        // --- 3. نظام الدخول ---
-        let userPin = "";
-        let isAdmin = false;
-        function checkAuth() {
-            const pin = document.getElementById('pin-input').value;
-            const valid = ["07", "78", "28", "29", "08", "02"];
-            if(valid.includes(pin)) {
-                userPin = pin;
-                isAdmin = (pin === "07");
-                document.getElementById('login-overlay').style.display = 'none';
-                if(isAdmin) document.getElementById('admin-icon').style.display = 'block';
-                applyLang();
-            } else { alert("Error Code!"); }
-        }
-
-        // --- 4. التنقل ---
-        function showSec(id) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id + '-sec').classList.add('active');
-            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-            if(document.getElementById('btn-'+id)) document.getElementById('btn-'+id).classList.add('active');
-            
-            const back = document.getElementById('back-btn');
-            if(id === 'news') back.classList.remove('show');
-            else back.classList.add('show');
-            window.scrollTo(0,0);
-        }
-
-        // --- 5. جلب البيانات ---
         function loadData() {
-            const t = i18n[currLang];
+            db.ref('settings/logo').on('value', s => { document.getElementById('header-logo').src = document.getElementById('login-logo').src = s.val() || ''; });
 
-            // الشعار
-            db.ref('settings/logo').on('value', s => {
-                const url = s.val() || '';
-                document.getElementById('header-logo').src = url;
-                document.getElementById('login-logo').src = url;
-            });
-
-            // الأخبار
             db.ref('news').on('value', snap => {
-                const list = document.getElementById('news-list');
-                list.innerHTML = "";
-                let newsArr = [];
-                snap.forEach(c => { newsArr.push(c.val()); });
-                newsArr.reverse().forEach(n => {
-                    list.innerHTML += `
-                        <div class="card news-item">
-                            <span class="date-tag">${n.date}</span>
-                            <h3>${n.title}</h3>
-                            ${n.img ? `<img src="${n.img}">` : ''}
-                            <p>${n.desc}</p>
-                        </div>
-                    `;
-                });
+                const list = document.getElementById('news-list'); list.innerHTML = "";
+                snap.forEach(c => { const n = c.val(); list.innerHTML = `<div class="card"><span>${n.date}</span><h3>${n.title}</h3><img src="${n.img}"><p>${n.desc}</p></div>` + list.innerHTML; });
             });
 
-            // اللاعبين
             db.ref('players').on('value', snap => {
-                const list = document.getElementById('squad-list');
-                const admSelect = document.getElementById('adm-stat-player');
-                list.innerHTML = "";
-                admSelect.innerHTML = "";
-                let players = [];
-                snap.forEach(c => { 
-                    let p = c.val(); p.id = c.key; players.push(p); 
-                    admSelect.innerHTML += `<option value="${p.id}">${p.user}</option>`;
-                });
-
-                players.sort((a,b) => a.pos - b.pos).forEach(p => {
-                    list.innerHTML += `
-                        <div class="card player-card" onclick="viewPlayer('${p.id}')">
-                            <img src="${p.img}" class="p-img-circle">
-                            <div style="flex-grow:1">
-                                <b style="font-size:16px">${p.user}</b> <span class="pos-badge">${getPosName(p.pos)}</span>
-                                <div style="font-size:11px; color:#888">#${p.num}</div>
-                            </div>
-                            <i class="fas fa-chevron-${currLang==='ar'?'left':'right'}" style="opacity:0.3"></i>
-                        </div>
-                    `;
+                const list = document.getElementById('squad-list'); const sel = document.getElementById('adm-stat-player');
+                list.innerHTML = ""; sel.innerHTML = "";
+                snap.forEach(c => {
+                    const p = c.val(); p.id = c.key;
+                    sel.innerHTML += `<option value="${p.id}">${p.user}</option>`;
+                    list.innerHTML += `<div class="card player-card" onclick="viewPlayer('${p.id}')"><img src="${p.img}" class="p-img-circle"><div><b>${p.user}</b></div></div>`;
                 });
             });
 
-            // الجوائز
             db.ref('awards').on('value', snap => {
                 const a = snap.val(); if(!a) return;
-                document.getElementById('awards-container').innerHTML = `
-                    <div class="card" style="text-align:center">
-                        <h4 style="color:var(--primary)">PLAYER OF THE MONTH</h4>
-                        <img src="${a.potm_img}" style="width:150px; height:150px; border-radius:50%; border:4px solid var(--accent);">
-                        <h2>${a.potm_name}</h2>
-                    </div>
-                    <div class="card">
-                        <h4 style="color:var(--primary)">GOAL OF THE MONTH</h4>
-                        <video controls style="width:100%; border-radius:15px;"><source src="${a.goal_vid}"></video>
-                    </div>
-                `;
-            });
-
-            // الرعاة
-            db.ref('sponsors').on('value', snap => {
-                const list = document.getElementById('sponsors-list');
-                list.innerHTML = "";
-                snap.forEach(c => {
-                    const s = c.val();
-                    list.innerHTML += `
-                        <div class="card" style="text-align:center">
-                            <img src="${s.img}" style="width:150px; margin-bottom:10px;">
-                            <p style="font-size:13px; color:#666">${s.desc}</p>
-                        </div>
-                    `;
-                });
+                document.getElementById('awards-container').innerHTML = `<div class="card" style="text-align:center"><h4>PLAYER OF THE MONTH</h4><img src="${a.potm_img}" style="width:120px; height:120px; border-radius:50%; border:3px solid gold;"><h3>${a.potm_name}</h3></div><div class="card"><h4>GOAL OF THE MONTH</h4><video controls style="width:100%"><source src="${a.goal_vid}"></video></div>`;
             });
         }
 
-        function getPosName(p) {
-            const t = i18n[currLang];
-            if(p=="1") return t.gk;
-            if(p=="2") return t.def;
-            if(p=="3") return t.mid;
-            return t.att;
-        }
-
-        // --- 6. تفاصيل اللاعب والتصويت ---
         function viewPlayer(id) {
             db.ref('players/'+id).once('value', snap => {
                 const p = snap.val();
-                document.getElementById('player-card-detail').innerHTML = `
-                    <img src="${p.img}" class="p-img-circle" style="width:120px; height:120px;">
-                    <h2 style="margin:10px 0">${p.name}</h2>
-                    <p style="color:#888">@${p.user} | ${p.dob} | No.${p.num}</p>
-                `;
-                
-                let statsHtml = "";
-                if(p.stats) {
-                    for(let m in p.stats) {
-                        let s = p.stats[m];
-                        statsHtml += `<tr><td>${m}</td><td>${s.m}</td><td>${s.g}</td><td>${s.a}</td><td>${s.motm}</td><td>${s.rate}</td></tr>`;
-                    }
-                }
-                document.getElementById('player-stats-body').innerHTML = statsHtml;
-                setupRating(id);
-                showSec('player-profile');
+                document.getElementById('player-card-detail').innerHTML = `<img src="${p.img}" class="p-img-circle" style="width:100px; height:100px;"><h2>${p.name}</h2>`;
+                let h = "";
+                if(p.stats) for(let m in p.stats) { const s = p.stats[m]; h += `<tr><td>${m}</td><td>${s.m}</td><td>${s.g}</td><td>${s.a}</td><td>${s.motm}</td><td>${s.pass}%</td><td>${s.shot}%</td><td>${s.rate}</td></tr>`; }
+                document.getElementById('player-stats-body').innerHTML = h;
+                setupRating(id); showSec('player-profile');
             });
         }
 
         function setupRating(pId) {
-            const box = document.getElementById('rating-stars');
-            box.innerHTML = "";
-            for(let i=1; i<=10; i++) {
-                box.innerHTML += `<i class="fas fa-star" id="star-${i}" onclick="vote('${pId}', ${i})"></i>`;
-            }
-
+            const b = document.getElementById('rating-stars'); b.innerHTML = "";
+            for(let i=1; i<=10; i++) b.innerHTML += `<i class="fas fa-star" id="star-${i}" onclick="vote('${pId}', ${i})"></i>`;
             db.ref('ratings/'+pId).on('value', snap => {
-                let sum=0, count=0;
-                snap.forEach(v => {
-                    sum += v.val(); count++;
-                    if(v.key === userPin) highlightStars(v.val());
-                });
-                document.getElementById('avg-rating').innerText = count>0 ? (sum/count).toFixed(1) + " / 10" : "No ratings yet";
+                let s=0, c=0; snap.forEach(v => { s+=v.val(); c++; if(v.key===window.userPin) highlightStars(v.val()); });
+                document.getElementById('avg-rating').innerText = c>0 ? (s/c).toFixed(1)+"/10" : "No ratings";
             });
         }
+        function highlightStars(n){ for(let i=1; i<=10; i++) document.getElementById('star-'+i).classList.toggle('active', i<=n); }
+        function vote(pId, n){ db.ref('ratings/'+pId+'/'+window.userPin).set(n); }
 
-        function highlightStars(n) {
-            for(let i=1; i<=10; i++) document.getElementById('star-'+i).classList.toggle('active', i<=n);
+        function showSec(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id + '-sec').classList.add('active');
+            document.getElementById('back-btn').classList.toggle('show', id!=='news');
         }
 
-        function vote(pId, n) { db.ref('ratings/'+pId+'/'+userPin).set(n); }
-
-        // --- 7. وظائف الآدمن (إرسال البيانات) ---
-        function dbAddPlayer() {
-            const data = {
-                name: document.getElementById('adm-p-name').value,
-                user: document.getElementById('adm-p-user').value,
-                dob: document.getElementById('adm-p-dob').value,
-                num: document.getElementById('adm-p-num').value,
-                img: document.getElementById('adm-p-img').value,
-                pos: document.getElementById('adm-p-pos').value
-            };
-            db.ref('players').push(data).then(() => alert("Player Added!"));
+        // --- 5. ADMIN FUNCTIONS ---
+        async function dbAddPlayer() {
+            const url = await uploadFile(document.getElementById('adm-p-img'));
+            const data = { name: document.getElementById('adm-p-name').value, user: document.getElementById('adm-p-user').value, dob: document.getElementById('adm-p-dob').value, num: document.getElementById('adm-p-num').value, img: url, pos: document.getElementById('adm-p-pos').value };
+            db.ref('players').push(data).then(() => alert("Done"));
         }
 
-        function dbAddNews() {
-            const data = {
-                title: document.getElementById('adm-n-title').value,
-                desc: document.getElementById('adm-n-desc').value,
-                img: document.getElementById('adm-n-img').value,
-                date: new Date().toLocaleDateString(currLang==='ar'?'ar-EG':'en-US')
-            };
-            db.ref('news').push(data).then(() => alert("News Posted!"));
+        async function dbAddNews() {
+            const url = await uploadFile(document.getElementById('adm-n-img'));
+            const data = { title: document.getElementById('adm-n-title').value, desc: document.getElementById('adm-n-desc').value, img: url, date: new Date().toLocaleDateString() };
+            db.ref('news').push(data).then(() => alert("Done"));
         }
 
         function dbUpdateStats() {
             const id = document.getElementById('adm-stat-player').value;
             const month = document.getElementById('adm-stat-month').value;
-            const data = {
-                m: document.getElementById('adm-stat-m').value,
-                g: document.getElementById('adm-stat-g').value,
-                a: document.getElementById('adm-stat-a').value,
-                motm: document.getElementById('adm-stat-motm').value,
-                rate: document.getElementById('adm-stat-rate').value
-            };
-            db.ref('players/'+id+'/stats/'+month).set(data).then(() => alert("Stats Updated!"));
+            const data = { m: document.getElementById('adm-stat-m').value, g: document.getElementById('adm-stat-g').value, a: document.getElementById('adm-stat-a').value, motm: document.getElementById('adm-stat-motm').value, pass: document.getElementById('adm-stat-pass').value, shot: document.getElementById('adm-stat-shot').value, rate: document.getElementById('adm-stat-rate').value };
+            db.ref('players/'+id+'/stats/'+month).set(data).then(() => alert("Stats Updated"));
         }
 
-        function dbUpdateLogo() {
-            db.ref('settings/logo').set(document.getElementById('adm-club-logo').value).then(() => alert("Logo Updated!"));
+        async function dbUpdateAwards() {
+            const pImg = await uploadFile(document.getElementById('adm-potm-img'));
+            const gVid = await uploadFile(document.getElementById('adm-goal-vid'));
+            const logo = await uploadFile(document.getElementById('adm-club-logo'));
+            if(logo) db.ref('settings/logo').set(logo);
+            const data = { potm_name: document.getElementById('adm-potm-name').value };
+            if(pImg) data.potm_img = pImg;
+            if(gVid) data.goal_vid = gVid;
+            db.ref('awards').update(data).then(() => alert("Awards Updated"));
         }
 
-        function dbAddSponsor() {
-            const data = { img: document.getElementById('adm-sp-img').value, desc: document.getElementById('adm-sp-desc').value };
-            db.ref('sponsors').push(data).then(() => alert("Sponsor Added!"));
-        }
-
-        function dbUpdateAwards() {
-            const data = {
-                potm_name: document.getElementById('adm-potm-name').value,
-                potm_img: document.getElementById('adm-potm-img').value,
-                goal_vid: document.getElementById('adm-goal-vid').value
-            };
-            db.ref('awards').set(data).then(() => alert("Awards Updated!"));
-        }
+        function toggleLang() { currLang = currLang==='ar'?'en':'ar'; applyLang(); }
     </script>
 </body>
 </html>
