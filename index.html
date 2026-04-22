@@ -3,39 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TAWHID FC | ELITE HUB V13</title>
+    <title>TAWHID FC | SUPABASE ELITE</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         :root { --primary: #6b21a8; --bg: #ffffff; --card: #f9fafb; --text: #111827; --accent: #fbbf24; --border: #e5e7eb; }
         [dir="ltr"] { font-family: 'Poppins', sans-serif; }
         [dir="rtl"] { font-family: 'Cairo', sans-serif; }
-        * { box-sizing: border-box; transition: 0.3s; }
+        * { box-sizing: border-box; transition: 0.3s; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 90px; overflow-x: hidden; }
 
         /* Login Overlay */
         #login-overlay { position: fixed; inset: 0; background: var(--primary); z-index: 100000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; }
-        .pin-input { background: rgba(255,255,255,0.1); border: 2px solid white; border-radius: 15px; padding: 15px; width: 220px; text-align: center; font-size: 28px; color: white; outline: none; }
+        .pin-input { background: rgba(255,255,255,0.1); border: 2px solid white; border-radius: 15px; padding: 15px; width: 220px; text-align: center; font-size: 28px; color: white; outline: none; letter-spacing: 5px; }
 
         /* Top Bar */
         .top-bar { position: sticky; top: 0; background: white; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 15px rgba(0,0,0,0.05); z-index: 1000; }
         .logo-img { height: 45px; object-fit: contain; }
-        .lang-btn { background: var(--primary); color: white; border: none; padding: 5px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 12px; }
+        .lang-btn { background: var(--primary); color: white; border: none; padding: 6px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 12px; }
 
         .container { padding: 15px; max-width: 500px; margin: auto; }
         .card { background: var(--card); border-radius: 20px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--border); position: relative; }
 
         /* News & Players */
-        .news-item img { width: 100%; border-radius: 15px; margin: 10px 0; }
+        .news-item img { width: 100%; border-radius: 15px; margin: 10px 0; object-fit: cover; }
         .player-card { display: flex; align-items: center; gap: 15px; cursor: pointer; padding: 10px; }
-        .p-img-circle { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
+        .p-img-circle { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); background: #eee; }
         .pos-badge { background: #f3e8ff; color: var(--primary); padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; }
 
         /* Stats Table */
@@ -53,57 +51,66 @@
         nav button { background: none; border: none; color: #9ca3af; font-size: 22px; cursor: pointer; }
         nav button.active { color: var(--primary); transform: scale(1.1); }
 
-        /* Admin UI */
-        input, select, textarea { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 10px; font-size: 14px; }
+        /* Admin Panels */
+        .admin-sec { display: none; }
+        input, select, textarea { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 10px; font-family: inherit; }
         .btn-save { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        .file-label { display: block; background: #eee; padding: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; cursor: pointer; font-size: 12px; border: 1px dashed #999; }
-        
+        .file-label { display: block; background: #f3f4f6; padding: 12px; border-radius: 10px; text-align: center; margin-bottom: 10px; cursor: pointer; border: 2px dashed #d1d5db; font-size: 13px; }
+
         .section { display: none; }
         .active { display: block; }
-        .back-btn { display: none; color: var(--primary); font-weight: bold; cursor: pointer; }
+        .back-btn { display: none; color: var(--primary); font-weight: bold; cursor: pointer; font-size: 18px; }
         .back-btn.show { display: inline-block; }
 
-        /* Upload Progress */
-        #upload-status { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: var(--accent); padding: 5px 15px; border-radius: 20px; font-size: 12px; display: none; z-index: 10000; }
+        #loading-bar { position: fixed; top: 0; left: 0; height: 4px; background: var(--accent); z-index: 10000; width: 0%; transition: 0.1s; }
     </style>
 </head>
 <body>
 
-    <div id="upload-status">جارِ الرفع...</div>
+    <div id="loading-bar"></div>
 
     <div id="login-overlay">
         <img id="login-logo" src="" width="100" style="margin-bottom: 20px;">
-        <h1>TAWHID FC</h1>
-        <p id="txt-enter-pin">Access Code</p>
-        <input type="password" id="pin-input" class="pin-input" maxlength="2">
-        <button onclick="checkAuth()" style="margin-top:20px; padding:12px 40px; border-radius:30px; border:none; font-weight:bold; background:white; color:var(--primary);">GO</button>
+        <h1 style="margin:0">TAWHID FC</h1>
+        <p id="txt-enter-pin">Enter Pin</p>
+        <input type="password" id="pin-input" class="pin-input" maxlength="2" placeholder="••">
+        <button onclick="checkAuth()" style="margin-top:20px; padding:12px 40px; border-radius:30px; border:none; font-weight:bold; background:white; color:var(--primary);">LOGIN</button>
     </div>
 
     <div class="top-bar">
-        <div id="back-btn" class="back-btn" onclick="showSec('news')"><i class="fas fa-arrow-right"></i></div>
+        <div id="back-btn" class="back-btn" onclick="showSec('news')"><i class="fas fa-chevron-right"></i></div>
         <img id="header-logo" class="logo-img" src="">
         <button class="lang-btn" onclick="toggleLang()" id="lang-toggle">English</button>
-        <div id="admin-icon" style="display:none; color: var(--primary);" onclick="showSec('admin')"><i class="fas fa-user-shield"></i></div>
+        <div id="admin-icon" style="display:none; color: var(--primary); cursor: pointer;" onclick="showSec('admin')"><i class="fas fa-cog"></i></div>
     </div>
 
     <div class="container">
-        <section id="news-sec" class="section active"><h2 id="title-news"></h2><div id="news-list"></div></section>
+        <!-- News -->
+        <section id="news-sec" class="section active">
+            <h2 id="title-news"></h2>
+            <div id="news-list"></div>
+        </section>
         
-        <section id="squad-sec" class="section"><h2 id="title-squad"></h2><div id="squad-list"></div></section>
+        <!-- Squad -->
+        <section id="squad-sec" class="section">
+            <h2 id="title-squad"></h2>
+            <div id="squad-list"></div>
+        </section>
 
+        <!-- Player Detail -->
         <section id="player-profile-sec" class="section">
             <div id="player-card-detail" style="text-align: center;"></div>
             <div class="card" style="text-align: center;">
                 <h4 id="txt-rate-this"></h4>
                 <div id="rating-stars" class="stars"></div>
-                <div id="avg-rating" style="font-weight: bold; color: var(--primary);"></div>
+                <div id="avg-rating" style="font-weight: bold; color: var(--primary); margin-top: 5px;"></div>
             </div>
             <div style="overflow-x: auto;">
                 <table class="stats-table">
                     <thead>
                         <tr>
                             <th id="th-month"></th><th id="th-m"></th><th id="th-g"></th><th id="th-a"></th>
-                            <th id="th-motm"></th><th id="th-pass">Pass%</th><th id="th-shot">Shot%</th><th id="th-rate"></th>
+                            <th id="th-motm"></th><th>Pass%</th><th>Shot%</th><th id="th-rate"></th>
                         </tr>
                     </thead>
                     <tbody id="player-stats-body"></tbody>
@@ -111,41 +118,60 @@
             </div>
         </section>
 
-        <section id="awards-sec" class="section"><h2 id="title-awards"></h2><div id="awards-container"></div></section>
+        <!-- Awards -->
+        <section id="awards-sec" class="section">
+            <h2 id="title-awards" style="text-align:center"></h2>
+            <div id="awards-container"></div>
+        </section>
 
-        <section id="sponsors-sec" class="section"><h2 id="title-sponsors"></h2><div id="sponsors-list"></div></section>
+        <!-- Sponsors -->
+        <section id="sponsors-sec" class="section">
+            <h2 id="title-sponsors" style="text-align:center"></h2>
+            <div class="card" style="text-align:center">
+                <img src="https://via.placeholder.com/150x80?text=Sponsor+1" style="width:120px">
+                <p>الراعي الرسمي للنادي</p>
+            </div>
+        </section>
 
-        <!-- لوحة التحكم -->
+        <!-- Admin Control -->
         <section id="admin-sec" class="section">
-            <h2 id="title-admin">Admin Control</h2>
+            <h2 id="title-admin">Admin Elite</h2>
             
             <div class="card">
-                <h4>إضافة لاعب</h4>
-                <input type="text" id="adm-p-name" placeholder="Full Name">
-                <input type="text" id="adm-p-user" placeholder="User Name">
-                <input type="text" id="adm-p-dob" placeholder="Birth Date">
-                <input type="number" id="adm-p-num" placeholder="Shirt Number">
-                <label class="file-label">صورة اللاعب <input type="file" id="adm-p-img" accept="image/*" hidden></label>
+                <h4>إضافة لاعب جديد</h4>
+                <input type="text" id="adm-p-name" placeholder="الاسم الكامل">
+                <input type="text" id="adm-p-user" placeholder="اسم الشهرة (يوزر)">
+                <input type="text" id="adm-p-dob" placeholder="تاريخ الميلاد">
+                <input type="number" id="adm-p-num" placeholder="رقم القميص">
+                <label class="file-label">اختيار صورة اللاعب <input type="file" id="adm-p-img" accept="image/*" hidden></label>
                 <select id="adm-p-pos">
-                    <option value="1">حارس</option><option value="2">دفاع</option><option value="3">وسط</option><option value="4">هجوم</option>
+                    <option value="1">حارس مرمى (GK)</option>
+                    <option value="2">دفاع (DEF)</option>
+                    <option value="3">وسط (MID)</option>
+                    <option value="4">هجوم (ATT)</option>
                 </select>
-                <button class="btn-save" onclick="dbAddPlayer()">حفظ اللاعب</button>
+                <button class="btn-save" onclick="uiAddPlayer()">حفظ اللاعب</button>
             </div>
 
             <div class="card">
                 <h4>تحديث إحصائيات</h4>
                 <select id="adm-stat-player"></select>
                 <select id="adm-stat-month">
-                    <!-- سيتم تعبئتها من 10-2025 إلى 09-2026 -->
+                    <option value="10-2025">10-2025</option><option value="11-2025">11-2025</option>
+                    <option value="12-2025">12-2025</option><option value="01-2026">01-2026</option>
+                    <option value="02-2026">02-2026</option><option value="03-2026">03-2026</option>
+                    <option value="04-2026">04-2026</option><option value="05-2026">05-2026</option>
+                    <option value="06-2026">06-2026</option><option value="07-2026">07-2026</option>
+                    <option value="08-2026">08-2026</option><option value="09-2026">09-2026</option>
                 </select>
-                <input type="number" id="adm-stat-m" placeholder="مباريات">
-                <input type="number" id="adm-stat-g" placeholder="أهداف">
+                <input type="number" id="adm-stat-m" placeholder="عدد المباريات">
+                <input type="number" id="adm-stat-g" placeholder="الأهداف">
                 <input type="number" id="adm-stat-a" placeholder="أسيست">
                 <input type="number" id="adm-stat-motm" placeholder="رجل المباراة">
                 <input type="number" id="adm-stat-pass" placeholder="دقة التمرير %">
                 <input type="number" id="adm-stat-shot" placeholder="دقة التسديد %">
                 <input type="number" step="0.1" id="adm-stat-rate" placeholder="التقييم">
-                <button class="btn-save" onclick="dbUpdateStats()">تحديث</button>
+                <button class="btn-save" onclick="uiUpdateStats()">حفظ الإحصائيات</button>
             </div>
 
             <div class="card">
@@ -153,188 +179,268 @@
                 <input type="text" id="adm-n-title" placeholder="العنوان">
                 <textarea id="adm-n-desc" placeholder="التفاصيل"></textarea>
                 <label class="file-label">صورة الخبر <input type="file" id="adm-n-img" accept="image/*" hidden></label>
-                <button class="btn-save" onclick="dbAddNews()">نشر</button>
+                <button class="btn-save" onclick="uiAddNews()">نشر الخبر</button>
             </div>
 
             <div class="card">
-                <h4>الجوائز والشعار</h4>
-                <label class="file-label">تحديث الشعار <input type="file" id="adm-club-logo" accept="image/*" hidden></label>
-                <hr>
+                <h4>تحديث الجوائز</h4>
                 <input type="text" id="adm-potm-name" placeholder="اسم لاعب الشهر">
                 <label class="file-label">صورة لاعب الشهر <input type="file" id="adm-potm-img" accept="image/*" hidden></label>
                 <label class="file-label">فيديو هدف الشهر <input type="file" id="adm-goal-vid" accept="video/*" hidden></label>
-                <button class="btn-save" onclick="dbUpdateAwards()">تحديث</button>
-            </div>
-
-            <div class="card">
-                <h4>إضافة راعي</h4>
-                <label class="file-label">شعار الراعي <input type="file" id="adm-sp-img" accept="image/*" hidden></label>
-                <input type="text" id="adm-sp-desc" placeholder="وصف الراعي">
-                <button class="btn-save" onclick="dbAddSponsor()">حفظ الراعي</button>
+                <button class="btn-save" onclick="uiUpdateAwards()">تحديث الجوائز</button>
             </div>
         </section>
     </div>
 
     <nav>
-        <button onclick="showSec('news')" id="btn-news" class="active"><i class="fas fa-home"></i></button>
+        <button onclick="showSec('news')" id="btn-news" class="active"><i class="fas fa-newspaper"></i></button>
         <button onclick="showSec('squad')" id="btn-squad"><i class="fas fa-users"></i></button>
         <button onclick="showSec('awards')" id="btn-awards"><i class="fas fa-award"></i></button>
         <button onclick="showSec('sponsors')" id="btn-sponsors"><i class="fas fa-handshake"></i></button>
     </nav>
 
     <script>
-        // --- 1. CONFIG (ضع بياناتك هنا) ---
-        const firebaseConfig = {
-            apiKey: "AIzaSy...",
-            authDomain: "tawhid-fc.firebaseapp.com",
-            databaseURL: "https://tawhid-fc-default-rtdb.firebaseio.com",
-            projectId: "tawhid-fc",
-            storageBucket: "tawhid-fc.appspot.com",
-            messagingSenderId: "...",
-            appId: "..."
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        const storage = firebase.storage();
+        // --- 1. SUPABASE INITIALIZATION ---
+        const SB_URL = "https://pgpjdwltezrxmpnuqvem.supabase.co";
+        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBncGpkd2x0ZXpyeG1wbnVxdmVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MzUwMjgsImV4cCI6MjA5MjQxMTAyOH0.KtVZAP-EhFAw1gonKGn4ulXVJp-tjKZVFIMNEfES7ho";
+        const supabase = collections = net.supabase.createClient(SB_URL, SB_KEY);
 
-        // --- 2. LANGUAGES ---
+        // --- 2. MULTI-LANG ---
         let currLang = 'ar';
         const i18n = {
-            ar: { news: "الأخبار", squad: "اللاعبين", awards: "الجوائز", sponsors: "الرعاة", month: "شهر", rateThis: "قيم اللاعب", matches: "م", goals: "أ", assists: "أس", motm: "MOTM", rate: "تقييم" },
-            en: { news: "News", squad: "Squad", awards: "Awards", sponsors: "Sponsors", month: "Month", rateThis: "Rate Him", matches: "M", goals: "G", assists: "A", motm: "MOTM", rate: "Rate" }
+            ar: { news: "النشاط الأخير", squad: "قائمة اللاعبين", awards: "لوحة الشرف", sponsors: "الرعاة", month: "شهر", rateThis: "قيم اللاعب", matches: "م", goals: "أ", assists: "أس", motm: "MOTM", rate: "تقييم", enterPin: "أدخل رمز الدخول" },
+            en: { news: "Recent Activity", squad: "Elite Squad", awards: "Awards", sponsors: "Sponsors", month: "Month", rateThis: "Rate Player", matches: "M", goals: "G", assists: "A", motm: "MOTM", rate: "Rating", enterPin: "Enter Access Code" }
         };
 
-        // --- 3. HELPERS ---
-        async function uploadFile(fileInput) {
-            if(!fileInput.files[0]) return null;
-            const file = fileInput.files[0];
-            const path = `uploads/${Date.now()}_${file.name}`;
-            const ref = storage.ref().child(path);
-            document.getElementById('upload-status').style.display = 'block';
-            await ref.put(file);
-            const url = await ref.getDownloadURL();
-            document.getElementById('upload-status').style.display = 'none';
-            return url;
-        }
+        // --- 3. AUTH SYSTEM ---
+        let userPin = "";
+        let isAdmin = false;
 
-        function populateMonths() {
-            const select = document.getElementById('adm-stat-month');
-            const months = ["10-2025", "11-2025", "12-2025", "01-2026", "02-2026", "03-2026", "04-2026", "05-2026", "06-2026", "07-2026", "08-2026", "09-2026"];
-            months.forEach(m => select.innerHTML += `<option value="${m}">${m}</option>`);
-        }
-
-        // --- 4. CORE ---
         function checkAuth() {
             const pin = document.getElementById('pin-input').value;
-            const valid = ["07", "78", "28", "29", "08", "02"];
-            if(valid.includes(pin)) {
-                window.userPin = pin;
-                window.isAdmin = (pin === "07");
+            const validPins = ["07", "78", "28", "29", "08", "02"];
+            if(validPins.includes(pin)) {
+                userPin = pin;
+                isAdmin = (pin === "07");
                 document.getElementById('login-overlay').style.display = 'none';
-                if(window.isAdmin) document.getElementById('admin-icon').style.display = 'block';
-                applyLang(); populateMonths(); loadData();
-            } else alert("Invalid Pin");
+                if(isAdmin) document.getElementById('admin-icon').style.display = 'block';
+                applyLang();
+                loadData();
+            } else {
+                alert("رمز دخول غير صحيح!");
+            }
+        }
+
+        // --- 4. CORE ENGINE ---
+        async function loadData() {
+            setLoad(30);
+            await fetchNews();
+            await fetchPlayers();
+            await fetchAwards();
+            setLoad(100);
+        }
+
+        async function fetchNews() {
+            const { data, error } = await supabase.from('news').select('*').order('id', { ascending: false });
+            const list = document.getElementById('news-list');
+            list.innerHTML = "";
+            data.forEach(n => {
+                list.innerHTML += `<div class="card news-item"><small style="color:var(--primary)">${n.date}</small><h3>${n.title}</h3><img src="${n.img}"><p>${n.desc}</p></div>`;
+            });
+        }
+
+        async function fetchPlayers() {
+            const { data } = await supabase.from('players').select('*').order('pos', { ascending: true });
+            const list = document.getElementById('squad-list');
+            const sel = document.getElementById('adm-stat-player');
+            list.innerHTML = ""; sel.innerHTML = "";
+            data.forEach(p => {
+                sel.innerHTML += `<option value="${p.id}">${p.user}</option>`;
+                list.innerHTML += `
+                    <div class="card player-card" onclick="viewPlayer('${p.id}')">
+                        <img src="${p.img}" class="p-img-circle">
+                        <div style="flex-grow:1">
+                            <b style="font-size:16px">${p.user}</b> <span class="pos-badge">${getPosName(p.pos)}</span>
+                            <div style="font-size:11px; opacity:0.6">#${p.num}</div>
+                        </div>
+                        <i class="fas fa-chevron-left" style="opacity:0.2"></i>
+                    </div>`;
+            });
+        }
+
+        async function viewPlayer(pId) {
+            setLoad(40);
+            const { data: p } = await supabase.from('players').select('*').eq('id', pId).single();
+            const { data: stats } = await supabase.from('stats').select('*').eq('player_id', pId);
+            
+            document.getElementById('player-card-detail').innerHTML = `<img src="${p.img}" class="p-img-circle" style="width:100px; height:100px;"><h2>${p.name}</h2><p>@${p.user} | ${p.dob} | No.${p.num}</p>`;
+            
+            let html = "";
+            let sumG=0, sumA=0;
+            stats.forEach(s => {
+                sumG += s.g; sumA += s.a;
+                html += `<tr><td>${s.month}</td><td>${s.m}</td><td>${s.g}</td><td>${s.a}</td><td>${s.motm}</td><td>${s.pass}%</td><td>${s.shot}%</td><td>${s.rate}</td></tr>`;
+            });
+            document.getElementById('player-stats-body').innerHTML = html || '<tr><td colspan="8">No stats recorded</td></tr>';
+            
+            // Rating System Load
+            loadRatingStars(pId);
+            showSec('player-profile');
+            setLoad(100);
+        }
+
+        async function fetchAwards() {
+            const { data } = await supabase.from('awards').select('*').limit(1).single();
+            if(!data) return;
+            document.getElementById('awards-container').innerHTML = `
+                <div class="card" style="text-align:center">
+                    <h4 style="color:var(--primary)">PLAYER OF THE MONTH</h4>
+                    <img src="${data.potm_img}" style="width:140px; height:140px; border-radius:50%; border:3px solid gold; object-fit:cover;">
+                    <h3>${data.potm_name}</h3>
+                </div>
+                <div class="card">
+                    <h4 style="color:var(--primary)">GOAL OF THE MONTH</h4>
+                    <video controls style="width:100%; border-radius:15px;"><source src="${data.goal_vid}"></video>
+                </div>`;
+        }
+
+        // --- 5. RATING SYSTEM ---
+        async function loadRatingStars(pId) {
+            const box = document.getElementById('rating-stars');
+            box.innerHTML = "";
+            for(let i=1; i<=10; i++) box.innerHTML += `<i class="fas fa-star" id="star-${i}" onclick="submitVote('${pId}', ${i})"></i>`;
+            
+            const { data } = await supabase.from('ratings').select('rating, user_pin').eq('player_id', pId);
+            let sum=0, count=0;
+            data.forEach(v => {
+                sum += v.rating; count++;
+                if(v.user_pin === userPin) highlightStars(v.rating);
+            });
+            document.getElementById('avg-rating').innerText = count > 0 ? (sum/count).toFixed(1) + " / 10" : "Not rated yet";
+        }
+
+        function highlightStars(n) {
+            for(let i=1; i<=10; i++) document.getElementById('star-'+i).classList.toggle('active', i<=n);
+        }
+
+        async function submitVote(pId, score) {
+            const { error } = await supabase.from('ratings').upsert({ player_id: pId, user_pin: userPin, rating: score }, { onConflict: 'player_id, user_pin' });
+            loadRatingStars(pId);
+        }
+
+        // --- 6. ADMIN & UPLOAD ---
+        async function uploadToSupabase(fileInput) {
+            const file = fileInput.files[0];
+            if(!file) return null;
+            setLoad(20);
+            const fileName = `${Date.now()}_${file.name}`;
+            const { data, error } = await supabase.storage.from('media').upload(fileName, file);
+            if(error) { alert("Upload error: " + error.message); return null; }
+            setLoad(100);
+            return `${SB_URL}/storage/v1/object/public/media/${fileName}`;
+        }
+
+        async function uiAddPlayer() {
+            const imgUrl = await uploadToSupabase(document.getElementById('adm-p-img'));
+            const p = {
+                name: document.getElementById('adm-p-name').value,
+                user: document.getElementById('adm-p-user').value,
+                dob: document.getElementById('adm-p-dob').value,
+                num: document.getElementById('adm-p-num').value,
+                pos: document.getElementById('adm-p-pos').value,
+                img: imgUrl
+            };
+            await supabase.from('players').insert(p);
+            alert("تمت إضافة اللاعب بنجاح!");
+            fetchPlayers();
+        }
+
+        async function uiUpdateStats() {
+            const s = {
+                player_id: document.getElementById('adm-stat-player').value,
+                month: document.getElementById('adm-stat-month').value,
+                m: document.getElementById('adm-stat-m').value,
+                g: document.getElementById('adm-stat-g').value,
+                a: document.getElementById('adm-stat-a').value,
+                motm: document.getElementById('adm-stat-motm').value,
+                pass: document.getElementById('adm-stat-pass').value,
+                shot: document.getElementById('adm-stat-shot').value,
+                rate: document.getElementById('adm-stat-rate').value
+            };
+            await supabase.from('stats').insert(s);
+            alert("تم تحديث الإحصائيات!");
+        }
+
+        async function uiAddNews() {
+            const imgUrl = await uploadToSupabase(document.getElementById('adm-n-img'));
+            const n = {
+                title: document.getElementById('adm-n-title').value,
+                desc: document.getElementById('adm-n-desc').value,
+                img: imgUrl,
+                date: new Date().toLocaleDateString('ar-EG')
+            };
+            await supabase.from('news').insert(n);
+            alert("تم نشر الخبر!");
+            fetchNews();
+        }
+
+        async function uiUpdateAwards() {
+            const potmImg = await uploadToSupabase(document.getElementById('adm-potm-img'));
+            const goalVid = await uploadToSupabase(document.getElementById('adm-goal-vid'));
+            const upd = { potm_name: document.getElementById('adm-potm-name').value };
+            if(potmImg) upd.potm_img = potmImg;
+            if(goalVid) upd.goal_vid = goalVid;
+            
+            // Check if award exists to update or insert
+            const { data } = await supabase.from('awards').select('id').limit(1);
+            if(data.length > 0) await supabase.from('awards').update(upd).eq('id', data[0].id);
+            else await supabase.from('awards').insert(upd);
+            alert("تم تحديث الجوائز!");
+        }
+
+        // --- 7. UI HELPERS ---
+        function toggleLang() {
+            currLang = currLang === 'ar' ? 'en' : 'ar';
+            applyLang();
         }
 
         function applyLang() {
             const t = i18n[currLang];
-            document.getElementById('html-tag').dir = currLang==='ar'?'rtl':'ltr';
+            document.getElementById('html-tag').dir = currLang === 'ar' ? 'rtl' : 'ltr';
+            document.getElementById('lang-toggle').innerText = currLang === 'ar' ? 'English' : 'عربي';
             document.getElementById('title-news').innerText = t.news;
             document.getElementById('title-squad').innerText = t.squad;
             document.getElementById('title-awards').innerText = t.awards;
             document.getElementById('title-sponsors').innerText = t.sponsors;
+            document.getElementById('txt-rate-this').innerText = t.rateThis;
             document.getElementById('th-month').innerText = t.month;
             document.getElementById('th-m').innerText = t.matches;
             document.getElementById('th-g').innerText = t.goals;
             document.getElementById('th-a').innerText = t.assists;
             document.getElementById('th-motm').innerText = t.motm;
             document.getElementById('th-rate').innerText = t.rate;
+            document.getElementById('txt-enter-pin').innerText = t.enterPin;
         }
-
-        function loadData() {
-            db.ref('settings/logo').on('value', s => { document.getElementById('header-logo').src = document.getElementById('login-logo').src = s.val() || ''; });
-
-            db.ref('news').on('value', snap => {
-                const list = document.getElementById('news-list'); list.innerHTML = "";
-                snap.forEach(c => { const n = c.val(); list.innerHTML = `<div class="card"><span>${n.date}</span><h3>${n.title}</h3><img src="${n.img}"><p>${n.desc}</p></div>` + list.innerHTML; });
-            });
-
-            db.ref('players').on('value', snap => {
-                const list = document.getElementById('squad-list'); const sel = document.getElementById('adm-stat-player');
-                list.innerHTML = ""; sel.innerHTML = "";
-                snap.forEach(c => {
-                    const p = c.val(); p.id = c.key;
-                    sel.innerHTML += `<option value="${p.id}">${p.user}</option>`;
-                    list.innerHTML += `<div class="card player-card" onclick="viewPlayer('${p.id}')"><img src="${p.img}" class="p-img-circle"><div><b>${p.user}</b></div></div>`;
-                });
-            });
-
-            db.ref('awards').on('value', snap => {
-                const a = snap.val(); if(!a) return;
-                document.getElementById('awards-container').innerHTML = `<div class="card" style="text-align:center"><h4>PLAYER OF THE MONTH</h4><img src="${a.potm_img}" style="width:120px; height:120px; border-radius:50%; border:3px solid gold;"><h3>${a.potm_name}</h3></div><div class="card"><h4>GOAL OF THE MONTH</h4><video controls style="width:100%"><source src="${a.goal_vid}"></video></div>`;
-            });
-        }
-
-        function viewPlayer(id) {
-            db.ref('players/'+id).once('value', snap => {
-                const p = snap.val();
-                document.getElementById('player-card-detail').innerHTML = `<img src="${p.img}" class="p-img-circle" style="width:100px; height:100px;"><h2>${p.name}</h2>`;
-                let h = "";
-                if(p.stats) for(let m in p.stats) { const s = p.stats[m]; h += `<tr><td>${m}</td><td>${s.m}</td><td>${s.g}</td><td>${s.a}</td><td>${s.motm}</td><td>${s.pass}%</td><td>${s.shot}%</td><td>${s.rate}</td></tr>`; }
-                document.getElementById('player-stats-body').innerHTML = h;
-                setupRating(id); showSec('player-profile');
-            });
-        }
-
-        function setupRating(pId) {
-            const b = document.getElementById('rating-stars'); b.innerHTML = "";
-            for(let i=1; i<=10; i++) b.innerHTML += `<i class="fas fa-star" id="star-${i}" onclick="vote('${pId}', ${i})"></i>`;
-            db.ref('ratings/'+pId).on('value', snap => {
-                let s=0, c=0; snap.forEach(v => { s+=v.val(); c++; if(v.key===window.userPin) highlightStars(v.val()); });
-                document.getElementById('avg-rating').innerText = c>0 ? (s/c).toFixed(1)+"/10" : "No ratings";
-            });
-        }
-        function highlightStars(n){ for(let i=1; i<=10; i++) document.getElementById('star-'+i).classList.toggle('active', i<=n); }
-        function vote(pId, n){ db.ref('ratings/'+pId+'/'+window.userPin).set(n); }
 
         function showSec(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(id + '-sec').classList.add('active');
-            document.getElementById('back-btn').classList.toggle('show', id!=='news');
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            if(document.getElementById('btn-'+id)) document.getElementById('btn-'+id).classList.add('active');
+            document.getElementById('back-btn').classList.toggle('show', id !== 'news');
+            window.scrollTo(0,0);
         }
 
-        // --- 5. ADMIN FUNCTIONS ---
-        async function dbAddPlayer() {
-            const url = await uploadFile(document.getElementById('adm-p-img'));
-            const data = { name: document.getElementById('adm-p-name').value, user: document.getElementById('adm-p-user').value, dob: document.getElementById('adm-p-dob').value, num: document.getElementById('adm-p-num').value, img: url, pos: document.getElementById('adm-p-pos').value };
-            db.ref('players').push(data).then(() => alert("Done"));
+        function getPosName(p) {
+            const names = { "1": "GK", "2": "DEF", "3": "MID", "4": "ATT" };
+            return names[p] || "";
         }
 
-        async function dbAddNews() {
-            const url = await uploadFile(document.getElementById('adm-n-img'));
-            const data = { title: document.getElementById('adm-n-title').value, desc: document.getElementById('adm-n-desc').value, img: url, date: new Date().toLocaleDateString() };
-            db.ref('news').push(data).then(() => alert("Done"));
+        function setLoad(p) {
+            const bar = document.getElementById('loading-bar');
+            bar.style.width = p + "%";
+            if(p >= 100) setTimeout(() => bar.style.width = "0%", 300);
         }
-
-        function dbUpdateStats() {
-            const id = document.getElementById('adm-stat-player').value;
-            const month = document.getElementById('adm-stat-month').value;
-            const data = { m: document.getElementById('adm-stat-m').value, g: document.getElementById('adm-stat-g').value, a: document.getElementById('adm-stat-a').value, motm: document.getElementById('adm-stat-motm').value, pass: document.getElementById('adm-stat-pass').value, shot: document.getElementById('adm-stat-shot').value, rate: document.getElementById('adm-stat-rate').value };
-            db.ref('players/'+id+'/stats/'+month).set(data).then(() => alert("Stats Updated"));
-        }
-
-        async function dbUpdateAwards() {
-            const pImg = await uploadFile(document.getElementById('adm-potm-img'));
-            const gVid = await uploadFile(document.getElementById('adm-goal-vid'));
-            const logo = await uploadFile(document.getElementById('adm-club-logo'));
-            if(logo) db.ref('settings/logo').set(logo);
-            const data = { potm_name: document.getElementById('adm-potm-name').value };
-            if(pImg) data.potm_img = pImg;
-            if(gVid) data.goal_vid = gVid;
-            db.ref('awards').update(data).then(() => alert("Awards Updated"));
-        }
-
-        function toggleLang() { currLang = currLang==='ar'?'en':'ar'; applyLang(); }
     </script>
 </body>
 </html>
