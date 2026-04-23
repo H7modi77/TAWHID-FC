@@ -1,444 +1,232 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="html-tag">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TAWHID FC | ELITE HUB V14</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>TAWHID FC | PRO HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <style>
-        :root { --primary: #6b21a8; --bg: #ffffff; --card: #f8f9fa; --text: #1a1a1a; --accent: #fbbf24; --border: #e5e7eb; }
-        [dir="ltr"] { font-family: 'Poppins', sans-serif; }
-        [dir="rtl"] { font-family: 'Cairo', sans-serif; }
-        * { box-sizing: border-box; transition: 0.3s; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 90px; overflow-x: hidden; }
-
-        /* شاشة الدخول الاحترافية */
-        #login-overlay { position: fixed; inset: 0; background: linear-gradient(135deg, var(--primary), #3b0764); z-index: 100000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; }
-        .login-box { background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 25px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); width: 85%; max-width: 350px; }
-        .pin-input { background: white; border: none; border-radius: 15px; padding: 15px; width: 100%; text-align: center; font-size: 24px; color: var(--primary); font-weight: bold; margin: 20px 0; outline: none; }
-        
-        /* الشريط العلوي */
-        .top-bar { position: sticky; top: 0; background: white; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 15px rgba(0,0,0,0.05); z-index: 1000; }
-        .logo-img { height: 45px; border-radius: 8px; }
-        .back-btn { font-size: 20px; color: var(--primary); cursor: pointer; visibility: hidden; }
-        .back-btn.show { visibility: visible; }
-
-        /* الأقسام والجداول */
-        .container { padding: 15px; max-width: 500px; margin: auto; }
-        .card { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .section { display: none; animation: fadeIn 0.4s ease; }
-        .active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* الأخبار */
-        .news-card img { width: 100%; border-radius: 15px; margin: 10px 0; object-fit: cover; }
-        .news-date { font-size: 11px; color: var(--primary); font-weight: bold; }
-
-        /* اللاعبين */
-        .player-row { display: flex; align-items: center; gap: 15px; cursor: pointer; padding: 10px 0; border-bottom: 1px solid #eee; }
-        .player-img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); background: #eee; }
-        .pos-tag { background: var(--primary); color: white; padding: 2px 8px; border-radius: 6px; font-size: 10px; }
-
-        /* إحصائيات اللاعب */
-        .stats-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 15px; text-align: center; }
-        .stats-table th { background: var(--primary); color: white; padding: 8px 3px; }
-        .stats-table td { padding: 8px 3px; border-bottom: 1px solid #eee; }
-
-        /* التقييم بالنجوم */
-        .stars-container { display: flex; justify-content: center; gap: 4px; margin: 15px 0; direction: ltr; }
-        .fa-star { font-size: 22px; color: #ddd; cursor: pointer; }
-        .fa-star.active { color: var(--accent); }
-
-        /* لوحة التحكم */
-        label { display: block; margin-top: 10px; font-size: 12px; font-weight: bold; color: #666; }
-        input, select, textarea { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-top: 5px; background: white; }
-        .btn-action { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 15px; cursor: pointer; }
-        .file-box { background: #f3f4f6; border: 2px dashed #ccc; padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; margin-top: 5px; position: relative; }
-
-        /* التنقل السفلي */
-        nav { position: fixed; bottom: 15px; left: 15px; right: 15px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 25px; display: flex; justify-content: space-around; padding: 12px; border: 1px solid var(--border); box-shadow: 0 8px 20px rgba(0,0,0,0.1); z-index: 999; }
-        nav button { background: none; border: none; color: #9ca3af; font-size: 22px; cursor: pointer; }
-        nav button.active { color: var(--primary); transform: scale(1.1); }
-
-        /* شريط التحميل */
-        #loader { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; z-index: 10001; transition: 0.2s; }
+        :root { --primary: #6b21a8; --bg: #ffffff; --card: #f8f9fa; --text: #1a1a1a; --accent: #fbbf24; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; padding-bottom: 90px; }
+        .section { display: none; padding: 15px; } .active { display: block; }
+        .card { background: var(--card); border-radius: 20px; padding: 15px; margin-bottom: 15px; border: 1px solid #eee; }
+        #login-overlay { position: fixed; inset: 0; background: var(--primary); z-index: 100000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; }
+        .pin-input { background: white; border: none; border-radius: 15px; padding: 15px; width: 220px; text-align: center; font-size: 24px; color: var(--primary); outline: none; margin-bottom: 20px;}
+        nav { position: fixed; bottom: 15px; left: 15px; right: 15px; background: white; border-radius: 25px; display: flex; justify-content: space-around; padding: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); z-index: 999; }
+        nav button { background: none; border: none; color: #ccc; font-size: 22px; cursor: pointer; }
+        nav button.active { color: var(--primary); }
+        .btn-action { background: var(--primary); color: white; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        input, select, textarea { width: 100%; padding: 10px; margin-top: 8px; border-radius: 10px; border: 1px solid #ddd; font-family: 'Cairo'; }
+        .top-bar { background: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; }
+        .player-img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        .stats-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 10px; }
+        .stats-table th { background: var(--primary); color: white; padding: 5px; }
+        .stats-table td { padding: 5px; text-align: center; border-bottom: 1px solid #eee; }
     </style>
 </head>
 <body>
 
-    <div id="loader"></div>
-
     <!-- شاشة الدخول -->
     <div id="login-overlay">
-        <div class="login-box">
-            <img id="login-logo" src="" width="90">
-            <h2 style="margin: 10px 0;">TAWHID FC</h2>
-            <p id="lang-login-msg" style="font-size: 14px; opacity: 0.8;">أدخل رمز الدخول المكون من رقمين</p>
-            <input type="password" id="pin-input" class="pin-input" maxlength="2" placeholder="••">
-            <button onclick="handleLogin()" class="btn-action" style="background: white; color: var(--primary); margin: 0;">دخول</button>
-        </div>
+        <h2>TAWHID FC</h2>
+        <input type="password" id="pin-input" class="pin-input" maxlength="2" placeholder="••">
+        <button onclick="handleLogin()" style="padding:10px 40px; border-radius:20px; border:none; background:white; color:var(--primary); font-weight:bold;">دخول</button>
     </div>
 
-    <!-- بار التنقل العلوي -->
     <div class="top-bar">
-        <i id="back-icon" class="fas fa-chevron-right back-btn" onclick="showSec('news')"></i>
-        <img id="club-logo" class="logo-img" src="">
-        <button onclick="toggleLang()" style="background:var(--primary); color:white; border:none; border-radius:15px; padding:5px 12px; font-size:11px;">EN/عربي</button>
-        <i id="admin-icon" class="fas fa-user-gear" style="display:none; color:var(--primary); font-size:20px;" onclick="showSec('admin')"></i>
+        <i class="fas fa-chevron-right" id="back-icon" style="visibility:hidden; color:var(--primary)" onclick="showSec('news')"></i>
+        <strong style="color:var(--primary)">TAWHID FC</strong>
+        <i id="admin-icon" class="fas fa-cog" style="display:none; color:var(--primary); font-size:20px;" onclick="showSec('admin')"></i>
     </div>
 
     <div class="container">
         <!-- قسم الأخبار -->
-        <section id="news-sec" class="section active">
-            <h3 id="lang-news-title">أخبار النادي</h3>
-            <div id="news-list"></div>
-        </section>
+        <section id="news-sec" class="section active"><h3>أخبار النادي</h3><div id="news-list"></div></section>
 
         <!-- قسم اللاعبين -->
-        <section id="squad-sec" class="section">
-            <h3 id="lang-squad-title">قائمة اللاعبين</h3>
-            <div id="squad-list"></div>
-        </section>
+        <section id="squad-sec" class="section"><h3>اللاعبين</h3><div id="squad-list"></div></section>
 
         <!-- بروفايل اللاعب -->
         <section id="player-profile-sec" class="section">
             <div id="player-header" style="text-align:center;"></div>
-            <div class="card" style="text-align:center;">
-                <h4 id="lang-rate-player">تقييم اللاعب</h4>
-                <div id="star-rating" class="stars-container"></div>
-                <div id="avg-rate-text" style="font-weight:bold; color:var(--primary);"></div>
-            </div>
-            <div class="card" style="overflow-x:auto; padding: 10px;">
-                <table class="stats-table">
-                    <thead>
-                        <tr>
-                            <th id="lang-th-m">الشهر</th><th>M</th><th>G</th><th>A</th><th>MOTM</th><th>PASS%</th><th>SHOT%</th><th>RATE</th>
-                        </tr>
-                    </thead>
-                    <tbody id="stats-body"></tbody>
-                </table>
-            </div>
+            <div class="card"><table class="stats-table"><thead><tr><th>الشهر</th><th>M</th><th>G</th><th>A</th><th>MOTM</th><th>PASS%</th><th>SHOT%</th><th>RATE</th></tr></thead><tbody id="stats-body"></tbody></table></div>
         </section>
 
         <!-- قسم الجوائز -->
-        <section id="awards-sec" class="section">
-            <h3 id="lang-awards-title" style="text-align:center;">لوحة التميز</h3>
-            <div id="awards-list"></div>
-        </section>
+        <section id="awards-sec" class="section"><h3>الجوائز</h3><div id="awards-list"></div></section>
 
-        <!-- قسم الرعاة -->
-        <section id="sponsors-sec" class="section">
-            <h3 id="lang-sponsors-title" style="text-align:center;">الرعاة الرسميين</h3>
-            <div id="sponsors-list"></div>
-        </section>
-
-        <!-- لوحة التحكم (07 فقط) -->
+        <!-- لوحة التحكم -->
         <section id="admin-sec" class="section">
-            <h3 style="color:var(--primary);">Admin Dashboard</h3>
+            <h3>لوحة التحكم (07)</h3>
             
             <div class="card">
-                <h4>1. إدارة اللاعبين</h4>
+                <h4>1. إضافة لاعب</h4>
                 <input type="text" id="adm-p-name" placeholder="الاسم الكامل">
                 <input type="text" id="adm-p-user" placeholder="يوزر اللاعب">
-                <input type="text" id="adm-p-dob" placeholder="تاريخ الميلاد">
                 <input type="number" id="adm-p-num" placeholder="الرقم">
                 <select id="adm-p-pos"><option value="1">حارس</option><option value="2">دفاع</option><option value="3">وسط</option><option value="4">هجوم</option></select>
-                <div class="file-box">صورة اللاعب <input type="file" id="adm-p-img" accept="image/*" style="opacity:0; position:absolute; inset:0;"></div>
-                <button class="btn-action" onclick="adminAddPlayer()">إضافة لاعب</button>
+                <input type="file" id="adm-p-img" accept="image/*">
+                <button class="btn-action" onclick="adminAddPlayer()">حفظ اللاعب</button>
             </div>
 
             <div class="card">
-                <h4>2. تحديث إحصائيات شهرية</h4>
+                <h4>2. إضافة خبر</h4>
+                <input type="text" id="adm-n-title" placeholder="عنوان الخبر">
+                <textarea id="adm-n-desc" placeholder="التفاصيل"></textarea>
+                <input type="file" id="adm-n-img" accept="image/*">
+                <button class="btn-action" onclick="adminAddNews()">نشر الخبر</button>
+            </div>
+
+            <div class="card">
+                <h4>3. تحديث إحصائيات</h4>
                 <select id="adm-stat-player"></select>
                 <select id="adm-stat-month">
                     <option value="10-2025">10-2025</option><option value="11-2025">11-2025</option><option value="12-2025">12-2025</option>
                     <option value="01-2026">01-2026</option><option value="02-2026">02-2026</option><option value="03-2026">03-2026</option>
-                    <option value="04-2026">04-2026</option><option value="05-2026">05-2026</option><option value="06-2026">06-2026</option>
-                    <option value="07-2026">07-2026</option><option value="08-2026">08-2026</option><option value="09-2026">09-2026</option>
                 </select>
-                <input type="number" id="adm-stat-m" placeholder="عدد المباريات">
-                <input type="number" id="adm-stat-g" placeholder="الأهداف">
+                <input type="number" id="adm-stat-m" placeholder="مباريات">
+                <input type="number" id="adm-stat-g" placeholder="أهداف">
                 <input type="number" id="adm-stat-a" placeholder="أسيست">
-                <input type="number" id="adm-stat-motm" placeholder="رجل المباراة">
                 <input type="number" id="adm-stat-pass" placeholder="دقة تمرير %">
                 <input type="number" id="adm-stat-shot" placeholder="دقة تسديد %">
-                <input type="number" step="0.1" id="adm-stat-rate" placeholder="التقييم النهائي">
-                <button class="btn-action" onclick="adminUpdateStats()">تحديث</button>
+                <input type="number" step="0.1" id="adm-stat-rate" placeholder="التقييم">
+                <button class="btn-action" onclick="adminUpdateStats()">تحديث الإحصائيات</button>
             </div>
 
             <div class="card">
-                <h4>3. الأخبار والجوائز والشعار</h4>
-                <input type="text" id="adm-n-title" placeholder="عنوان الخبر">
-                <textarea id="adm-n-desc" placeholder="نص الخبر"></textarea>
-                <div class="file-box">صورة الخبر <input type="file" id="adm-n-img" accept="image/*" style="opacity:0; position:absolute; inset:0;"></div>
-                <button class="btn-action" onclick="adminAddNews()">نشر الخبر</button>
-                <hr>
-                <div class="file-box">تحديث شعار النادي <input type="file" id="adm-club-logo" accept="image/*" style="opacity:0; position:absolute; inset:0;"></div>
+                <h4>4. الجوائز</h4>
                 <input type="text" id="adm-potm-name" placeholder="اسم لاعب الشهر">
-                <div class="file-box">صورة لاعب الشهر <input type="file" id="adm-potm-img" accept="image/*" style="opacity:0; position:absolute; inset:0;"></div>
-                <div class="file-box">فيديو هدف الشهر <input type="file" id="adm-goal-vid" accept="video/*" style="opacity:0; position:absolute; inset:0;"></div>
-                <button class="btn-action" onclick="adminUpdateAwards()">تحديث الجوائز والشعار</button>
-            </div>
-
-            <div class="card">
-                <h4>4. الرعاة</h4>
-                <div class="file-box">شعار الراعي <input type="file" id="adm-sp-img" accept="image/*" style="opacity:0; position:absolute; inset:0;"></div>
-                <input type="text" id="adm-sp-desc" placeholder="وصف الراعي">
-                <button class="btn-action" onclick="adminAddSponsor()">إضافة راعي</button>
+                <input type="file" id="adm-potm-img" accept="image/*">
+                <input type="file" id="adm-goal-vid" accept="video/*">
+                <button class="btn-action" onclick="adminUpdateAwards()">تحديث الجوائز</button>
             </div>
         </section>
     </div>
 
-    <!-- نافيجيشن سفلي -->
     <nav>
-        <button onclick="showSec('news')" id="nav-news" class="active"><i class="fas fa-home"></i></button>
-        <button onclick="showSec('squad')" id="nav-squad"><i class="fas fa-users"></i></button>
-        <button onclick="showSec('awards')" id="nav-awards"><i class="fas fa-award"></i></button>
-        <button onclick="showSec('sponsors')" id="nav-sponsors"><i class="fas fa-handshake"></i></button>
+        <button onclick="showSec('news')" id="btn-news" class="active"><i class="fas fa-home"></i></button>
+        <button onclick="showSec('squad')" id="btn-squad"><i class="fas fa-users"></i></button>
+        <button onclick="showSec('awards')" id="btn-awards"><i class="fas fa-award"></i></button>
     </nav>
 
     <script>
-        // --- الربط مع SUPABASE ---
         const SB_URL = "https://pgpjdwltezrxmpnuqvem.supabase.co";
         const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBncGpkd2x0ZXpyeG1wbnVxdmVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MzUwMjgsImV4cCI6MjA5MjQxMTAyOH0.KtVZAP-EhFAw1gonKGn4ulXVJp-tjKZVFIMNEfES7ho";
         const _supabase = supabase.createClient(SB_URL, SB_KEY);
 
         let userPin = "";
-        let isAdmin = false;
-        let currLang = 'ar';
 
-        const i18n = {
-            ar: { news: "أخبار النادي", squad: "قائمة اللاعبين", awards: "الجوائز", sponsors: "الرعاة", rate: "تقييم اللاعب", month: "الشهر" },
-            en: { news: "Club News", squad: "Squad List", awards: "Awards", sponsors: "Sponsors", rate: "Rate Player", month: "Month" }
-        };
-
-        // --- نظام الدخول ---
         async function handleLogin() {
             const pin = document.getElementById('pin-input').value;
-            const valid = ["07", "78", "28", "29", "08", "02"];
-            if(valid.includes(pin)) {
+            if(["07", "78", "28", "29", "08", "02"].includes(pin)) {
                 userPin = pin;
-                isAdmin = (pin === "07");
                 document.getElementById('login-overlay').style.display = 'none';
-                if(isAdmin) document.getElementById('admin-icon').style.display = 'block';
+                if(pin === "07") document.getElementById('admin-icon').style.display = 'block';
                 loadData();
-            } else alert("Invalid Code");
+            } else alert("خطأ!");
         }
 
-        // --- التنقل ---
         function showSec(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(id + '-sec').classList.add('active');
             document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-            if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active');
-            document.getElementById('back-icon').classList.toggle('show', id !== 'news');
-            window.scrollTo(0,0);
+            if(document.getElementById('btn-'+id)) document.getElementById('btn-'+id).classList.add('active');
+            document.getElementById('back-icon').style.visibility = (id === 'news' ? 'hidden' : 'visible');
         }
 
-        // --- جلب البيانات ---
         async function loadData() {
-            setLoader(30);
-            await fetchLogo();
-            await fetchNews();
-            await fetchSquad();
-            await fetchAwards();
-            await fetchSponsors();
-            setLoader(100);
-        }
-
-        async function fetchLogo() {
-            const { data } = await _supabase.from('awards').select('potm_img').limit(1).single();
-            // هنا نفترض أن الشعار مخزن بشكل منفصل أو نستخدم صورة افتراضية
-            _supabase.storage.from('media').getPublicUrl('club_logo.png').data.publicUrl;
-        }
-
-        async function fetchNews() {
-            const { data } = await _supabase.from('news').select('*').order('id', { ascending: false });
-            const list = document.getElementById('news-list');
-            list.innerHTML = "";
-            data?.forEach(n => {
-                list.innerHTML += `<div class="card news-card"><span class="news-date">${n.date}</span><h4>${n.title}</h4><img src="${n.img}"><p style="font-size:13px; opacity:0.8;">${n.desc}</p></div>`;
+            // تحميل الأخبار
+            const { data: news } = await _supabase.from('news').select('*').order('id', {ascending: false});
+            const newsList = document.getElementById('news-list');
+            newsList.innerHTML = "";
+            news?.forEach(n => {
+                newsList.innerHTML += `<div class="card"><h4>${n.title}</h4><img src="${n.img}" style="width:100%; border-radius:10px;"><p>${n.desc}</p></div>`;
             });
-        }
 
-        async function fetchSquad() {
-            const { data } = await _supabase.from('players').select('*').order('pos', { ascending: true });
-            const list = document.getElementById('squad-list');
+            // تحميل اللاعبين
+            const { data: players } = await _supabase.from('players').select('*').order('pos');
+            const squadList = document.getElementById('squad-list');
             const admSel = document.getElementById('adm-stat-player');
-            list.innerHTML = ""; admSel.innerHTML = "";
-            data?.forEach(p => {
+            squadList.innerHTML = ""; admSel.innerHTML = "";
+            players?.forEach(p => {
                 admSel.innerHTML += `<option value="${p.id}">${p.user}</option>`;
-                list.innerHTML += `
-                    <div class="card player-row" onclick="viewPlayer('${p.id}')">
-                        <img src="${p.img}" class="player-img">
-                        <div style="flex-grow:1">
-                            <b>${p.user}</b> <span class="pos-tag">${getPos(p.pos)}</span>
-                            <div style="font-size:11px; opacity:0.6">#${p.num}</div>
-                        </div>
-                        <i class="fas fa-chevron-left" style="opacity:0.2"></i>
-                    </div>`;
+                squadList.innerHTML += `<div class="card" style="display:flex; align-items:center; gap:15px;" onclick="viewPlayer('${p.id}')"><img src="${p.img}" class="player-img"><b>${p.user}</b></div>`;
             });
+
+            // تحميل الجوائز
+            const { data: awards } = await _supabase.from('awards').select('*').limit(1).single();
+            if(awards) {
+                document.getElementById('awards-list').innerHTML = `<div class="card" style="text-align:center"><h4>لاعب الشهر</h4><img src="${awards.potm_img}" style="width:120px; border-radius:50%"><br><b>${awards.potm_name}</b></div><div class="card"><h4>هدف الشهر</h4><video controls style="width:100%"><source src="${awards.goal_vid}"></video></div>`;
+            }
         }
 
         async function viewPlayer(pId) {
-            setLoader(40);
             const { data: p } = await _supabase.from('players').select('*').eq('id', pId).single();
             const { data: stats } = await _supabase.from('stats').select('*').eq('player_id', pId);
-            
-            document.getElementById('player-header').innerHTML = `<img src="${p.img}" class="player-img" style="width:110px; height:110px;"><h2>${p.name}</h2><p>@${p.user} | ${p.dob}</p>`;
-            
-            let html = "";
-            stats?.forEach(s => {
-                html += `<tr><td>${s.month}</td><td>${s.m}</td><td>${s.g}</td><td>${s.a}</td><td>${s.motm}</td><td>${s.pass}%</td><td>${s.shot}%</td><td>${s.rate}</td></tr>`;
-            });
-            document.getElementById('stats-body').innerHTML = html;
-            
-            loadStars(pId);
+            document.getElementById('player-header').innerHTML = `<img src="${p.img}" style="width:100px; height:100px; border-radius:50%"><h2>${p.name}</h2>`;
+            let h = "";
+            stats?.forEach(s => { h += `<tr><td>${s.month}</td><td>${s.m}</td><td>${s.g}</td><td>${s.a}</td><td>${s.motm}</td><td>${s.pass}%</td><td>${s.shot}%</td><td>${s.rate}</td></tr>`; });
+            document.getElementById('stats-body').innerHTML = h;
             showSec('player-profile');
-            setLoader(100);
         }
 
-        async function fetchAwards() {
-            const { data } = await _supabase.from('awards').select('*').limit(1).single();
-            if(!data) return;
-            document.getElementById('awards-list').innerHTML = `
-                <div class="card" style="text-align:center">
-                    <h4 style="color:var(--primary)">PLAYER OF THE MONTH</h4>
-                    <img src="${data.potm_img}" style="width:140px; height:140px; border-radius:50%; border:3px solid gold; object-fit:cover;">
-                    <h3>${data.potm_name}</h3>
-                </div>
-                <div class="card">
-                    <h4 style="color:var(--primary)">GOAL OF THE MONTH</h4>
-                    <video controls style="width:100%; border-radius:15px;"><source src="${data.goal_vid}"></video>
-                </div>`;
-        }
-
-        async function fetchSponsors() {
-            const { data } = await _supabase.from('sponsors').select('*');
-            const list = document.getElementById('sponsors-list');
-            list.innerHTML = "";
-            data?.forEach(s => {
-                list.innerHTML += `<div class="card" style="text-align:center;"><img src="${s.img}" style="width:160px;"><p>${s.desc}</p></div>`;
-            });
-        }
-
-        // --- تقييم النجوم ---
-        async function loadStars(pId) {
-            const box = document.getElementById('star-rating');
-            box.innerHTML = "";
-            for(let i=1; i<=10; i++) box.innerHTML += `<i class="fas fa-star" id="star-${i}" onclick="submitRating('${pId}', ${i})"></i>`;
-            
-            const { data } = await _supabase.from('ratings').select('*').eq('player_id', pId);
-            let sum=0, count=0;
-            data?.forEach(r => {
-                sum += r.rating; count++;
-                if(r.user_pin === userPin) markStars(r.rating);
-            });
-            document.getElementById('avg-rate-text').innerText = count > 0 ? (sum/count).toFixed(1) + " / 10" : "0.0 / 10";
-        }
-
-        function markStars(n) {
-            for(let i=1; i<=10; i++) document.getElementById('star-'+i).classList.toggle('active', i<=n);
-        }
-
-        async function submitRating(pId, n) {
-            await _supabase.from('ratings').upsert({ player_id: pId, user_pin: userPin, rating: n }, { onConflict: 'player_id, user_pin' });
-            loadStars(pId);
-        }
-
-        // --- وظائف الآدمن ---
+        // --- وظائف الرفع والإضافة ---
         async function uploadFile(input) {
             const file = input.files[0];
             if(!file) return null;
-            setLoader(20);
             const path = `media/${Date.now()}_${file.name}`;
             const { data, error } = await _supabase.storage.from('media').upload(path, file);
-            setLoader(100);
-            return `${SB_URL}/storage/v1/object/public/media/${path}`;
+            if(error) { alert("فشل الرفع: " + error.message); return null; }
+            return SB_URL + "/storage/v1/object/public/media/" + path;
         }
 
         async function adminAddPlayer() {
-            const url = await uploadFile(document.getElementById('adm-p-img'));
-            const p = {
+            const img = await uploadFile(document.getElementById('adm-p-img'));
+            const { error } = await _supabase.from('players').insert({
                 name: document.getElementById('adm-p-name').value,
                 user: document.getElementById('adm-p-user').value,
-                dob: document.getElementById('adm-p-dob').value,
                 num: document.getElementById('adm-p-num').value,
                 pos: document.getElementById('adm-p-pos').value,
-                img: url
-            };
-            await _supabase.from('players').insert(p);
-            alert("Player Added"); fetchSquad();
+                img: img
+            });
+            if(error) alert(error.message); else { alert("تم الحفظ"); loadData(); }
+        }
+
+        async function adminAddNews() {
+            const img = await uploadFile(document.getElementById('adm-n-img'));
+            const { error } = await _supabase.from('news').insert({
+                title: document.getElementById('adm-n-title').value,
+                desc: document.getElementById('adm-n-desc').value,
+                img: img,
+                date: new Date().toLocaleDateString()
+            });
+            if(error) alert(error.message); else { alert("تم النشر"); loadData(); }
         }
 
         async function adminUpdateStats() {
-            const s = {
+            const { error } = await _supabase.from('stats').insert({
                 player_id: document.getElementById('adm-stat-player').value,
                 month: document.getElementById('adm-stat-month').value,
                 m: document.getElementById('adm-stat-m').value,
                 g: document.getElementById('adm-stat-g').value,
                 a: document.getElementById('adm-stat-a').value,
-                motm: document.getElementById('adm-stat-motm').value,
                 pass: document.getElementById('adm-stat-pass').value,
                 shot: document.getElementById('adm-stat-shot').value,
                 rate: document.getElementById('adm-stat-rate').value
-            };
-            await _supabase.from('stats').insert(s);
-            alert("Stats Updated");
-        }
-
-        async function adminAddNews() {
-            const url = await uploadFile(document.getElementById('adm-n-img'));
-            await _supabase.from('news').insert({ title: document.getElementById('adm-n-title').value, desc: document.getElementById('adm-n-desc').value, img: url, date: new Date().toLocaleDateString('ar-EG') });
-            alert("News Posted"); fetchNews();
+            });
+            if(error) alert(error.message); else alert("تم تحديث الإحصائيات");
         }
 
         async function adminUpdateAwards() {
-            const pImg = await uploadFile(document.getElementById('adm-potm-img'));
-            const gVid = await uploadFile(document.getElementById('adm-goal-vid'));
-            const logo = await uploadFile(document.getElementById('adm-club-logo'));
-            
-            const obj = { potm_name: document.getElementById('adm-potm-name').value };
-            if(pImg) obj.potm_img = pImg;
-            if(gVid) obj.goal_vid = gVid;
-            
-            const { data } = await _supabase.from('awards').select('id').limit(1).single();
-            if(data) await _supabase.from('awards').update(obj).eq('id', data.id);
-            else await _supabase.from('awards').insert(obj);
-            alert("Awards Updated"); fetchAwards();
-        }
-
-        async function adminAddSponsor() {
-            const url = await uploadFile(document.getElementById('adm-sp-img'));
-            await _supabase.from('sponsors').insert({ img: url, desc: document.getElementById('adm-sp-desc').value });
-            alert("Sponsor Added"); fetchSponsors();
-        }
-
-        // --- أدوات مساعدة ---
-        function getPos(n) {
-            const map = { "1": "GK", "2": "DEF", "3": "MID", "4": "ATT" };
-            return map[n] || "";
-        }
-        function toggleLang() {
-            currLang = currLang === 'ar' ? 'en' : 'ar';
-            document.getElementById('html-tag').dir = currLang === 'ar' ? 'rtl' : 'ltr';
-            applyLang();
-        }
-        function applyLang() {
-            const t = i18n[currLang];
-            document.getElementById('lang-news-title').innerText = t.news;
-            document.getElementById('lang-squad-title').innerText = t.squad;
-            document.getElementById('lang-awards-title').innerText = t.awards;
-            document.getElementById('lang-sponsors-title').innerText = t.sponsors;
-            document.getElementById('lang-rate-player').innerText = t.rate;
-        }
-        function setLoader(p) {
-            document.getElementById('loader').style.width = p + "%";
-            if(p >= 100) setTimeout(() => document.getElementById('loader').style.width = "0%", 400);
+            const img = await uploadFile(document.getElementById('adm-potm-img'));
+            const vid = await uploadFile(document.getElementById('adm-goal-vid'));
+            const upd = { potm_name: document.getElementById('adm-potm-name').value };
+            if(img) upd.potm_img = img;
+            if(vid) upd.goal_vid = vid;
+            const { error } = await _supabase.from('awards').upsert(upd);
+            if(error) alert(error.message); else { alert("تم تحديث الجوائز"); loadData(); }
         }
     </script>
 </body>
