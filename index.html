@@ -3,435 +3,369 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TAWHID FC | PROFESSIONAL MANAGEMENT</title>
+    <title>TAWHID FC | STATS & PERFORMANCE</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Oswald:wght@500;700&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        :root { --rm-blue: #001b4c; --rm-gold: #e4c35a; --white: #ffffff; --text: #111; --gray: #f4f4f4; }
+        :root {
+            --rm-blue: #001b4c;
+            --rm-gold: #e4c35a;
+            --rm-gray: #f4f4f4;
+            --white: #ffffff;
+            --text-dark: #111;
+        }
+
         [dir="rtl"] { font-family: 'Cairo', sans-serif; }
-        [dir="ltr"] { font-family: 'Oswald', sans-serif; }
+        [dir="ltr"] { font-family: 'Montserrat', sans-serif; }
+
         * { box-sizing: border-box; transition: 0.3s; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; background: var(--white); color: var(--text); overflow-x: hidden; }
+        body { margin: 0; background: var(--white); color: var(--text-dark); overflow-x: hidden; }
 
-        /* Login */
-        #login-overlay { position: fixed; inset: 0; background: var(--rm-blue); z-index: 100000; display: flex; align-items: center; justify-content: center; color: white; }
-        .pin-box { background: white; padding: 30px; border-radius: 15px; width: 85%; max-width: 320px; text-align: center; }
-        .pin-input { width: 100%; border: 2px solid #ddd; padding: 15px; font-size: 26px; text-align: center; margin: 15px 0; border-radius: 8px; color: var(--rm-blue); font-weight: bold; }
+        /* Navigation: Real Madrid Style */
+        .navbar { background: var(--white); position: sticky; top: 0; z-index: 2000; border-bottom: 1px solid #eee; }
+        .nav-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 40px; border-bottom: 4px solid var(--rm-blue); }
+        .nav-top img { height: 50px; cursor: pointer; }
+        
+        .nav-main { display: flex; justify-content: center; background: var(--white); padding: 0; list-style: none; margin: 0; overflow-x: auto; }
+        .nav-main li { padding: 15px 25px; font-weight: 900; font-size: 13px; text-transform: uppercase; cursor: pointer; color: var(--rm-blue); border-bottom: 3px solid transparent; white-space: nowrap; }
+        .nav-main li.active { border-bottom-color: var(--rm-gold); background: var(--rm-gray); }
 
-        /* Navigation */
-        .header { position: sticky; top: 0; background: white; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; z-index: 1000; }
-        .club-logo { height: 45px; cursor: pointer; }
-        .sidebar { position: fixed; top: 0; left: -100%; width: 100%; height: 100%; background: white; z-index: 2000; transition: 0.5s; overflow-y: auto; }
-        .sidebar.open { left: 0; }
-        [dir="rtl"] .sidebar { left: auto; right: -100%; }
-        [dir="rtl"] .sidebar.open { right: 0; }
-        .side-item { padding: 20px 25px; border-bottom: 1px solid #eee; font-size: 18px; font-weight: 900; color: var(--rm-blue); cursor: pointer; display: flex; justify-content: space-between; }
+        .lang-btn { background: var(--rm-blue); color: white; border: none; padding: 6px 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 11px; }
 
         /* Sections */
-        section { display: none; padding: 20px; animation: fadeIn 0.5s ease; }
-        .active-sec { display: block; }
+        section { display: none; animation: fadeIn 0.4s ease; }
+        .active-section { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Player Cards */
-        .squad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .player-card { background: var(--gray); border-radius: 12px; overflow: hidden; position: relative; }
-        .player-card img { width: 100%; display: block; }
-        .p-info { position: absolute; bottom: 10px; left: 10px; color: white; text-shadow: 1px 1px 4px #000; }
-        [dir="rtl"] .p-info { left: auto; right: 10px; text-align: right; }
+        /* Home (News) */
+        .hero-news { position: relative; height: 70vh; background: var(--rm-blue); color: white; display: flex; align-items: flex-end; }
+        .hero-news img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
+        .hero-content { position: relative; z-index: 10; padding: 60px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); width: 100%; }
+        .hero-content .badge { background: var(--rm-gold); color: var(--rm-blue); padding: 4px 12px; font-weight: 900; font-size: 12px; display: inline-block; margin-bottom: 15px; }
+        .hero-content h1 { font-size: clamp(30px, 5vw, 55px); margin: 0; font-family: 'Oswald'; text-transform: uppercase; line-height: 1; }
 
-        /* Admin Management Tables */
-        .admin-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
-        .admin-table th, .admin-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        [dir="rtl"] .admin-table th, [dir="rtl"] .admin-table td { text-align: right; }
-        .btn-edit { color: blue; cursor: pointer; margin-right: 10px; }
-        .btn-delete { color: red; cursor: pointer; }
+        /* Squad Page */
+        .container { max-width: 1200px; margin: auto; padding: 40px 20px; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 2px solid var(--rm-gray); padding-bottom: 15px; }
+        .page-title { font-size: 30px; text-transform: uppercase; font-family: 'Oswald'; margin: 0; border-left: 5px solid var(--rm-blue); padding-left: 15px; }
+        [dir="rtl"] .page-title { border-left: 0; border-right: 5px solid var(--rm-blue); padding-left: 0; padding-right: 15px; }
 
-        /* Forms */
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; }
-        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; }
-        .btn-main { background: var(--rm-blue); color: white; border: none; padding: 15px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .btn-gold { background: var(--rm-gold); color: var(--rm-blue); }
+        .squad-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; }
+        .player-card { background: var(--white); border-bottom: 2px solid #eee; cursor: pointer; position: relative; }
+        .player-card:hover { transform: translateY(-10px); }
+        .p-img-box { background: var(--rm-gray); height: 350px; position: relative; overflow: hidden; }
+        .p-img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .p-number-overlay { position: absolute; top: 10px; left: 15px; font-size: 70px; font-weight: 900; color: rgba(0,0,0,0.06); font-family: 'Oswald'; line-height: 1; }
+        .p-ovr-badge { position: absolute; bottom: 0; right: 0; background: var(--rm-blue); color: var(--rm-gold); padding: 10px 15px; font-family: 'Oswald'; font-weight: 900; font-size: 24px; }
+        .p-info { padding: 20px 0; }
+        .p-info span { color: #888; font-weight: bold; font-size: 13px; text-transform: uppercase; }
+        .p-info h4 { margin: 5px 0 0; font-size: 22px; text-transform: uppercase; font-weight: 900; color: var(--rm-blue); }
 
-        /* Player View */
-        .player-view { position: fixed; inset: 0; background: var(--rm-blue); z-index: 3000; display: none; overflow-y: auto; color: white; }
-        .pv-header { height: 50vh; background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: flex-end; padding: 30px; position: relative; }
-        .pv-header::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, var(--rm-blue)); }
+        /* Awards Page */
+        .award-box { background: var(--rm-gray); display: flex; flex-wrap: wrap; align-items: center; margin-bottom: 30px; }
+        .award-media { flex: 1; min-width: 300px; }
+        .award-media img, .award-media video { width: 100%; display: block; }
+        .award-text { flex: 1; padding: 40px; text-align: center; }
+        .award-text h2 { font-family: 'Oswald'; font-size: 35px; color: var(--rm-blue); text-transform: uppercase; }
 
-        /* Sponsor Footer */
-        .sponsor-footer { background: #f9f9f9; padding: 20px; text-align: center; margin-top: 50px; }
-        .sponsor-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; opacity: 0.6; }
-        .sponsor-grid img { height: 25px; }
+        /* Partners */
+        .partners-flex { display: flex; justify-content: center; gap: 60px; padding: 80px 0; flex-wrap: wrap; }
+        .partners-flex img { height: 60px; filter: grayscale(1); opacity: 0.5; }
+        .partners-flex img:hover { filter: grayscale(0); opacity: 1; }
 
-        #loader { position: fixed; top: 0; left: 0; width: 0%; height: 3px; background: var(--rm-gold); z-index: 10001; }
+        /* Player Details Overlay */
+        .player-overlay { position: fixed; inset: 0; background: var(--white); z-index: 3000; display: none; overflow-y: auto; }
+        .pv-grid { display: grid; grid-template-columns: 1fr 1.5fr; min-height: 100vh; }
+        .pv-img { background-size: cover; background-position: center top; background-color: var(--rm-gray); }
+        .pv-data { padding: 60px; background: var(--rm-blue); color: white; }
+        .close-pv { position: fixed; top: 30px; right: 30px; font-size: 45px; color: white; cursor: pointer; z-index: 3100; text-shadow: 0 0 10px #000; }
+        
+        .big-ovr { font-size: 100px; font-weight: 900; color: var(--rm-gold); font-family: 'Oswald'; line-height: 1; margin: 20px 0; }
+        .month-stat-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
+        .month-stat-table th { background: rgba(0,0,0,0.2); padding: 12px; text-align: left; font-size: 12px; text-transform: uppercase; color: var(--rm-gold); }
+        .month-stat-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 14px; font-weight: bold; }
+        [dir="rtl"] .month-stat-table th { text-align: right; }
+
+        @media (max-width: 768px) {
+            .nav-top { padding: 10px 20px; }
+            .pv-grid { grid-template-columns: 1fr; }
+            .pv-img { height: 40vh; }
+            .pv-data { padding: 30px 20px; }
+            .big-ovr { font-size: 70px; }
+            .month-stat-table { font-size: 11px; }
+        }
     </style>
 </head>
 <body>
 
-    <div id="loader"></div>
-
-    <div id="login-overlay">
-        <div class="pin-box">
-            <h2 style="color:var(--rm-blue); margin:0;">TAWHID FC</h2>
-            <input type="password" id="pin-input" class="pin-input" maxlength="2" placeholder="••">
-            <button onclick="handleLogin()" class="btn-main">LOGIN</button>
+    <nav class="navbar">
+        <div class="nav-top">
+            <img src="logo.png" alt="TAWHID FC" onclick="showSection('home')">
+            <button class="lang-btn" onclick="toggleLang()">EN / عربي</button>
         </div>
-    </div>
+        <ul class="nav-main">
+            <li id="m-home" class="active" onclick="showSection('home')">Home</li>
+            <li id="m-squad" onclick="showSection('squad')">Team</li>
+            <li id="m-awards" onclick="showSection('awards')">Awards</li>
+            <li id="m-partners" onclick="showSection('partners')">Partners</li>
+        </ul>
+    </nav>
 
-    <div class="header">
-        <i class="fas fa-bars" style="font-size:24px; color:var(--rm-blue);" onclick="toggleMenu()"></i>
-        <img id="main-logo" class="club-logo" src="" onclick="changeSec('news')">
-        <button onclick="toggleLang()" style="border:1px solid var(--rm-blue); background:none; padding:5px 10px; border-radius:5px; font-weight:bold; font-size:11px;">EN / عربي</button>
-    </div>
-
-    <div id="sidebar" class="sidebar">
-        <div class="header">
-            <i class="fas fa-times" style="font-size:24px; color:var(--rm-blue);" onclick="toggleMenu()"></i>
-            <span style="font-weight:900;">MENU</span>
+    <!-- NEWS (HOME) -->
+    <section id="sec-home" class="active-section">
+        <div class="hero-news">
+            <img src="h7modi07.png" alt="New Arrival">
+            <div class="hero-content">
+                <span class="badge" id="n-badge">OFFICIAL STATEMENT</span>
+                <h1 id="n-title">WELCOMING H7modi_07 TO TAWHID FC</h1>
+                <p id="n-desc">A new era begins today as our latest creative midfielder joins the squad.</p>
+            </div>
         </div>
-        <div class="side-item" onclick="changeSec('news')"><span class="lang-news">NEWS</span><i class="fas fa-chevron-right"></i></div>
-        <div class="side-item" onclick="changeSec('squad')"><span class="lang-squad">SQUAD</span><i class="fas fa-chevron-right"></i></div>
-        <div class="side-item" onclick="changeSec('history')"><span class="lang-history">HISTORY</span><i class="fas fa-chevron-right"></i></div>
-        <div class="side-item" onclick="changeSec('awards')"><span class="lang-awards">AWARDS</span><i class="fas fa-chevron-right"></i></div>
-        <div id="admin-link" class="side-item" style="display:none; background:#fff5f5;" onclick="changeSec('admin')"><span>ADMIN CONTROL (00)</span><i class="fas fa-lock"></i></div>
-        <div class="side-item" onclick="location.reload()"><span>LOGOUT</span><i class="fas fa-sign-out-alt"></i></div>
-    </div>
+    </section>
 
-    <div id="content">
-        <!-- News -->
-        <section id="news-sec" class="active-sec">
-            <div id="news-list"></div>
-        </section>
-
-        <!-- Squad -->
-        <section id="squad-sec">
-            <h2 class="lang-squad">SQUAD</h2>
-            <div id="squad-list" class="squad-grid"></div>
-        </section>
-
-        <!-- History -->
-        <section id="history-sec">
-            <h2 class="lang-history">CLUB HISTORY</h2>
-            <div id="history-list"></div>
-        </section>
-
-        <!-- Awards -->
-        <section id="awards-sec">
-            <h2 class="lang-awards">SEASON AWARDS</h2>
-            <div id="awards-display"></div>
-        </section>
-
-        <!-- Admin Dashboard -->
-        <section id="admin-sec">
-            <h2 style="color:var(--rm-blue)">Admin Management Center</h2>
-            
-            <!-- Tab Buttons -->
-            <div style="display:flex; gap:5px; overflow-x:auto; padding-bottom:10px;">
-                <button onclick="showTab('tab-players')" class="btn-main" style="width:auto; padding:8px 15px;">Players</button>
-                <button onclick="showTab('tab-stats')" class="btn-main" style="width:auto; padding:8px 15px;">Stats</button>
-                <button onclick="showTab('tab-news')" class="btn-main" style="width:auto; padding:8px 15px;">News</button>
-                <button onclick="showTab('tab-awards')" class="btn-main" style="width:auto; padding:8px 15px;">Awards</button>
-                <button onclick="showTab('tab-history')" class="btn-main" style="width:auto; padding:8px 15px;">History</button>
-                <button onclick="showTab('tab-sponsors')" class="btn-main" style="width:auto; padding:8px 15px;">Sponsors</button>
+    <!-- SQUAD (TEAM) -->
+    <section id="sec-squad">
+        <div class="container">
+            <div class="page-header">
+                <h2 class="page-title" id="t-squad">FIRST TEAM SQUAD</h2>
+                <select id="sort-select" onchange="handleSort()" style="padding:10px; font-weight:bold;">
+                    <option value="rating">RATING</option>
+                    <option value="name">NAME</option>
+                </select>
             </div>
+            <div class="squad-grid" id="squad-list"></div>
+        </div>
+    </section>
 
-            <!-- Tab: Players -->
-            <div id="tab-players" class="admin-tab">
-                <div class="card" style="border:1px solid #ddd; padding:15px; margin:10px 0;">
-                    <h4 id="player-form-title">Add/Edit Player</h4>
-                    <input type="hidden" id="edit-player-id">
-                    <input type="text" id="adm-p-name" placeholder="Full Name">
-                    <input type="text" id="adm-p-nat" placeholder="Nationality (e.g. Saudi Arabia)">
-                    <input type="text" id="adm-p-dob" placeholder="Date of Birth">
-                    <input type="number" id="adm-p-num" placeholder="Shirt Number">
-                    <select id="adm-p-pos">
-                        <option value="Goalkeeper">Goalkeeper</option><option value="Defender">Defender</option>
-                        <option value="Midfielder">Midfielder</option><option value="Forward">Forward</option>
-                    </select>
-                    <input type="file" id="adm-p-img">
-                    <button class="btn-main btn-gold" onclick="savePlayer()">SAVE PLAYER</button>
-                </div>
-                <div id="manage-players-list"></div>
-            </div>
-
-            <!-- Tab: Stats -->
-            <div id="tab-stats" class="admin-tab" style="display:none;">
-                <div class="card" style="border:1px solid #ddd; padding:15px; margin:10px 0;">
-                    <h4>Add/Edit Monthly Stats</h4>
-                    <input type="hidden" id="edit-stat-id">
-                    <select id="adm-stat-player"></select>
-                    <select id="adm-stat-month">
-                        <option value="10-2025">10-2025</option><option value="11-2025">11-2025</option>
-                        <option value="12-2025">12-2025</option><option value="01-2026">01-2026</option>
-                        <option value="02-2026">02-2026</option><option value="03-2026">03-2026</option>
-                        <option value="04-2026">04-2026</option><option value="05-2026">05-2026</option>
-                        <option value="06-2026">06-2026</option><option value="07-2026">07-2026</option>
-                        <option value="08-2026">08-2026</option><option value="09-2026">09-2026</option>
-                    </select>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                        <input type="number" id="adm-stat-m" placeholder="Matches">
-                        <input type="number" id="adm-stat-g" placeholder="Goals">
-                        <input type="number" id="adm-stat-a" placeholder="Assists">
-                        <input type="number" id="adm-stat-motm" placeholder="MOTM">
-                        <input type="number" id="adm-stat-pass" placeholder="Pass Acc%">
-                        <input type="number" id="adm-stat-shot" placeholder="Shot Acc%">
-                        <input type="number" step="0.1" id="adm-stat-rate" placeholder="Rating">
+    <!-- AWARDS -->
+    <section id="sec-awards">
+        <div class="container">
+            <h2 class="page-title" id="t-awards">RECOGNITIONS</h2>
+            <div style="margin-top:30px;">
+                <div class="award-box">
+                    <div class="award-text">
+                        <h2 id="potm-h">PLAYER OF THE MONTH</h2>
+                        <p id="potm-n">Excellence in Performance</p>
                     </div>
-                    <button class="btn-main btn-gold" onclick="saveStats()">SAVE STATS</button>
+                    <div class="award-media">
+                        <img src="award-player.png" onerror="this.src='logo.png'">
+                    </div>
                 </div>
-                <div id="manage-stats-list"></div>
-            </div>
-
-            <!-- Tab: News -->
-            <div id="tab-news" class="admin-tab" style="display:none;">
-                <div class="card" style="border:1px solid #ddd; padding:15px;">
-                    <h4>Add/Edit News</h4>
-                    <input type="hidden" id="edit-news-id">
-                    <input type="text" id="adm-n-title" placeholder="News Title">
-                    <textarea id="adm-n-desc" placeholder="News Article Content" rows="5"></textarea>
-                    <input type="file" id="adm-n-img">
-                    <button class="btn-main btn-gold" onclick="saveNews()">PUBLISH NEWS</button>
+                <div class="award-box" style="flex-direction: row-reverse;">
+                    <div class="award-text">
+                        <h2 id="gotm-h">GOAL OF THE MONTH</h2>
+                        <p id="gotm-n">Most Remarkable Finish</p>
+                    </div>
+                    <div class="award-media">
+                        <video controls poster="award-goal.png"><source src="goal-video.mp4"></video>
+                    </div>
                 </div>
-                <div id="manage-news-list"></div>
             </div>
-
-            <!-- Tab: Awards -->
-            <div id="tab-awards" class="admin-tab" style="display:none;">
-                <div class="card" style="border:1px solid #ddd; padding:15px;">
-                    <h4>Monthly Awards Management</h4>
-                    <select id="adm-aw-type">
-                        <option value="POTM">Player of the Month</option>
-                        <option value="TopScorer">Top Scorer of the Month</option>
-                        <option value="TopProvider">Top Provider (Assists)</option>
-                        <option value="GOTM">Goal of the Month (Video)</option>
-                    </select>
-                    <input type="text" id="adm-aw-name" placeholder="Winner Name">
-                    <input type="file" id="adm-aw-file">
-                    <button class="btn-main btn-gold" onclick="saveAward()">SAVE AWARD</button>
-                </div>
-                <div id="manage-awards-list"></div>
-            </div>
-            
-            <!-- Other tabs (Sponsors, History) would follow same logic -->
-        </section>
-    </div>
-
-    <!-- Sponsor Bar -->
-    <div class="sponsor-footer">
-        <div class="sponsor-grid" id="footer-sponsors"></div>
-    </div>
-
-    <!-- Player Profile View -->
-    <div id="player-view" class="player-view">
-        <div class="header" style="background:transparent; border:none; position:absolute; width:100%; z-index:10;">
-            <i class="fas fa-times" style="font-size:24px; color:white; cursor:pointer;" onclick="closePlayer()"></i>
         </div>
+    </section>
+
+    <!-- PARTNERS -->
+    <section id="sec-partners">
+        <div class="container">
+            <h2 class="page-title" id="t-partners">OFFICIAL PARTNERS</h2>
+            <div class="partners-flex">
+                <img src="sponsor1.png">
+                <img src="sponsor2.png">
+            </div>
+        </div>
+    </section>
+
+    <!-- PLAYER OVERLAY -->
+    <div id="player-view" class="player-overlay">
+        <span class="close-pv" onclick="closePlayer()">&times;</span>
         <div id="pv-body"></div>
     </div>
 
     <script>
-        const SB_URL = "https://pgpjdwltezrxmpnuqvem.supabase.co";
-        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBncGpkd2x0ZXpyeG1wbnVxdmVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MzUwMjgsImV4cCI6MjA5MjQxMTAyOH0.KtVZAP-EhFAw1gonKGn4ulXVJp-tjKZVFIMNEfES7ho";
-        const _supabase = supabase.createClient(SB_URL, SB_KEY);
-
         let currLang = 'en';
-        let isAdmin = false;
 
-        // --- AUTH ---
-        function handleLogin() {
-            const pin = document.getElementById('pin-input').value;
-            const viewers = ["02", "08", "78", "29", "28", "07"];
-            if (pin === "00") {
-                isAdmin = true;
-                document.getElementById('admin-link').style.display = 'flex';
-                document.getElementById('login-overlay').style.display = 'none';
-            } else if (viewers.includes(pin)) {
-                document.getElementById('login-overlay').style.display = 'none';
-            } else { alert("Access Denied"); return; }
-            loadData();
+        const i18n = {
+            en: {
+                home: "Home", squad: "Team", awards: "Awards", partners: "Partners",
+                nBadge: "OFFICIAL STATEMENT", nTitle: "WELCOMING H7modi_07 TO TAWHID FC", nDesc: "A new midfield maestro has arrived to the family.",
+                tSquad: "FIRST TEAM SQUAD", tAwards: "RECOGNITIONS", tPartners: "OFFICIAL PARTNERS",
+                potmH: "PLAYER OF THE MONTH", gotmH: "GOAL OF THE MONTH",
+                m: "M", g: "G", a: "A", p: "Pass%", s: "Shot%", mo: "MOTM", w: "Win%", ovr: "OVR",
+                month: "Month", 
+                bio_Almousa3m: "The top scorer in the history of the club. An unstoppable goal machine."
+            },
+            ar: {
+                home: "الرئيسية", squad: "الفريق", awards: "الجوائز", partners: "الشركاء",
+                nBadge: "بيان رسمي", nTitle: "الترحيب باللاعب H7modi_07", nDesc: "فرد جديد ينضم لخط وسط الفريق لتعزيز قوتنا.",
+                tSquad: "قائمة الفريق الأول", tAwards: "الجوائز والتقديرات", tPartners: "الرعاة الرسميون",
+                potmH: "لاعب الشهر", gotmH: "هدف الشهر",
+                m: "مب", g: "أه", a: "أس", p: "تمرير", s: "تسديد", mo: "رجل", w: "فوز%", ovr: "تقييم",
+                month: "الشهر",
+                bio_Almousa3m: "الهداف التاريخي للنادي. ماكينة أهداف لا تتوقف عن التسجيل."
+            }
+        };
+
+        const players = [
+            { id: 3, num: 78, name: "Almousa3M", pos: "ST", img: "almousa3m.png", bio: "bio_Almousa3m", 
+                stats: [
+                    {month: "October", m: 58, g: 65, a: 61, p: 78, s: 33, mo: 18, w: 60, ovr: 94},
+                    {month: "November", m: 57, g: 67, a: 72, p: 77, s: 33, mo: 15, w: 53, ovr: 95},
+                    {month: "January", m: 126, g: 161, a: 146, p: 77, s: 40, mo: 24, w: 49, ovr: 93}
+                ]
+            },
+            { id: 2, num: 8, name: "M-_-_-_-11_11", pos: "CM", img: "m1111.png", 
+                stats: [
+                    {month: "October", m: 68, g: 38, a: 43, p: 81, s: 27, mo: 9, w: 57, ovr: 90},
+                    {month: "November", m: 86, g: 48, a: 58, p: 74, s: 29, mo: 10, w: 54, ovr: 92},
+                    {month: "January", m: 158, g: 112, a: 113, p: 75, s: 34, mo: 33, w: 46, ovr: 91}
+                ]
+            },
+            { id: 6, num: 2, name: "Basabeso", pos: "CB", img: "basabeso2.png", 
+                stats: [
+                    {month: "October", m: 48, g: 36, a: 17, p: 84, s: 40, mo: 7, w: 62, ovr: 89},
+                    {month: "November", m: 75, g: 54, a: 22, p: 86, s: 39, mo: 9, w: 57, ovr: 91},
+                    {month: "January", m: 91, g: 84, a: 43, p: 85, s: 41, mo: 5, w: 49, ovr: 90}
+                ]
+            },
+            { id: 4, num: 28, name: "H2ssain_28", pos: "ST", img: "h2ssain28.png", 
+                stats: [
+                    {month: "October", m: 44, g: 36, a: 15, p: 76, s: 23, mo: 1, w: 56, ovr: 88},
+                    {month: "November", m: 64, g: 59, a: 48, p: 77, s: 25, mo: 8, w: 51, ovr: 90},
+                    {month: "January", m: 146, g: 144, a: 72, p: 73, s: 28, mo: 9, w: 44, ovr: 89}
+                ]
+            },
+            { id: 1, num: 7, name: "H7modi_77", pos: "LW", img: "logo.png", status: "Out 15/04/2026",
+                stats: [
+                    {month: "October", m: 45, g: 14, a: 368, p: 79, s: 33, mo: 2, w: 62, ovr: 87},
+                    {month: "November", m: 77, g: 52, a: 54, p: 76, s: 43, mo: 9, w: 51, ovr: 89},
+                    {month: "January", m: 116, g: 44, a: 85, p: 75, s: 38, mo: 19, w: 47, ovr: 88}
+                ]
+            },
+            { id: 5, num: 29, name: "Yo0ousef25", pos: "RW", img: "yo0ousef25.png", 
+                stats: [
+                    {month: "October", m: 28, g: 23, a: 5, p: 78, s: 46, mo: 0, w: 67, ovr: 84},
+                    {month: "November", m: 26, g: 21, a: 8, p: 78, s: 52, mo: 3, w: 58, ovr: 86},
+                    {month: "January", m: 99, g: 57, a: 17, p: 74, s: 47, mo: 0, w: 43, ovr: 85}
+                ]
+            },
+            { id: 7, num: 7, name: "H7modi_07", pos: "CAM", img: "h7modi07.png", status: "Joined 20/04/2026", stats: [] }
+        ];
+
+        function getAvgOVR(p) {
+            if(!p.stats || p.stats.length === 0) return "--";
+            let total = 0;
+            p.stats.forEach(s => total += s.ovr);
+            return Math.round(total / p.stats.length);
         }
 
-        // --- UI NAVIGATION ---
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
-        function changeSec(id) {
-            document.querySelectorAll('section').forEach(s => s.classList.remove('active-sec'));
-            document.getElementById(id + '-sec').classList.add('active-sec');
-            toggleMenu(); window.scrollTo(0,0);
-        }
-        function showTab(tabId) {
-            document.querySelectorAll('.admin-tab').forEach(t => t.style.display = 'none');
-            document.getElementById(tabId).style.display = 'block';
-            refreshAdminLists();
-        }
-
-        // --- DATA SYNC ---
-        async function loadData() {
-            setLoad(30);
-            await fetchNews();
-            await fetchSquad();
-            await fetchAwards();
-            await fetchHistory();
-            await fetchSponsors();
-            setLoad(100);
-        }
-
-        async function fetchNews() {
-            const { data } = await _supabase.from('news').select('*').order('id', {ascending:false});
-            const list = document.getElementById('news-list');
-            list.innerHTML = data.map(n => `
-                <div class="news-card">
-                    <img src="${n.img}">
-                    <div class="news-title">${currLang === 'ar' ? n.title_ar || n.title : n.title}</div>
-                </div>
-            `).join('');
-        }
-
-        async function fetchSquad() {
-            const { data } = await _supabase.from('players').select('*').order('pos');
-            const list = document.getElementById('squad-list');
-            const admSel = document.getElementById('adm-stat-player');
-            admSel.innerHTML = data.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
-            list.innerHTML = data.map(p => `
-                <div class="player-card" onclick="viewPlayer('${p.id}')">
-                    <img src="${p.img}">
-                    <div class="p-info">
-                        <div style="font-size:35px; font-weight:900;">${p.num}</div>
-                        <div style="font-size:12px; font-weight:bold;">${p.name.toUpperCase()}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function viewPlayer(id) {
-            setLoad(50);
-            const { data: p } = await _supabase.from('players').select('*').eq('id', id).single();
-            const { data: stats } = await _supabase.from('stats').select('*').eq('player_id', id);
-            
-            let tG=0, tA=0, tM=0, tMotm=0;
-            stats.forEach(s => { tG += s.g; tA += s.a; tM += s.m; tMotm += s.motm; });
-
-            document.getElementById('player-view').style.display = 'block';
-            document.getElementById('pv-body').innerHTML = `
-                <div class="pv-header" style="background-image:url('${p.img}')">
-                    <div style="position:relative; z-index:2;">
-                        <div style="font-size:80px; font-weight:900; line-height:0.8;">${p.num}</div>
-                        <div style="font-size:30px; font-weight:900;">
-                            <img src="https://flagcdn.com/w40/${p.nationality?.toLowerCase().substring(0,2) || 'sa'}.png" style="width:30px; border-radius:4px;"> 
-                            ${p.name.toUpperCase()}
-                        </div>
-                        <div style="opacity:0.8; font-weight:bold;">${p.pos} | Born: ${p.dob}</div>
-                    </div>
-                </div>
-                <div style="padding:20px; display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; text-align:center; background:rgba(0,0,0,0.2);">
-                    <div><div style="font-size:20px; font-weight:900;">${tM}</div><small>MATCHES</small></div>
-                    <div><div style="font-size:20px; font-weight:900;">${tG}</div><small>GOALS</small></div>
-                    <div><div style="font-size:20px; font-weight:900;">${tA}</div><small>ASSISTS</small></div>
-                    <div><div style="font-size:20px; font-weight:900;">${tMotm}</div><small>MOTM</small></div>
-                </div>
-                <div style="padding:20px;">
-                    <table style="width:100%; border-collapse:collapse; font-size:12px;">
-                        <tr style="border-bottom:1px solid #444; opacity:0.6;"><th>MONTH</th><th>G</th><th>A</th><th>P%</th><th>S%</th><th>RATE</th></tr>
-                        ${stats.map(s => `<tr><td style="padding:10px 0;">${s.month}</td><td>${s.g}</td><td>${s.a}</td><td>${s.pass}%</td><td>${s.shot}%</td><td>${s.rate}</td></tr>`).join('')}
-                    </table>
-                </div>
-            `;
-            setLoad(100);
-        }
-
-        async function fetchAwards() {
-            const { data } = await _supabase.from('awards').select('*');
-            const display = document.getElementById('awards-display');
-            display.innerHTML = data.map(a => `
-                <div class="card" style="background:var(--gray); border-radius:15px; margin-bottom:15px; text-align:center; padding:15px;">
-                    <h4 style="color:var(--rm-blue); margin-top:0;">${a.type}</h4>
-                    ${a.img_vid_url.includes('.mp4') ? `<video controls style="width:100%; border-radius:10px;"><source src="${a.img_vid_url}"></video>` : `<img src="${a.img_vid_url}" style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid var(--rm-gold);">`}
-                    <h3>${a.name}</h3>
-                </div>
-            `).join('');
-        }
-
-        // --- ADMIN FUNCTIONS (CRUD) ---
-        async function refreshAdminLists() {
-            // Players List
-            const { data: players } = await _supabase.from('players').select('*');
-            document.getElementById('manage-players-list').innerHTML = `
-                <table class="admin-table">
-                    <tr><th>Name</th><th>Action</th></tr>
-                    ${players.map(p => `<tr><td>${p.name}</td><td><span class="btn-edit" onclick="editPlayer('${p.id}')">Edit</span><span class="btn-delete" onclick="deleteItem('players', '${p.id}')">Del</span></td></tr>`).join('')}
-                </table>`;
-            
-            // News List
-            const { data: news } = await _supabase.from('news').select('*');
-            document.getElementById('manage-news-list').innerHTML = `
-                <table class="admin-table">
-                    <tr><th>Title</th><th>Action</th></tr>
-                    ${news.map(n => `<tr><td>${n.title}</td><td><span class="btn-edit" onclick="editNews('${n.id}')">Edit</span><span class="btn-delete" onclick="deleteItem('news', '${n.id}')">Del</span></td></tr>`).join('')}
-                </table>`;
-
-            // Stats List
-            const { data: stats } = await _supabase.from('stats').select('*, players(name)');
-            document.getElementById('manage-stats-list').innerHTML = `
-                <table class="admin-table">
-                    <tr><th>Player</th><th>Month</th><th>Action</th></tr>
-                    ${stats.map(s => `<tr><td>${s.players.name}</td><td>${s.month}</td><td><span class="btn-edit" onclick="editStats('${s.id}')">Edit</span><span class="btn-delete" onclick="deleteItem('stats', '${s.id}')">Del</span></td></tr>`).join('')}
-                </table>`;
-        }
-
-        async function savePlayer() {
-            const id = document.getElementById('edit-player-id').value;
-            const imgFile = document.getElementById('adm-p-img').files[0];
-            let imgUrl = null;
-            if(imgFile) imgUrl = await uploadFile(imgFile);
-
-            const p = {
-                name: document.getElementById('adm-p-name').value,
-                nationality: document.getElementById('adm-p-nat').value,
-                dob: document.getElementById('adm-p-dob').value,
-                num: document.getElementById('adm-p-num').value,
-                pos: document.getElementById('adm-p-pos').value
-            };
-            if(imgUrl) p.img = imgUrl;
-
-            if(id) await _supabase.from('players').update(p).eq('id', id);
-            else await _supabase.from('players').insert(p);
-            alert("Player Saved"); refreshAdminLists();
-        }
-
-        async function editPlayer(id) {
-            const { data: p } = await _supabase.from('players').select('*').eq('id', id).single();
-            document.getElementById('edit-player-id').value = p.id;
-            document.getElementById('adm-p-name').value = p.name;
-            document.getElementById('adm-p-nat').value = p.nationality;
-            document.getElementById('adm-p-dob').value = p.dob;
-            document.getElementById('adm-p-num').value = p.num;
-            document.getElementById('adm-p-pos').value = p.pos;
+        function showSection(id) {
+            document.querySelectorAll('section').forEach(s => s.classList.remove('active-section'));
+            document.getElementById('sec-' + id).classList.add('active-section');
+            document.querySelectorAll('.nav-main li').forEach(li => li.classList.remove('active'));
+            document.getElementById('m-' + id).classList.add('active');
             window.scrollTo(0,0);
         }
 
-        async function deleteItem(table, id) {
-            if(confirm("Are you sure?")) {
-                await _supabase.from(table).delete().eq('id', id);
-                refreshAdminLists(); loadData();
-            }
+        function toggleLang() {
+            currLang = currLang === 'en' ? 'ar' : 'en';
+            document.getElementById('html-tag').dir = currLang === 'ar' ? 'rtl' : 'ltr';
+            updateUI();
         }
 
-        // --- HELPER FUNCTIONS ---
-        async function uploadFile(file) {
-            const path = `media/${Date.now()}_${file.name}`;
-            await _supabase.storage.from('media').upload(path, file);
-            return SB_URL + "/storage/v1/object/public/media/" + path;
+        function updateUI() {
+            const t = i18n[currLang];
+            document.getElementById('m-home').innerText = t.home;
+            document.getElementById('m-squad').innerText = t.squad;
+            document.getElementById('m-awards').innerText = t.awards;
+            document.getElementById('m-partners').innerText = t.partners;
+            document.getElementById('n-badge').innerText = t.nBadge;
+            document.getElementById('n-title').innerText = t.nTitle;
+            document.getElementById('n-desc').innerText = t.nDesc;
+            document.getElementById('t-squad').innerText = t.tSquad;
+            document.getElementById('t-awards').innerText = t.tAwards;
+            document.getElementById('t-partners').innerText = t.tPartners;
+            document.getElementById('potm-h').innerText = t.potmH;
+            document.getElementById('gotm-h').innerText = t.gotmH;
+            sortAndRender();
         }
 
-        function setLoad(p) { document.getElementById('loader').style.width = p + "%"; if(p >= 100) setTimeout(() => document.getElementById('loader').style.width = "0%", 300); }
-        function toggleLang() { currLang = currLang === 'en' ? 'ar' : 'en'; document.getElementById('html-tag').dir = currLang === 'ar' ? 'rtl' : 'ltr'; loadData(); }
-        function closePlayer() { document.getElementById('player-view').style.display = 'none'; }
+        function handleSort() { sortAndRender(); }
 
-        // --- Initialize ---
-        applyLangStatic();
-        function applyLangStatic() { /* Add static translation for buttons here if needed */ }
+        function sortAndRender() {
+            const val = document.getElementById('sort-select').value;
+            if(val === 'rating') players.sort((a,b) => (getAvgOVR(b) === "--" ? 0 : getAvgOVR(b)) - (getAvgOVR(a) === "--" ? 0 : getAvgOVR(a)));
+            else players.sort((a,b) => a.name.localeCompare(b.name));
+            
+            const list = document.getElementById('squad-list');
+            list.innerHTML = players.map(p => `
+                <div class="player-card" onclick="viewPlayer(${p.id})">
+                    <div class="p-img-box">
+                        <div class="p-number-overlay">${p.num}</div>
+                        <img src="${p.img}" onerror="this.src='logo.png'">
+                        <div class="p-ovr-badge">${getAvgOVR(p)}</div>
+                    </div>
+                    <div class="p-info">
+                        <span>${p.pos}</span>
+                        <h4>${p.name}</h4>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function viewPlayer(id) {
+            const p = players.find(x => x.id === id);
+            const t = i18n[currLang];
+            
+            let statsTableRows = p.stats.map(s => `
+                <tr>
+                    <td>${s.month}</td>
+                    <td>${s.m}</td>
+                    <td>${s.g}</td>
+                    <td>${s.a}</td>
+                    <td>${s.mo}</td>
+                    <td>${s.p}%</td>
+                    <td>${s.s}%</td>
+                    <td>${s.w}%</td>
+                    <td style="color:var(--rm-gold)">${s.ovr}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('pv-body').innerHTML = `
+                <div class="pv-grid">
+                    <div class="pv-img" style="background-image:url('${p.img}')"></div>
+                    <div class="pv-data">
+                        <div style="color:var(--rm-gold); font-weight:bold; font-size:22px;">#${p.num} | ${p.pos}</div>
+                        <h2 style="font-size:clamp(40px, 6vw, 70px); margin:0; text-transform:uppercase; font-family:Oswald;">${p.name}</h2>
+                        <div class="big-ovr">${getAvgOVR(p)}</div>
+                        <p style="font-size:18px; line-height:1.6; opacity:0.8; margin-bottom:30px;">
+                            ${p.bio ? t[p.bio] : (p.status || '')}
+                        </p>
+                        
+                        <div style="overflow-x:auto">
+                            <table class="month-stat-table">
+                                <thead>
+                                    <tr>
+                                        <th>${t.month}</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.mo}</th><th>${t.p}</th><th>${t.s}</th><th>${t.w}</th><th>${t.ovr}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>${statsTableRows || '<tr><td colspan="9" style="text-align:center">No Stats Available</td></tr>'}</tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('player-view').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePlayer() {
+            document.getElementById('player-view').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onload = updateUI;
     </script>
 </body>
 </html>
