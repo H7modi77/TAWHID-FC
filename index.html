@@ -1,369 +1,364 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" id="html-tag">
+<html lang="ar" dir="rtl" id="app-html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TAWHID FC | STATS & PERFORMANCE</title>
+    <title>TAWHID2 FC | PRO CLUBS HUB</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Oswald:wght@500;700&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@400;700;900&family=Montserrat:wght@300;400;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --rm-blue: #001b4c;
-            --rm-gold: #e4c35a;
-            --rm-gray: #f4f4f4;
-            --white: #ffffff;
-            --text-dark: #111;
+            --primary: #001b4c;
+            --accent: #e4c35a;
+            --dark: #050a15;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --win: #00ff88;
+            --loss: #ff3e3e;
+            --draw: #888;
         }
 
-        [dir="rtl"] { font-family: 'Cairo', sans-serif; }
-        [dir="ltr"] { font-family: 'Montserrat', sans-serif; }
+        * { box-sizing: border-box; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); -webkit-tap-highlight-color: transparent; }
+        body { 
+            margin: 0; background: var(--dark); color: white; 
+            font-family: 'Montserrat', 'Cairo', sans-serif; 
+            overflow-x: hidden; padding-bottom: 80px;
+        }
 
-        * { box-sizing: border-box; transition: 0.3s; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; background: var(--white); color: var(--text-dark); overflow-x: hidden; }
+        /* --- UI Components --- */
+        .header {
+            background: linear-gradient(to bottom, var(--primary), transparent);
+            padding: 20px; text-align: center; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px);
+        }
+        .header img { height: 45px; filter: drop-shadow(0 0 10px var(--accent)); cursor: pointer; }
 
-        /* Navigation: Real Madrid Style */
-        .navbar { background: var(--white); position: sticky; top: 0; z-index: 2000; border-bottom: 1px solid #eee; }
-        .nav-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 40px; border-bottom: 4px solid var(--rm-blue); }
-        .nav-top img { height: 50px; cursor: pointer; }
-        
-        .nav-main { display: flex; justify-content: center; background: var(--white); padding: 0; list-style: none; margin: 0; overflow-x: auto; }
-        .nav-main li { padding: 15px 25px; font-weight: 900; font-size: 13px; text-transform: uppercase; cursor: pointer; color: var(--rm-blue); border-bottom: 3px solid transparent; white-space: nowrap; }
-        .nav-main li.active { border-bottom-color: var(--rm-gold); background: var(--rm-gray); }
+        .nav-bar {
+            position: fixed; bottom: 0; width: 100%; background: rgba(5, 15, 30, 0.95);
+            display: flex; justify-content: space-around; padding: 12px;
+            border-top: 1px solid var(--accent); z-index: 2000; backdrop-filter: blur(10px);
+        }
+        .nav-item { color: #666; font-size: 1.3rem; cursor: pointer; text-align: center; }
+        .nav-item.active { color: var(--accent); transform: translateY(-5px); text-shadow: 0 0 10px var(--accent); }
+        .nav-item span { display: block; font-size: 9px; font-weight: bold; margin-top: 4px; }
 
-        .lang-btn { background: var(--rm-blue); color: white; border: none; padding: 6px 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 11px; }
-
-        /* Sections */
-        section { display: none; animation: fadeIn 0.4s ease; }
+        section { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
         .active-section { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Home (News) */
-        .hero-news { position: relative; height: 70vh; background: var(--rm-blue); color: white; display: flex; align-items: flex-end; }
-        .hero-news img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
-        .hero-content { position: relative; z-index: 10; padding: 60px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); width: 100%; }
-        .hero-content .badge { background: var(--rm-gold); color: var(--rm-blue); padding: 4px 12px; font-weight: 900; font-size: 12px; display: inline-block; margin-bottom: 15px; }
-        .hero-content h1 { font-size: clamp(30px, 5vw, 55px); margin: 0; font-family: 'Oswald'; text-transform: uppercase; line-height: 1; }
+        .card { background: var(--card-bg); border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .big-val { font-family: 'Orbitron'; font-size: 2.2rem; color: var(--accent); display: block; }
+        .label { font-size: 11px; color: #aaa; text-transform: uppercase; }
 
-        /* Squad Page */
-        .container { max-width: 1200px; margin: auto; padding: 40px 20px; }
-        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 2px solid var(--rm-gray); padding-bottom: 15px; }
-        .page-title { font-size: 30px; text-transform: uppercase; font-family: 'Oswald'; margin: 0; border-left: 5px solid var(--rm-blue); padding-left: 15px; }
-        [dir="rtl"] .page-title { border-left: 0; border-right: 5px solid var(--rm-blue); padding-left: 0; padding-right: 15px; }
-
-        .squad-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; }
-        .player-card { background: var(--white); border-bottom: 2px solid #eee; cursor: pointer; position: relative; }
-        .player-card:hover { transform: translateY(-10px); }
-        .p-img-box { background: var(--rm-gray); height: 350px; position: relative; overflow: hidden; }
-        .p-img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .p-number-overlay { position: absolute; top: 10px; left: 15px; font-size: 70px; font-weight: 900; color: rgba(0,0,0,0.06); font-family: 'Oswald'; line-height: 1; }
-        .p-ovr-badge { position: absolute; bottom: 0; right: 0; background: var(--rm-blue); color: var(--rm-gold); padding: 10px 15px; font-family: 'Oswald'; font-weight: 900; font-size: 24px; }
-        .p-info { padding: 20px 0; }
-        .p-info span { color: #888; font-weight: bold; font-size: 13px; text-transform: uppercase; }
-        .p-info h4 { margin: 5px 0 0; font-size: 22px; text-transform: uppercase; font-weight: 900; color: var(--rm-blue); }
-
-        /* Awards Page */
-        .award-box { background: var(--rm-gray); display: flex; flex-wrap: wrap; align-items: center; margin-bottom: 30px; }
-        .award-media { flex: 1; min-width: 300px; }
-        .award-media img, .award-media video { width: 100%; display: block; }
-        .award-text { flex: 1; padding: 40px; text-align: center; }
-        .award-text h2 { font-family: 'Oswald'; font-size: 35px; color: var(--rm-blue); text-transform: uppercase; }
-
-        /* Partners */
-        .partners-flex { display: flex; justify-content: center; gap: 60px; padding: 80px 0; flex-wrap: wrap; }
-        .partners-flex img { height: 60px; filter: grayscale(1); opacity: 0.5; }
-        .partners-flex img:hover { filter: grayscale(0); opacity: 1; }
-
-        /* Player Details Overlay */
-        .player-overlay { position: fixed; inset: 0; background: var(--white); z-index: 3000; display: none; overflow-y: auto; }
-        .pv-grid { display: grid; grid-template-columns: 1fr 1.5fr; min-height: 100vh; }
-        .pv-img { background-size: cover; background-position: center top; background-color: var(--rm-gray); }
-        .pv-data { padding: 60px; background: var(--rm-blue); color: white; }
-        .close-pv { position: fixed; top: 30px; right: 30px; font-size: 45px; color: white; cursor: pointer; z-index: 3100; text-shadow: 0 0 10px #000; }
-        
-        .big-ovr { font-size: 100px; font-weight: 900; color: var(--rm-gold); font-family: 'Oswald'; line-height: 1; margin: 20px 0; }
-        .month-stat-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
-        .month-stat-table th { background: rgba(0,0,0,0.2); padding: 12px; text-align: left; font-size: 12px; text-transform: uppercase; color: var(--rm-gold); }
-        .month-stat-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 14px; font-weight: bold; }
-        [dir="rtl"] .month-stat-table th { text-align: right; }
-
-        @media (max-width: 768px) {
-            .nav-top { padding: 10px 20px; }
-            .pv-grid { grid-template-columns: 1fr; }
-            .pv-img { height: 40vh; }
-            .pv-data { padding: 30px 20px; }
-            .big-ovr { font-size: 70px; }
-            .month-stat-table { font-size: 11px; }
+        /* --- Player List --- */
+        .player-row {
+            display: flex; align-items: center; background: var(--card-bg); 
+            padding: 12px; border-radius: 12px; margin-bottom: 10px; gap: 15px;
+            border-left: 4px solid var(--accent); cursor: pointer;
         }
+        .p-img { width: 50px; height: 50px; border-radius: 10px; background: #222; object-fit: cover; }
+        .p-ovr { background: var(--accent); color: #000; font-family: 'Orbitron'; padding: 4px 8px; border-radius: 6px; font-weight: 900; }
+
+        /* --- Detailed Player Stats --- */
+        .overlay { position: fixed; inset: 0; background: var(--dark); z-index: 4000; display: none; overflow-y: auto; padding: 20px; }
+        .stat-group { margin-bottom: 25px; }
+        .stat-group h3 { color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 5px; font-family: 'Orbitron'; }
+        .stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
+
+        /* --- Match History --- */
+        .match-card { border-right: 5px solid #888; }
+        .w-border { border-right-color: var(--win); }
+        .l-border { border-right-color: var(--loss); }
+
+        .lang-switch { background: var(--accent); color: #000; border: none; padding: 5px 12px; border-radius: 15px; font-weight: 900; font-size: 12px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="nav-top">
-            <img src="logo.png" alt="TAWHID FC" onclick="showSection('home')">
-            <button class="lang-btn" onclick="toggleLang()">EN / عربي</button>
-        </div>
-        <ul class="nav-main">
-            <li id="m-home" class="active" onclick="showSection('home')">Home</li>
-            <li id="m-squad" onclick="showSection('squad')">Team</li>
-            <li id="m-awards" onclick="showSection('awards')">Awards</li>
-            <li id="m-partners" onclick="showSection('partners')">Partners</li>
-        </ul>
-    </nav>
+    <header class="header">
+        <img src="logo.png" onclick="showSec('home')" onerror="this.src='https://cdn-icons-png.flaticon.com/512/824/824727.png'">
+        <div style="font-family: Orbitron; font-weight: 900; color: white; margin-top: 5px;">TAWHID2 FC</div>
+        <button class="lang-switch" onclick="toggleLang()">EN</button>
+    </header>
 
-    <!-- NEWS (HOME) -->
+    <!-- SECTION 1: DASHBOARD (OVERVIEW) -->
     <section id="sec-home" class="active-section">
-        <div class="hero-news">
-            <img src="h7modi07.png" alt="New Arrival">
-            <div class="hero-content">
-                <span class="badge" id="n-badge">OFFICIAL STATEMENT</span>
-                <h1 id="n-title">WELCOMING H7modi_07 TO TAWHID FC</h1>
-                <p id="n-desc">A new era begins today as our latest creative midfielder joins the squad.</p>
+        <div class="card" style="text-align: center; background: linear-gradient(135deg, var(--primary), #000);">
+            <span class="label" id="lbl-skill">التقييم المهاري</span>
+            <span class="big-val">1807</span>
+            <div style="display: flex; justify-content: space-around; margin-top: 15px;">
+                <div><span class="label" id="lbl-rank">الترتيب</span><br><b>#100+</b></div>
+                <div><span class="label" id="lbl-div">أفضل قسم</span><br><b>Div 2</b></div>
+                <div><span class="label" id="lbl-rep">السمعة</span><br><b>Tier 2</b></div>
             </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="card"><span class="label" id="lbl-total-m">المباريات</span><span class="big-val" style="font-size: 1.5rem;">431</span></div>
+            <div class="card"><span class="label" id="lbl-win-rate">نسبة الفوز</span><span class="big-val" style="font-size: 1.5rem; color: var(--win);">45%</span></div>
+        </div>
+
+        <h3 class="label" style="margin-top: 10px;" id="lbl-lifetime">إحصائيات الدوري الكلية</h3>
+        <div class="card">
+            <div class="stat-row"><span id="lbl-wins">فوز</span><b style="color:var(--win)">195</b></div>
+            <div class="stat-row"><span id="lbl-draws">تعادل</span><b>56</b></div>
+            <div class="stat-row"><span id="lbl-losses">خسارة</span><b style="color:var(--loss)">180</b></div>
+            <div class="stat-row"><span id="lbl-goals">أهداف مسجلة</span><b>1480</b></div>
+            <div class="stat-row"><span id="lbl-conceded">أهداف مستقبلة</span><b>1450</b></div>
+            <div class="stat-row"><span id="lbl-diff">فارق الأهداف</span><b style="color:var(--win)">+30</b></div>
         </div>
     </section>
 
-    <!-- SQUAD (TEAM) -->
+    <!-- SECTION 2: SQUAD (PLAYERS) -->
     <section id="sec-squad">
-        <div class="container">
-            <div class="page-header">
-                <h2 class="page-title" id="t-squad">FIRST TEAM SQUAD</h2>
-                <select id="sort-select" onchange="handleSort()" style="padding:10px; font-weight:bold;">
-                    <option value="rating">RATING</option>
-                    <option value="name">NAME</option>
-                </select>
-            </div>
-            <div class="squad-grid" id="squad-list"></div>
+        <h3 id="lbl-squad-title">التشكيلة الذهبية (7 لاعبين)</h3>
+        <div id="player-list-ui"></div>
+    </section>
+
+    <!-- SECTION 3: ANALYTICS (AI) -->
+    <section id="sec-ai">
+        <h3 id="lbl-ai-title">مركز التحليل المتقدم</h3>
+        <div class="card" style="border: 1px solid var(--accent);">
+            <h4 id="lbl-carry-title">🎒 تصنيف "من يحمل الفريق" (Carry Score)</h4>
+            <div id="carry-ui"></div>
+        </div>
+        <div class="card">
+            <h4 id="lbl-padder-title">📊 كاشف تضخيم الإحصائيات (Stat Padder)</h4>
+            <div id="padder-ui"></div>
         </div>
     </section>
 
-    <!-- AWARDS -->
+    <!-- SECTION 4: MATCH HISTORY -->
+    <section id="sec-matches">
+        <h3 id="lbl-match-title">تاريخ المعارك الأخيرة</h3>
+        <div id="match-ui"></div>
+    </section>
+
+    <!-- SECTION 5: ACHIEVEMENTS -->
     <section id="sec-awards">
-        <div class="container">
-            <h2 class="page-title" id="t-awards">RECOGNITIONS</h2>
-            <div style="margin-top:30px;">
-                <div class="award-box">
-                    <div class="award-text">
-                        <h2 id="potm-h">PLAYER OF THE MONTH</h2>
-                        <p id="potm-n">Excellence in Performance</p>
-                    </div>
-                    <div class="award-media">
-                        <img src="award-player.png" onerror="this.src='logo.png'">
-                    </div>
-                </div>
-                <div class="award-box" style="flex-direction: row-reverse;">
-                    <div class="award-text">
-                        <h2 id="gotm-h">GOAL OF THE MONTH</h2>
-                        <p id="gotm-n">Most Remarkable Finish</p>
-                    </div>
-                    <div class="award-media">
-                        <video controls poster="award-goal.png"><source src="goal-video.mp4"></video>
-                    </div>
-                </div>
-            </div>
+        <h3 id="lbl-award-title">خزانة الإنجازات</h3>
+        <div class="card" style="text-align: center;">
+            <span class="big-val" style="font-size: 4rem;">98</span>
+            <span class="label">إجمالي الميداليات</span>
+        </div>
+        <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="card"><b>2</b><br><small>Legendary</small></div>
+            <div class="card"><b>24</b><br><small>Epic</small></div>
+            <div class="card"><b>30</b><br><small>Rare</small></div>
+            <div class="card"><b>42</b><br><small>Common</small></div>
         </div>
     </section>
 
-    <!-- PARTNERS -->
-    <section id="sec-partners">
-        <div class="container">
-            <h2 class="page-title" id="t-partners">OFFICIAL PARTNERS</h2>
-            <div class="partners-flex">
-                <img src="sponsor1.png">
-                <img src="sponsor2.png">
-            </div>
-        </div>
-    </section>
-
-    <!-- PLAYER OVERLAY -->
-    <div id="player-view" class="player-overlay">
-        <span class="close-pv" onclick="closePlayer()">&times;</span>
-        <div id="pv-body"></div>
+    <!-- PLAYER OVERLAY (MODAL) -->
+    <div id="p-overlay" class="overlay">
+        <button onclick="closePlayer()" style="background: var(--accent); border:none; padding:10px 20px; border-radius:10px; font-weight:900; position:sticky; top:0; z-index:5000;">BACK / عودة</button>
+        <div id="p-detail-content"></div>
     </div>
 
+    <!-- NAVIGATION BAR -->
+    <nav class="nav-bar">
+        <div class="nav-item active" onclick="showSec('home', this)"><i class="fas fa-home"></i><span id="nav-h">الرئيسية</span></div>
+        <div class="nav-item" onclick="showSec('squad', this)"><i class="fas fa-users"></i><span id="nav-s">الفريق</span></div>
+        <div class="nav-item" onclick="showSec('ai', this)"><i class="fas fa-brain"></i><span id="nav-a">التحليل</span></div>
+        <div class="nav-item" onclick="showSec('matches', this)"><i class="fas fa-history"></i><span id="nav-m">المباريات</span></div>
+        <div class="nav-item" onclick="showSec('awards', this)"><i class="fas fa-medal"></i><span id="nav-aw">الجوائز</span></div>
+    </nav>
+
     <script>
-        let currLang = 'en';
+        const clubData = {
+            players: [
+                {
+                    name: "ALMOUSA3M", img: "almousa3m.png", ovr: 89, pos: "FORWARD", height: "190 CM",
+                    gen: { games: 316, winP: 50, rating: 8.0, motm: 61 },
+                    atk: { goals: 352, gpm: 1.11, shotS: 38, assists: 337, apm: 1.07, gapm: 2.18 },
+                    team: { passes: 5128, ppm: 16.23, passS: 77 },
+                    def: { red: 6, tackles: 204, tackS: 8, defCS: 0, gkCS: 1 },
+                    ai: { carry: 85, padder: "Legit ✅" }
+                },
+                {
+                    name: "H2SSAIN_28", img: "h2ssain28.png", ovr: 87, pos: "FORWARD", height: "186 CM",
+                    gen: { games: 349, winP: 44, rating: 7.4, motm: 26 },
+                    atk: { goals: 341, gpm: 0.98, shotS: 29, assists: 246, apm: 0.70, gapm: 1.68 },
+                    team: { passes: 3575, ppm: 10.24, passS: 74 },
+                    def: { red: 10, tackles: 145, tackS: 3, defCS: 0, gkCS: 0 },
+                    ai: { carry: 64, padder: "Padder 📊" }
+                },
+                {
+                    name: "M-_-_-_-11_11", img: "m1111.png", ovr: 80, pos: "MIDFIELDER", height: "175 CM",
+                    gen: { games: 382, winP: 46, rating: 8.1, motm: 63 },
+                    atk: { goals: 218, gpm: 0.57, shotS: 33, assists: 237, apm: 0.62, gapm: 1.19 },
+                    team: { passes: 5744, ppm: 15.04, passS: 75 },
+                    def: { red: 11, tackles: 361, tackS: 21, defCS: 1, gkCS: 0 },
+                    ai: { carry: 72, padder: "Padder 📊" }
+                },
+                {
+                    name: "H7MODI_77", img: "logo.png", ovr: 80, pos: "MIDFIELDER", height: "162 CM",
+                    gen: { games: 237, winP: 47, rating: 8.0, motm: 36 },
+                    atk: { goals: 116, gpm: 0.49, shotS: 37, assists: 165, apm: 0.70, gapm: 1.19 },
+                    team: { passes: 3673, ppm: 15.50, passS: 75 },
+                    def: { red: 32, tackles: 398, tackS: 9, defCS: 0, gkCS: 0 },
+                    ai: { carry: 70, padder: "Legit ✅" }
+                },
+                {
+                    name: "BASABESO2", img: "basabeso2.png", ovr: 86, pos: "FORWARD", height: "185 CM",
+                    gen: { games: 292, winP: 48, rating: 7.3, motm: 20 },
+                    atk: { goals: 168, gpm: 0.58, shotS: 39, assists: 89, apm: 0.30, gapm: 0.88 },
+                    team: { passes: 3082, ppm: 10.55, passS: 85 },
+                    def: { red: 13, tackles: 280, tackS: 28, defCS: 4, gkCS: 0 },
+                    ai: { carry: 48, padder: "Padder 📊" }
+                },
+                {
+                    name: "YO0OUSEF25", img: "yo0ousef25.png", ovr: 86, pos: "FORWARD", height: "175 CM",
+                    gen: { games: 256, winP: 43, rating: 6.9, motm: 8 },
+                    atk: { goals: 148, gpm: 0.58, shotS: 44, assists: 58, apm: 0.23, gapm: 0.80 },
+                    team: { passes: 2485, ppm: 9.71, passS: 76 },
+                    def: { red: 11, tackles: 117, tackS: 7, defCS: 0, gkCS: 0 },
+                    ai: { carry: 38, padder: "High Padder 📊" }
+                },
+                {
+                    name: "H7MODI_07", img: "h7modi07.png", ovr: 80, pos: "FORWARD", height: "162 CM",
+                    gen: { games: 115, winP: 45, rating: 7.3, motm: 10 },
+                    atk: { goals: 38, gpm: 0.33, shotS: 27, assists: 50, apm: 0.43, gapm: 0.77 },
+                    team: { passes: 1511, ppm: 13.14, passS: 75 },
+                    def: { red: 14, tackles: 170, tackS: 8, defCS: 0, gkCS: 0 },
+                    ai: { carry: 44, padder: "Suspicious 📊" }
+                }
+            ],
+            matches: [
+                { res: "W", score: "7-6", opp: "Vobber V2", date: "1 Aug", scorers: "H2SSAIN_28 (4), H7modi_07 (3)" },
+                { res: "L", score: "3-4", opp: "AL Zulfi", date: "1 Aug", scorers: "Basabeso2, H2SSAIN_28, H7modi_07" },
+                { res: "W", score: "3-1", opp: "Zhaymr", date: "1 Aug", scorers: "H2SSAIN_28 (2), yo0ousef25" },
+                { res: "L", score: "1-7", opp: "ALSAWALiHA Team", date: "1 Aug", scorers: "M11" },
+                { res: "D", score: "2-2", opp: "Last breath fc0", date: "1 Aug", scorers: "M11, H7modi_07" }
+            ]
+        };
 
         const i18n = {
-            en: {
-                home: "Home", squad: "Team", awards: "Awards", partners: "Partners",
-                nBadge: "OFFICIAL STATEMENT", nTitle: "WELCOMING H7modi_07 TO TAWHID FC", nDesc: "A new midfield maestro has arrived to the family.",
-                tSquad: "FIRST TEAM SQUAD", tAwards: "RECOGNITIONS", tPartners: "OFFICIAL PARTNERS",
-                potmH: "PLAYER OF THE MONTH", gotmH: "GOAL OF THE MONTH",
-                m: "M", g: "G", a: "A", p: "Pass%", s: "Shot%", mo: "MOTM", w: "Win%", ovr: "OVR",
-                month: "Month", 
-                bio_Almousa3m: "The top scorer in the history of the club. An unstoppable goal machine."
-            },
             ar: {
-                home: "الرئيسية", squad: "الفريق", awards: "الجوائز", partners: "الشركاء",
-                nBadge: "بيان رسمي", nTitle: "الترحيب باللاعب H7modi_07", nDesc: "فرد جديد ينضم لخط وسط الفريق لتعزيز قوتنا.",
-                tSquad: "قائمة الفريق الأول", tAwards: "الجوائز والتقديرات", tPartners: "الرعاة الرسميون",
-                potmH: "لاعب الشهر", gotmH: "هدف الشهر",
-                m: "مب", g: "أه", a: "أس", p: "تمرير", s: "تسديد", mo: "رجل", w: "فوز%", ovr: "تقييم",
-                month: "الشهر",
-                bio_Almousa3m: "الهداف التاريخي للنادي. ماكينة أهداف لا تتوقف عن التسجيل."
+                skill: "التقييم المهاري", rank: "الترتيب العالمي", div: "أفضل قسم", rep: "السمعة", totalM: "إجمالي المباريات",
+                winRate: "نسبة الفوز", lifetime: "إحصائيات الدوري الكلية", wins: "فوز", draws: "تعادل", losses: "خسارة",
+                goals: "أهداف مسجلة", conceded: "أهداف مستقبلة", diff: "فارق الأهداف", squadTitle: "قائمة الأساطير",
+                aiTitle: "مركز التحليل الذكي", carryTitle: "من يحمل الفريق (Carry Score)", padderTitle: "كاشف التضخيم",
+                matchTitle: "سجل المباريات", awardTitle: "خزانة الجوائز",
+                navH: "الرئيسية", navS: "الفريق", navA: "التحليل", navM: "المباريات", navAw: "الجوائز"
+            },
+            en: {
+                skill: "Skill Rating", rank: "Global Rank", div: "Best Division", rep: "Reputation", totalM: "Total Matches",
+                winRate: "Win Rate", lifetime: "League Stats Overview", wins: "Wins", draws: "Draws", losses: "Losses",
+                goals: "Goals Scored", conceded: "Goals Against", diff: "Goal Difference", squadTitle: "The Legendary Squad",
+                aiTitle: "AI Performance Center", carryTitle: "Carry Ranking (Backpack)", padderTitle: "Stat Padder Detector",
+                matchTitle: "Battle History", awardTitle: "Achievement Hall",
+                navH: "Home", navS: "Squad", navA: "Analysis", navM: "Matches", navAw: "Awards"
             }
         };
 
-        const players = [
-            { id: 3, num: 78, name: "Almousa3M", pos: "ST", img: "almousa3m.png", bio: "bio_Almousa3m", 
-                stats: [
-                    {month: "October", m: 58, g: 65, a: 61, p: 78, s: 33, mo: 18, w: 60, ovr: 94},
-                    {month: "November", m: 57, g: 67, a: 72, p: 77, s: 33, mo: 15, w: 53, ovr: 95},
-                    {month: "January", m: 126, g: 161, a: 146, p: 77, s: 40, mo: 24, w: 49, ovr: 93}
-                ]
-            },
-            { id: 2, num: 8, name: "M-_-_-_-11_11", pos: "CM", img: "m1111.png", 
-                stats: [
-                    {month: "October", m: 68, g: 38, a: 43, p: 81, s: 27, mo: 9, w: 57, ovr: 90},
-                    {month: "November", m: 86, g: 48, a: 58, p: 74, s: 29, mo: 10, w: 54, ovr: 92},
-                    {month: "January", m: 158, g: 112, a: 113, p: 75, s: 34, mo: 33, w: 46, ovr: 91}
-                ]
-            },
-            { id: 6, num: 2, name: "Basabeso", pos: "CB", img: "basabeso2.png", 
-                stats: [
-                    {month: "October", m: 48, g: 36, a: 17, p: 84, s: 40, mo: 7, w: 62, ovr: 89},
-                    {month: "November", m: 75, g: 54, a: 22, p: 86, s: 39, mo: 9, w: 57, ovr: 91},
-                    {month: "January", m: 91, g: 84, a: 43, p: 85, s: 41, mo: 5, w: 49, ovr: 90}
-                ]
-            },
-            { id: 4, num: 28, name: "H2ssain_28", pos: "ST", img: "h2ssain28.png", 
-                stats: [
-                    {month: "October", m: 44, g: 36, a: 15, p: 76, s: 23, mo: 1, w: 56, ovr: 88},
-                    {month: "November", m: 64, g: 59, a: 48, p: 77, s: 25, mo: 8, w: 51, ovr: 90},
-                    {month: "January", m: 146, g: 144, a: 72, p: 73, s: 28, mo: 9, w: 44, ovr: 89}
-                ]
-            },
-            { id: 1, num: 7, name: "H7modi_77", pos: "LW", img: "logo.png", status: "Out 15/04/2026",
-                stats: [
-                    {month: "October", m: 45, g: 14, a: 368, p: 79, s: 33, mo: 2, w: 62, ovr: 87},
-                    {month: "November", m: 77, g: 52, a: 54, p: 76, s: 43, mo: 9, w: 51, ovr: 89},
-                    {month: "January", m: 116, g: 44, a: 85, p: 75, s: 38, mo: 19, w: 47, ovr: 88}
-                ]
-            },
-            { id: 5, num: 29, name: "Yo0ousef25", pos: "RW", img: "yo0ousef25.png", 
-                stats: [
-                    {month: "October", m: 28, g: 23, a: 5, p: 78, s: 46, mo: 0, w: 67, ovr: 84},
-                    {month: "November", m: 26, g: 21, a: 8, p: 78, s: 52, mo: 3, w: 58, ovr: 86},
-                    {month: "January", m: 99, g: 57, a: 17, p: 74, s: 47, mo: 0, w: 43, ovr: 85}
-                ]
-            },
-            { id: 7, num: 7, name: "H7modi_07", pos: "CAM", img: "h7modi07.png", status: "Joined 20/04/2026", stats: [] }
-        ];
-
-        function getAvgOVR(p) {
-            if(!p.stats || p.stats.length === 0) return "--";
-            let total = 0;
-            p.stats.forEach(s => total += s.ovr);
-            return Math.round(total / p.stats.length);
-        }
-
-        function showSection(id) {
-            document.querySelectorAll('section').forEach(s => s.classList.remove('active-section'));
-            document.getElementById('sec-' + id).classList.add('active-section');
-            document.querySelectorAll('.nav-main li').forEach(li => li.classList.remove('active'));
-            document.getElementById('m-' + id).classList.add('active');
-            window.scrollTo(0,0);
-        }
+        let curLang = 'ar';
 
         function toggleLang() {
-            currLang = currLang === 'en' ? 'ar' : 'en';
-            document.getElementById('html-tag').dir = currLang === 'ar' ? 'rtl' : 'ltr';
+            curLang = curLang === 'ar' ? 'en' : 'ar';
+            document.getElementById('app-html').dir = curLang === 'ar' ? 'rtl' : 'ltr';
+            document.querySelector('.lang-switch').innerText = curLang === 'ar' ? 'EN' : 'AR';
             updateUI();
         }
 
         function updateUI() {
-            const t = i18n[currLang];
-            document.getElementById('m-home').innerText = t.home;
-            document.getElementById('m-squad').innerText = t.squad;
-            document.getElementById('m-awards').innerText = t.awards;
-            document.getElementById('m-partners').innerText = t.partners;
-            document.getElementById('n-badge').innerText = t.nBadge;
-            document.getElementById('n-title').innerText = t.nTitle;
-            document.getElementById('n-desc').innerText = t.nDesc;
-            document.getElementById('t-squad').innerText = t.tSquad;
-            document.getElementById('t-awards').innerText = t.tAwards;
-            document.getElementById('t-partners').innerText = t.tPartners;
-            document.getElementById('potm-h').innerText = t.potmH;
-            document.getElementById('gotm-h').innerText = t.gotmH;
-            sortAndRender();
+            const t = i18n[curLang];
+            Object.keys(t).forEach(id => {
+                const el = document.getElementById('lbl-' + id) || document.getElementById(id);
+                if(el) el.innerText = t[id];
+            });
+            renderSquad();
+            renderMatches();
+            renderAI();
         }
 
-        function handleSort() { sortAndRender(); }
-
-        function sortAndRender() {
-            const val = document.getElementById('sort-select').value;
-            if(val === 'rating') players.sort((a,b) => (getAvgOVR(b) === "--" ? 0 : getAvgOVR(b)) - (getAvgOVR(a) === "--" ? 0 : getAvgOVR(a)));
-            else players.sort((a,b) => a.name.localeCompare(b.name));
-            
-            const list = document.getElementById('squad-list');
-            list.innerHTML = players.map(p => `
-                <div class="player-card" onclick="viewPlayer(${p.id})">
-                    <div class="p-img-box">
-                        <div class="p-number-overlay">${p.num}</div>
-                        <img src="${p.img}" onerror="this.src='logo.png'">
-                        <div class="p-ovr-badge">${getAvgOVR(p)}</div>
+        function renderSquad() {
+            const container = document.getElementById('player-list-ui');
+            container.innerHTML = clubData.players.map((p, idx) => `
+                <div class="player-row" onclick="viewPlayer(${idx})">
+                    <img src="${p.img}" class="p-img" onerror="this.src='logo.png'">
+                    <div style="flex-grow:1;">
+                        <b style="font-size:15px; color:var(--accent)">${p.name}</b><br>
+                        <small style="font-size:10px; opacity:0.6;">${p.pos} | ${p.height}</small>
                     </div>
-                    <div class="p-info">
-                        <span>${p.pos}</span>
-                        <h4>${p.name}</h4>
-                    </div>
+                    <div class="p-ovr">${p.ovr}</div>
                 </div>
             `).join('');
         }
 
-        function viewPlayer(id) {
-            const p = players.find(x => x.id === id);
-            const t = i18n[currLang];
-            
-            let statsTableRows = p.stats.map(s => `
-                <tr>
-                    <td>${s.month}</td>
-                    <td>${s.m}</td>
-                    <td>${s.g}</td>
-                    <td>${s.a}</td>
-                    <td>${s.mo}</td>
-                    <td>${s.p}%</td>
-                    <td>${s.s}%</td>
-                    <td>${s.w}%</td>
-                    <td style="color:var(--rm-gold)">${s.ovr}</td>
-                </tr>
-            `).join('');
-
-            document.getElementById('pv-body').innerHTML = `
-                <div class="pv-grid">
-                    <div class="pv-img" style="background-image:url('${p.img}')"></div>
-                    <div class="pv-data">
-                        <div style="color:var(--rm-gold); font-weight:bold; font-size:22px;">#${p.num} | ${p.pos}</div>
-                        <h2 style="font-size:clamp(40px, 6vw, 70px); margin:0; text-transform:uppercase; font-family:Oswald;">${p.name}</h2>
-                        <div class="big-ovr">${getAvgOVR(p)}</div>
-                        <p style="font-size:18px; line-height:1.6; opacity:0.8; margin-bottom:30px;">
-                            ${p.bio ? t[p.bio] : (p.status || '')}
-                        </p>
-                        
-                        <div style="overflow-x:auto">
-                            <table class="month-stat-table">
-                                <thead>
-                                    <tr>
-                                        <th>${t.month}</th><th>${t.m}</th><th>${t.g}</th><th>${t.a}</th><th>${t.mo}</th><th>${t.p}</th><th>${t.s}</th><th>${t.w}</th><th>${t.ovr}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>${statsTableRows || '<tr><td colspan="9" style="text-align:center">No Stats Available</td></tr>'}</tbody>
-                            </table>
-                        </div>
-                    </div>
+        function viewPlayer(idx) {
+            const p = clubData.players[idx];
+            document.getElementById('p-detail-content').innerHTML = `
+                <div style="text-align:center; margin:20px 0;">
+                    <img src="${p.img}" style="width:120px; border-radius:20px; border:2px solid var(--accent)" onerror="this.src='logo.png'">
+                    <h2 style="font-family:Orbitron; color:var(--accent); margin:10px 0;">${p.name}</h2>
+                    <span class="label">${p.pos} | ${p.height}</span>
+                </div>
+                <div class="stat-group">
+                    <h3>GENERAL / عام</h3>
+                    <div class="stat-row"><span>Games Played</span><b>${p.gen.games}</b></div>
+                    <div class="stat-row"><span>Win Rate</span><b>${p.gen.winP}%</b></div>
+                    <div class="stat-row"><span>Avg Rating</span><b>${p.gen.rating}</b></div>
+                    <div class="stat-row"><span>MOTM</span><b>${p.gen.motm}</b></div>
+                </div>
+                <div class="stat-group">
+                    <h3>ATTACKING / الهجوم</h3>
+                    <div class="stat-row"><span>Goals</span><b>${p.atk.goals}</b></div>
+                    <div class="stat-row"><span>Goals Per Match</span><b>${p.atk.gpm}</b></div>
+                    <div class="stat-row"><span>Assists</span><b>${p.atk.assists}</b></div>
+                    <div class="stat-row"><span>Shot Success</span><b>${p.atk.shotS}%</b></div>
+                </div>
+                <div class="stat-group">
+                    <h3>TEAM PLAY / اللعب الجماعي</h3>
+                    <div class="stat-row"><span>Passes</span><b>${p.team.passes}</b></div>
+                    <div class="stat-row"><span>Pass Accuracy</span><b>${p.team.passS}%</b></div>
+                </div>
+                <div class="stat-group">
+                    <h3>DEFENDING / الدفاع</h3>
+                    <div class="stat-row"><span>Tackles</span><b>${p.def.tackles}</b></div>
+                    <div class="stat-row"><span>Red Cards</span><b style="color:var(--loss)">${p.def.red}</b></div>
+                    <div class="stat-row"><span>Clean Sheets (GK)</span><b>${p.def.gkCS}</b></div>
                 </div>
             `;
-            document.getElementById('player-view').style.display = 'block';
-            document.body.style.overflow = 'hidden';
+            document.getElementById('p-overlay').style.display = 'block';
         }
 
-        function closePlayer() {
-            document.getElementById('player-view').style.display = 'none';
-            document.body.style.overflow = 'auto';
+        function renderMatches() {
+            const container = document.getElementById('match-ui');
+            container.innerHTML = clubData.matches.map(m => `
+                <div class="card match-card ${m.res==='W'?'w-border':(m.res==='L'?'l-border':'')}">
+                    <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:10px;">
+                        <span>${m.date}</span>
+                        <b style="color:${m.res==='W'?'var(--win)':'var(--loss)'}">${m.res==='W'?'WIN':'LOSS'}</b>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <b style="font-size:1.1rem; color:var(--accent)">TAWHID2</b>
+                        <span class="big-val" style="font-size:1.5rem;">${m.score}</span>
+                        <span style="opacity:0.6;">${m.opp}</span>
+                    </div>
+                    <div style="font-size:9px; color:#888; margin-top:8px;">⚽ Scorers: ${m.scorers}</div>
+                </div>
+            `).join('');
         }
+
+        function renderAI() {
+            document.getElementById('carry-ui').innerHTML = clubData.players.sort((a,b)=>b.ai.carry-a.carry).map(p => `
+                <div class="stat-row"><span>${p.name}</span><b>${p.ai.carry}%</b></div>
+            `).join('');
+            document.getElementById('padder-ui').innerHTML = clubData.players.map(p => `
+                <div class="stat-row"><span>${p.name}</span><b>${p.ai.padder}</b></div>
+            `).join('');
+        }
+
+        function showSec(id, el) {
+            document.querySelectorAll('section').forEach(s => s.classList.remove('active-section'));
+            document.getElementById('sec-' + id).classList.add('active-section');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function closePlayer() { document.getElementById('p-overlay').style.display = 'none'; }
 
         window.onload = updateUI;
     </script>
