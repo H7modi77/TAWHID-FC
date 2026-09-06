@@ -1,0 +1,6 @@
+{
+  "name": "TAWHID2 | DATA MONSTER HUB",
+  "description": "Official EA FC Pro Clubs stats tracker and data monster hub for TAWHID2 FC",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
