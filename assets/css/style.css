@@ -45,3 +45,25 @@ table.compact{min-width:0}.tile b.txt{font-size:20px;line-height:1.5}.sticky-fir
 .modal-profile .socials{justify-content:flex-start}
 @media(max-width:600px){.social span{display:none}.social{width:40px;height:40px;padding:0;justify-content:center}.social svg{width:19px;height:19px}.socials{gap:10px;margin-top:10px}.modal-profile .socials{justify-content:center}.rtab{padding:8px 12px}}
 .dark-section .sponsor-slot{height:120px}.sponsor-slot img{object-fit:contain}
+
+/* مسار الموسم */
+.season-track .panel{padding:22px 24px}.track-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.track-top b{display:block;font-size:17px;color:#0c3f39}.track-top small{display:block;margin-top:4px;color:#7d918a;font:700 12px Outfit,Cairo;direction:ltr;text-align:right}
+.track-top strong{font:800 34px/1 Outfit;color:#c2994f}
+.track-bar{height:8px;background:#e7eeea;border-radius:9px;margin:16px 0 18px;overflow:hidden}.track-bar i{display:block;height:100%;background:linear-gradient(270deg,#d1ad65,#176a58);border-radius:9px}
+.track-rounds{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.tr{border:1px solid #dbe5df;background:#f7faf8;border-radius:6px;padding:8px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;color:#62786f}
+.tr span{font:800 17px Outfit}.tr small{font-size:9.5px;font-weight:800}
+.tr.done{background:#0c514b;border-color:#0c514b;color:#fff}.tr.now{background:#fff8ea;border-color:#d1ad65;color:#8a6420;box-shadow:0 0 0 2px rgba(209,173,101,.25)}
+/* مقارنة اللاعبين */
+.cmp{padding:20px 22px}.cmp-pick{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-bottom:14px}
+.cmp-pick select{width:100%;min-height:44px;border:1px solid #cfdcd5;border-radius:6px;background:#fff;padding:0 10px;font:800 14px Outfit,Cairo;color:#0c3f39}
+.cmp-pick span{font:900 13px Outfit;color:#c2994f;letter-spacing:2px}
+.cmp-row{display:grid;grid-template-columns:64px 1fr 64px;grid-template-rows:auto auto;align-items:center;column-gap:10px;padding:9px 0;border-top:1px solid #edf2ef}
+.cmp-row label{grid-column:1/-1;grid-row:1;text-align:center;font-size:11.5px;font-weight:800;color:#6f857d;margin-bottom:5px}
+.cmp-row .v{grid-row:2;font:800 16px Outfit;color:#43574f;text-align:center}.cmp-row .v.win{color:#0c6a58}
+.cmp-row .bars{grid-row:2;direction:ltr;display:grid;grid-template-columns:1fr 1fr;gap:3px;height:9px}
+.cmp-row .half{display:flex;background:#eef3f0;overflow:hidden}.cmp-row .half.l{justify-content:flex-end;border-radius:9px 0 0 9px}.cmp-row .half.r{border-radius:0 9px 9px 0}
+.cmp-row .half i{display:block;height:100%}.cmp-row .half .a{background:#176a58}.cmp-row .half .b{background:#d1ad65}
+.share-row{display:flex;justify-content:center;margin-top:18px}
+@media(max-width:600px){.track-rounds{grid-template-columns:repeat(4,1fr)}.track-top b{font-size:15px}.track-top strong{font-size:28px}.cmp{padding:16px 14px}.cmp-row{grid-template-columns:52px 1fr 52px}.cmp-pick select{font-size:12.5px;padding:0 6px}.toast{left:12px;right:12px;bottom:16px;text-align:center}}
