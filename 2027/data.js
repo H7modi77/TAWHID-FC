@@ -2,13 +2,13 @@
  * TAWHID FC — البيانات القابلة للتعديل (2027 فقط)
  * احفظ تعديل هذا الملف ثم حدّث صفحة index.html، وستظهر التغييرات للجميع عند رفع الملفين للاستضافة.
  * مهم: لا توجد لوحة حفظ داخل المتصفح، فمصدر الحقيقة الوحيد هو هذا الملف.
- * ضع index.html و data.js والصور في المجلد نفسه.
+ * الصور: 2027/players (اللاعبين) · 2027/news (الأخبار) · 2027/gallery (المعرض) · 2027/goals (الأهداف).
  * updated: تاريخ آخر تحديث للإحصائيات (يظهر في الموقع).
  * ovr / height: التقييم العام والطول من اللعبة.
  * اكتب الأرقام بدون علامات اقتباس، واستخدم null للإحصائية التي لا تملك قيمتها.
  * ترتيب اللاعبين وتقييمهم يُحسب تلقائيًا في index.html حسب المركز.
- * يمكنك إضافة خبر: { title:"عنوان", date:"2027/01/01", image:"A2.PNG", text:"النص" }
- * يمكنك إضافة صورة: { title:"العنوان", image:"B2.PNG" }
+ * يمكنك إضافة خبر: { title:"عنوان", date:"2027/01/01", image:"2027/news/A3.PNG", text:"النص" }
+ * يمكنك إضافة صورة: { title:"العنوان", image:"2027/gallery/B1.PNG" }
  * يمكنك إضافة مباراة: { date:"2027-01-01 21:00", opponent:"الفريق المنافس", score:"3-1", result:"W", scorers:"الاسم (2)", motm:"الاسم" }
  * رموز النتائج: W فوز، D تعادل، L خسارة.
  * المباريات: اترك قيم الفريق الأساسية null إذا أردت استنتاجها آليًا من سجل المباريات.
@@ -40,7 +40,7 @@ window.TAWHID_DATA = {
       "name": "Almousa3m",
       "nationality": "السعودية",
       "pos": "ST",
-      "photo": "Alm27.PNG",
+      "photo": "2027/players/Alm27.PNG",
       "games": 58,
       "goals": 40,
       "assists": 51,
@@ -72,7 +72,7 @@ window.TAWHID_DATA = {
       "name": "Basabeso2",
       "nationality": "السعودية",
       "pos": "LW",
-      "photo": "Basa27.PNG",
+      "photo": "2027/players/Basa27.PNG",
       "games": 41,
       "goals": 5,
       "assists": 6,
@@ -104,7 +104,7 @@ window.TAWHID_DATA = {
       "name": "H2ssain_28",
       "nationality": "السعودية",
       "pos": "ST",
-      "photo": "Hss27.PNG",
+      "photo": "2027/players/Hss27.PNG",
       "games": 47,
       "goals": 47,
       "assists": 20,
@@ -136,7 +136,7 @@ window.TAWHID_DATA = {
       "name": "M-*-*-_-11_11",
       "nationality": "السعودية",
       "pos": "CM",
-      "photo": "M--27.PNG",
+      "photo": "2027/players/M--27.PNG",
       "games": 60,
       "goals": 23,
       "assists": 37,
@@ -168,7 +168,7 @@ window.TAWHID_DATA = {
       "name": "H7modi_77",
       "nationality": "السعودية",
       "pos": "CM",
-      "photo": "H7modi7727.PNG",
+      "photo": "2027/players/H7modi7727.PNG",
       "games": null,
       "goals": null,
       "assists": null,
@@ -200,7 +200,7 @@ window.TAWHID_DATA = {
       "name": "H7modi_07",
       "nationality": "مصر",
       "pos": "ST",
-      "photo": "H7modi0727.PNG",
+      "photo": "2027/players/H7modi0727.PNG",
       "games": 50,
       "goals": 34,
       "assists": 32,
@@ -232,7 +232,7 @@ window.TAWHID_DATA = {
       "name": "Yo0ousef_25",
       "nationality": "جنوب أفريقيا",
       "pos": "RW",
-      "photo": "Yo27.PNG",
+      "photo": "2027/players/Yo27.PNG",
       "games": 35,
       "goals": 18,
       "assists": 6,
@@ -264,7 +264,7 @@ window.TAWHID_DATA = {
       "name": "Alaly19",
       "nationality": "قطر",
       "pos": "ST",
-      "photo": "Alaly27.PNG",
+      "photo": "2027/players/Alaly27.PNG",
       "games": null,
       "goals": null,
       "assists": null,
@@ -296,13 +296,13 @@ window.TAWHID_DATA = {
     {
       "title": "نادي التوحيد يعلن انطلاق موسم 2027",
       "date": "2026/10/03",
-      "image": "A1.PNG",
+      "image": "2027/news/A1.PNG",
       "text": "يسر نادي التوحيد الإعلان عن انطلاق الموسم الجديد، وسط طموحات كبيرة لتحقيق الإنجازات."
     },
     {
       "title": "ترتيب جوائز الكرة الذهبية لعام 2026",
       "date": "2026/9/23",
-      "image": "A2.PNG",
+      "image": "2026/news/A2.PNG",
       "text": "حقق اللاعب Almousa3m الكرة الذهبية للمرة الثانية على التوالي"
     }
   ],
