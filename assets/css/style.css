@@ -31,3 +31,17 @@ table.compact{min-width:0}.tile b.txt{font-size:20px;line-height:1.5}.sticky-fir
 @media(max-width:600px){table.compact{min-width:0;font-size:12px}table.compact th,table.compact td{padding:10px 7px}.tile b.txt{font-size:15px}.modal-profile{text-align:center}.modal-profile .badge{margin:auto}.archive-title .badge{font-size:11px}.nav>button,.nav .dropbtn{font-size:15px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
+
+/* الدورات + حسابات اللاعبين */
+.round-tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;margin:-8px 0 22px;scrollbar-width:thin;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+.rtab{flex:0 0 auto;scroll-snap-align:start;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:9px 14px;border:1px solid #d7e1db;background:#fff;border-radius:6px;color:#1d4a40;text-align:right}
+.rtab b{font-size:12px;font-weight:900}.rtab small{font:700 10px Outfit,Cairo;color:#7d918a;direction:ltr}
+.rtab.active{background:#0c514b;border-color:#0c514b;color:#fff}.rtab.active small{color:#cfe3dc}.rtab.pending{opacity:.62}.rtab.pending.active{opacity:1}
+.rounds-table td,.rounds-table th{white-space:nowrap}
+.socials{display:flex;justify-content:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.social{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:6px 11px;border-radius:999px;font-size:11px;font-weight:800;color:#fff;transition:transform .15s,filter .15s}
+.social svg{width:17px;height:17px;flex:none}.social:hover{transform:translateY(-1px);filter:brightness(1.08)}
+.social.instagram{background:linear-gradient(45deg,#f09433,#dc2743 55%,#bc1888)}.social.tiktok{background:#111}
+.modal-profile .socials{justify-content:flex-start}
+@media(max-width:600px){.social span{display:none}.social{width:40px;height:40px;padding:0;justify-content:center}.social svg{width:19px;height:19px}.socials{gap:10px;margin-top:10px}.modal-profile .socials{justify-content:center}.rtab{padding:8px 12px}}
+.dark-section .sponsor-slot{height:120px}.sponsor-slot img{object-fit:contain}

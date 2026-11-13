@@ -10,6 +10,8 @@
  * يمكنك إضافة خبر: { title:"عنوان", date:"2027/01/01", image:"2027/news/A3.PNG", text:"النص" }
  * يمكنك إضافة صورة: { title:"العنوان", image:"2027/gallery/B1.PNG" }
  * يمكنك إضافة مباراة: { date:"2027-01-01 21:00", opponent:"الفريق المنافس", score:"3-1", result:"W", scorers:"الاسم (2)", motm:"الاسم" }
+ * season: بداية الموسم ونهايته. rounds: الدورات؛ كل دورة فيها team و players لتلك الفترة فقط (اتركها null أو {} إذا لم تبدأ).
+ * social: حسابات اللاعب { instagram:"اسم الحساب", tiktok:"اسم الحساب" }.
  * رموز النتائج: W فوز، D تعادل، L خسارة.
  * المباريات: اترك قيم الفريق الأساسية null إذا أردت استنتاجها آليًا من سجل المباريات.
  * لا تضع الفاصلة , بعد آخر عنصر في القائمة إن كنت غير متأكد من الصياغة.
@@ -17,6 +19,10 @@
 window.TAWHID_DATA = {
   "description": "نحو موسم جديد... معًا نكتب التاريخ.",
   "updated": "2026/11/13",
+  "season": {
+    "start": "2026-10-01",
+    "end": "2027-09-10"
+  },
   "team": {
     "games": 60,
     "wins": 29,
@@ -25,8 +31,8 @@ window.TAWHID_DATA = {
     "goals": 184,
     "conceded": 192,
     "skill": 1578,
-    "division": null,
-    "bestDivision": null,
+    "division": 2,
+    "bestDivision": 2,
     "promotions": null,
     "relegations": null,
     "playoffs": null,
@@ -65,7 +71,11 @@ window.TAWHID_DATA = {
       "minutes": null,
       "points": null,
       "ovr": 81,
-      "height": "190 CM"
+      "height": "190 CM",
+      "social": {
+        "instagram": "memo7820",
+        "tiktok": "Mustafa M Al-Mousa"
+      }
     },
     {
       "id": "basa",
@@ -97,7 +107,11 @@ window.TAWHID_DATA = {
       "minutes": null,
       "points": null,
       "ovr": 81,
-      "height": "177 CM"
+      "height": "177 CM",
+      "social": {
+        "instagram": "abbasalmarhoon_2",
+        "tiktok": "abbaso86"
+      }
     },
     {
       "id": "hss",
@@ -129,7 +143,11 @@ window.TAWHID_DATA = {
       "minutes": null,
       "points": null,
       "ovr": 79,
-      "height": "183 CM"
+      "height": "183 CM",
+      "social": {
+        "instagram": "hussain28nasser",
+        "tiktok": "hussainii28"
+      }
     },
     {
       "id": "m",
@@ -161,7 +179,11 @@ window.TAWHID_DATA = {
       "minutes": null,
       "points": null,
       "ovr": 82,
-      "height": "162 CM"
+      "height": "162 CM",
+      "social": {
+        "instagram": "mohammedalmoalim",
+        "tiktok": "mohammed almolim"
+      }
     },
     {
       "id": "h77",
@@ -225,7 +247,11 @@ window.TAWHID_DATA = {
       "minutes": null,
       "points": null,
       "ovr": 77,
-      "height": "162 CM"
+      "height": "162 CM",
+      "social": {
+        "instagram": "h7modi_77",
+        "tiktok": "h7modi_77"
+      }
     },
     {
       "id": "yo",
@@ -257,7 +283,11 @@ window.TAWHID_DATA = {
       "minutes": null,
       "points": null,
       "ovr": 74,
-      "height": "170 CM"
+      "height": "170 CM",
+      "social": {
+        "instagram": "hussain44h",
+        "tiktok": "hussain44h"
+      }
     },
     {
       "id": "alaly",
@@ -289,7 +319,174 @@ window.TAWHID_DATA = {
       "minutes": null,
       "points": null,
       "ovr": null,
-      "height": null
+      "height": null,
+      "social": {
+        "instagram": "alaly_0",
+        "tiktok": "alaly"
+      }
+    }
+  ],
+  "rounds": [
+    {
+      "id": 1,
+      "name": "الدورة الأولى",
+      "from": "2026-10-01",
+      "to": "2026-11-13",
+      "team": {
+        "games": 60,
+        "wins": 29,
+        "draws": 5,
+        "losses": 26,
+        "goals": 184,
+        "conceded": 192
+      },
+      "players": {
+        "alm": {
+          "games": 58,
+          "win": 48,
+          "rating": 7.7,
+          "motm": 7,
+          "goals": 40,
+          "shotPct": 39,
+          "assists": 51,
+          "passes": 1017,
+          "passPct": 79,
+          "tackles": 55,
+          "tacklePct": 12,
+          "red": 0,
+          "csDef": 0
+        },
+        "basa": {
+          "games": 41,
+          "win": 51,
+          "rating": 6.7,
+          "motm": 1,
+          "goals": 5,
+          "shotPct": 21,
+          "assists": 6,
+          "passes": 403,
+          "passPct": 84,
+          "tackles": 47,
+          "tacklePct": 28,
+          "red": 3,
+          "csDef": 0
+        },
+        "hss": {
+          "games": 47,
+          "win": 42,
+          "rating": 7.2,
+          "motm": 7,
+          "goals": 47,
+          "shotPct": 39,
+          "assists": 20,
+          "passes": 359,
+          "passPct": 71,
+          "tackles": 22,
+          "tacklePct": 7,
+          "red": 2,
+          "csDef": 0
+        },
+        "m": {
+          "games": 60,
+          "win": 48,
+          "rating": 8.4,
+          "motm": 14,
+          "goals": 23,
+          "shotPct": 31,
+          "assists": 37,
+          "passes": 1310,
+          "passPct": 79,
+          "tackles": 108,
+          "tacklePct": 25,
+          "red": 0
+        },
+        "h07": {
+          "games": 50,
+          "win": 54,
+          "rating": 7.6,
+          "motm": 3,
+          "goals": 34,
+          "shotPct": 41,
+          "assists": 32,
+          "passes": 714,
+          "passPct": 72,
+          "tackles": 68,
+          "tacklePct": 8,
+          "red": 5,
+          "csDef": 0
+        },
+        "yo": {
+          "games": 35,
+          "win": 42,
+          "rating": 6.5,
+          "motm": 1,
+          "goals": 18,
+          "shotPct": 48,
+          "assists": 6,
+          "passes": 316,
+          "passPct": 74,
+          "tackles": 19,
+          "tacklePct": 7,
+          "red": 1,
+          "csDef": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "name": "الدورة الثانية",
+      "from": "2026-11-14",
+      "to": "2026-12-31",
+      "team": null,
+      "players": {}
+    },
+    {
+      "id": 3,
+      "name": "الدورة الثالثة",
+      "from": "2027-01-01",
+      "to": "2027-02-15",
+      "team": null,
+      "players": {}
+    },
+    {
+      "id": 4,
+      "name": "الدورة الرابعة",
+      "from": "2027-02-16",
+      "to": "2027-03-31",
+      "team": null,
+      "players": {}
+    },
+    {
+      "id": 5,
+      "name": "الدورة الخامسة",
+      "from": "2027-04-01",
+      "to": "2027-05-15",
+      "team": null,
+      "players": {}
+    },
+    {
+      "id": 6,
+      "name": "الدورة السادسة",
+      "from": "2027-05-16",
+      "to": "2027-06-30",
+      "team": null,
+      "players": {}
+    },
+    {
+      "id": 7,
+      "name": "الدورة السابعة",
+      "from": "2027-07-01",
+      "to": "2027-08-15",
+      "team": null,
+      "players": {}
+    },
+    {
+      "id": 8,
+      "name": "الدورة الثامنة",
+      "from": "2027-08-16",
+      "to": "2027-09-10",
+      "team": null,
+      "players": {}
     }
   ],
   "news": [
